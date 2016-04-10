@@ -1,7 +1,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:id="@+id/fragment"
-          android:name="no.hbv.gruppe1.snusr.snusr.MainActivityFragment"
-          tools:layout="@layout/fragment_main"
+          android:name="no.hbv.gruppe1.snusr.snusr.SnusList"
+          tools:layout="@layout/fragment_snuslist"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
