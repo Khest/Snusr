@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 /**
- * Created by hakonst on 10.04.16.
+ * Created by Håkon Stensheim on 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     Context context;
@@ -124,6 +124,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_MANUFACTORER);
+        db.execSQL(CREATE_TABLE_LINE);
+        db.execSQL(CREATE_TABLE_TYPE);
+        db.execSQL(CREATE_TABLE_TASTE);
     }
 
     @Override
