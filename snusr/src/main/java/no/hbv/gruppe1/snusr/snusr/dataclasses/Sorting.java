@@ -3,13 +3,13 @@ package no.hbv.gruppe1.snusr.snusr.dataclasses;
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 /**
- * Created by Dakh on 2016-04-14.
+ * Sorting class for sorting query
  */
 public enum  Sorting {
     ALFABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
     POPULARITY("Popularitet", DatabaseHelper.FeedEntry.col_snus_totalrank),
-    NONEBOOKMARKED("Ikke bokmarkert",""),
-    BOOKMARKED("", ""),
+    NONEBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
+    BOOKMARKED("Bokmarkert", DatabaseHelper.FeedEntry.col_mylist_bookmark),
     TASTE("Smak", DatabaseHelper.FeedEntry.col_snus_taste1),
     NICOTINLEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
     TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type),
@@ -26,11 +26,12 @@ public enum  Sorting {
         return guiName;
     }
 
-
     public String getSql(Order order) {
-        return "ORDER BY " + sql + order.toString();
+        return " ORDER BY " + sql +" " + order.toString();
     }
 
+
+/** Enum class contains ASC and DESC **/
 private enum Order{
     ASC("ASC"),
     DESC("DESC");
