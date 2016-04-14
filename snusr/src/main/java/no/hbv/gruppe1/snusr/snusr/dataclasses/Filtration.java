@@ -7,6 +7,9 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
  * Created by Knut Johan Hesten on 2016-04-14.
  */
 
+/**
+ * Enumerable class that handles SQL generation for a variety of filters
+ */
 public enum Filtration {
     NAME("Name", DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
     PRODUCER("Producer", DatabaseHelper.FeedEntry.col_snus_manufactorer, FiltrationRule.LIKE),
