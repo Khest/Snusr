@@ -3,7 +3,8 @@ package no.hbv.gruppe1.snusr.snusr.interfaces;
 import android.graphics.Bitmap;
 
 /**
- * Created by Dakh on 2016-04-10.
+ * Created by Knut Johan Hesten on 2016-04-10.
+ * Interface stub for imagespace functions and methods. Implementation TBD
  */
 public interface ImageHandlerInterface {
 
