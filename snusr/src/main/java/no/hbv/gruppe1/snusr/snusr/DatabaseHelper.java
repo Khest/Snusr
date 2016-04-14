@@ -1,14 +1,20 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.provider.BaseColumns;
+
+import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 
 /**
  * Created by Håkon Stensheim on 10.04.16.
  */
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper{
     Context context;
     public static final int DATABASE_VERSION = 1;
     public static final String INTEGER = "INTEGER";
@@ -16,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TEXT = "TEXT";
     public static final String CREATE_TABLE_SNUS = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_SNUS + "("
             + FeedEntry.col_snus_id + " INTEGER PRIMARY KEY, "
+            + FeedEntry.col_snus_name + " " + TEXT + ", "
             + FeedEntry.col_snus_manufactorer + " " + INTEGER + ", "
             + FeedEntry.col_snus_line + " " + INTEGER + ", "
             + FeedEntry.col_snus_taste1 + " " + INTEGER + ", "
@@ -25,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FeedEntry.col_snus_nicotinelevel + " " + DOUBLE + ", "
             + FeedEntry.col_snus_totalrank + " " + DOUBLE + ", "
             + FeedEntry.col_snus_type + " " + INTEGER + ", "
+            + FeedEntry.col_snus_img + " BLOB, "
             + "FOREIGN KEY (" + FeedEntry.col_snus_manufactorer + ") REFERENCES "
             + FeedEntry.DATABASE_TABLE_MANUFACTORER + "(" + FeedEntry.col_manufactorer_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_line + ") REFERENCES "
@@ -61,10 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FeedEntry.col_type_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_type_text + " " + TEXT + ");";
 
+    // TODO: Add constraint for bookmark. Int 0/1 (bool)
     public static final String CREATE_TABLE_MYLIST = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
             + FeedEntry.col_mylist_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_mylist_snusid + " " + INTEGER + ", "
-            + FeedEntry.col_mylist_myrank + " " + INTEGER + " "
+            + FeedEntry.col_mylist_myrank + " " + INTEGER + ", "
+            + FeedEntry.col_mylist_bookmark + " " + INTEGER + ", "
             + "FOREIGN KEY (" + FeedEntry.col_mylist_snusid + ") REFERENCES " + FeedEntry.DATABASE_TABLE_SNUS
             + "(" + FeedEntry.col_snus_id + ")" + ");";
 
@@ -83,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String col_snus_nicotinelevel = "NICOTINELEVEL";
         public static final String col_snus_totalrank = "TOTALRANK";
         public static final String col_snus_type = "TYPE";
+        public static final String col_snus_img = "IMG";
 
 
         //Table MANUFACTORER:
@@ -113,6 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String col_mylist_id = "_id";
         public static final String col_mylist_snusid = "SNUS_ID";
         public static final String col_mylist_myrank = "MYRANK";
+        public static final String col_mylist_bookmark = "BOOKMARK";
     }
 
 
@@ -127,10 +139,101 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_LINE);
         db.execSQL(CREATE_TABLE_TYPE);
         db.execSQL(CREATE_TABLE_TASTE);
+        db.execSQL(CREATE_TABLE_SNUS);
+        db.execSQL(CREATE_TABLE_MYLIST);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onCreate(db);
+    }
+
+    public boolean putDummyData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
+        putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
+        putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
+
+        putLine(db, 1, "General");
+        putLine(db, 1, "General G3");
+        putLine(db, 1, "Ettan");
+        putLine(db, 1, "Catch");
+        putLine(db, 2, "Skruf");
+        putLine(db, 2, "KNOX");
+        putLine(db, 2, "Smålands");
+        putLine(db, 3, "Lucky Strike");
+
+        putType(db, "Loose");
+        putType(db, "Portion");
+        putType(db, "White Loose");
+        putType(db, "White Portion");
+        putType(db, "White Tobacco Portion");
+
+        putTaste(db, "");
+        putTaste(db, "Licorice");
+        putTaste(db, "Coffee");
+        putTaste(db, "Blueberry");
+        putTaste(db, "Mint");
+        putTaste(db, "Tobacco");
+        putTaste(db, "Lemon");
+        putTaste(db, "Orange");
+        putTaste(db, "Apple");
+        putTaste(db, "Vanilla");
+
+        putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+
+        return true;
+    }
+
+    public void putManufactorer(SQLiteDatabase db, String name, String url, String country){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_manufactorer_name, name);
+        input.put(FeedEntry.col_manufactorer_url, url);
+        input.put(FeedEntry.col_manufactorer_country, country);
+        db.insert(FeedEntry.DATABASE_TABLE_MANUFACTORER, null, input);
+    }
+
+    public void putLine(SQLiteDatabase db, int manufactorer, String name){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_line_manufactorer, manufactorer);
+        input.put(FeedEntry.col_line_name, name);
+        db.insert(FeedEntry.DATABASE_TABLE_LINE, null, input);
+    }
+
+    public void putType(SQLiteDatabase db, String text){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_type_text, text);
+        db.insert(FeedEntry.DATABASE_TABLE_TYPE, null, input);
+    }
+
+    public void putTaste(SQLiteDatabase db, String taste){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_taste_taste, taste);
+        db.insert(FeedEntry.DATABASE_TABLE_TASTE, null, input);
+    }
+
+    public void putSnus(SQLiteDatabase db, String name, int manufactorer, int line, int taste1, int taste2, int taste3,
+                        double strength, double nicotinelevel, double rank, int type, byte[] img){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_snus_name, name);
+        input.put(FeedEntry.col_snus_manufactorer, manufactorer);
+        input.put(FeedEntry.col_snus_line, line);
+        input.put(FeedEntry.col_snus_taste1, taste1);
+        input.put(FeedEntry.col_snus_taste2, taste2);
+        input.put(FeedEntry.col_snus_taste3, taste3);
+        input.put(FeedEntry.col_snus_strength, strength);
+        input.put(FeedEntry.col_snus_nicotinelevel, nicotinelevel);
+        input.put(FeedEntry.col_snus_totalrank, rank);
+        input.put(FeedEntry.col_snus_type, type);
+        input.put(FeedEntry.col_snus_img, img);
+        db.insert(FeedEntry.DATABASE_TABLE_SNUS, null, input);
+    }
+
+    public void putMyList(SQLiteDatabase db, int snus, int rank, int bookmark){
+        ContentValues input = new ContentValues();
+        input.put(FeedEntry.col_mylist_snusid, snus);
+        input.put(FeedEntry.col_mylist_myrank, rank);
+        input.put(FeedEntry.col_mylist_bookmark, bookmark);
+        db.insert(FeedEntry.DATABASE_TABLE_MYLIST, null, input);
     }
 }

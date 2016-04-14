@@ -1,5 +1,6 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,10 +8,20 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String PREFS_NAME = "PrefsFile";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if (settings.getBoolean("first_time", true)){
+            // Kode som skal kjøres første gang appen tas i bruk.
+            // Opprett database
+
+            // Setter first_time til false, denne koden kjøres aldri igjen.
+            // settings.edit().putBoolean("first_time", false).apply();
+        }
     }
 
 
