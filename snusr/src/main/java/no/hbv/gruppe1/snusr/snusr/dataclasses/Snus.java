@@ -5,14 +5,11 @@ package no.hbv.gruppe1.snusr.snusr.dataclasses;
  * Functions as intermediate between database and view layer. Handles text and number formatting.
  */
 public final class Snus {
-    Snus snus = new Snus();
-
     private static int id;
     private static String manufacturer, line, taste1, taste2, taste3, type;
     private static Double strenght, nicotinelvl, totalrank;
 
-    private Snus() {
-    }
+    private Snus() {}
 
     public static void setSnus(int id, String manufacturer, String line, String taste1, String taste2, String taste3, String type,
     Double strength, Double nicotinelvl, Double totalrank) {
