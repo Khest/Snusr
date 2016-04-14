@@ -1,4 +1,4 @@
-package no.hbv.gruppe1.snusr.snusr;
+package no.hbv.gruppe1.snusr.snusr.interfaces;
 
 /**
  * Created by Dakh on 2016-04-10.
