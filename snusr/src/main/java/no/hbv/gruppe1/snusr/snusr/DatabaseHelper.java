@@ -3,6 +3,7 @@ package no.hbv.gruppe1.snusr.snusr;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -149,39 +150,40 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public boolean putDummyData(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
-        putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
-        putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
+            putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
+            putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
 
-        putLine(db, 1, "General");
-        putLine(db, 1, "General G3");
-        putLine(db, 1, "Ettan");
-        putLine(db, 1, "Catch");
-        putLine(db, 2, "Skruf");
-        putLine(db, 2, "KNOX");
-        putLine(db, 2, "Smålands");
-        putLine(db, 3, "Lucky Strike");
+            putLine(db, 1, "General");
+            putLine(db, 1, "General G3");
+            putLine(db, 1, "Ettan");
+            putLine(db, 1, "Catch");
+            putLine(db, 2, "Skruf");
+            putLine(db, 2, "KNOX");
+            putLine(db, 2, "Smålands");
+            putLine(db, 3, "Lucky Strike");
 
-        putType(db, "Loose");
-        putType(db, "Portion");
-        putType(db, "White Loose");
-        putType(db, "White Portion");
-        putType(db, "White Tobacco Portion");
+            putType(db, "Loose");
+            putType(db, "Portion");
+            putType(db, "White Loose");
+            putType(db, "White Portion");
+            putType(db, "White Tobacco Portion");
 
-        putTaste(db, "");
-        putTaste(db, "Licorice");
-        putTaste(db, "Coffee");
-        putTaste(db, "Blueberry");
-        putTaste(db, "Mint");
-        putTaste(db, "Tobacco");
-        putTaste(db, "Lemon");
-        putTaste(db, "Orange");
-        putTaste(db, "Apple");
-        putTaste(db, "Vanilla");
+            putTaste(db, "");
+            putTaste(db, "Licorice");
+            putTaste(db, "Coffee");
+            putTaste(db, "Blueberry");
+            putTaste(db, "Mint");
+            putTaste(db, "Tobacco");
+            putTaste(db, "Lemon");
+            putTaste(db, "Orange");
+            putTaste(db, "Apple");
+            putTaste(db, "Vanilla");
 
-        putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
-
+            putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+        } catch (Exception ex){return false;}
         return true;
     }
 
@@ -235,5 +237,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         input.put(FeedEntry.col_mylist_myrank, rank);
         input.put(FeedEntry.col_mylist_bookmark, bookmark);
         db.insert(FeedEntry.DATABASE_TABLE_MYLIST, null, input);
+    }
+
+    public String getSnus(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT " + FeedEntry.DATABASE_TABLE_SNUS + "." + FeedEntry.col_snus_name + ", "
+                + FeedEntry.DATABASE_TABLE_LINE + "." + FeedEntry.col_line_name
+                + " FROM " + FeedEntry.DATABASE_TABLE_SNUS
+                + " LEFT JOIN "
+                + FeedEntry.DATABASE_TABLE_LINE + " ON " + FeedEntry.DATABASE_TABLE_SNUS + "." + FeedEntry.col_snus_line
+                + " = " + FeedEntry.DATABASE_TABLE_LINE + "." + FeedEntry.col_line_id
+                + ";", null);
+        c.moveToFirst();
+        String text = c.getString(1);
+        text = text + " " + c.getString(0);
+        c.close();
+        return text;
     }
 }
