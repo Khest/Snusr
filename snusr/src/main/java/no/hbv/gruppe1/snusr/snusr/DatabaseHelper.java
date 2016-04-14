@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.provider.BaseColumns;
+
+import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 
 /**
  * Created by Håkon Stensheim on 10.04.16.
  */
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper{
     Context context;
     public static final int DATABASE_VERSION = 1;
     public static final String INTEGER = "INTEGER";
@@ -28,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FeedEntry.col_snus_nicotinelevel + " " + DOUBLE + ", "
             + FeedEntry.col_snus_totalrank + " " + DOUBLE + ", "
             + FeedEntry.col_snus_type + " " + INTEGER + ", "
+            + FeedEntry.col_snus_img + " BLOB, "
             + "FOREIGN KEY (" + FeedEntry.col_snus_manufactorer + ") REFERENCES "
             + FeedEntry.DATABASE_TABLE_MANUFACTORER + "(" + FeedEntry.col_manufactorer_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_line + ") REFERENCES "
@@ -64,10 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FeedEntry.col_type_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_type_text + " " + TEXT + ");";
 
+    // TODO: Add constraint for bookmark. Int 0/1 (bool)
     public static final String CREATE_TABLE_MYLIST = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
             + FeedEntry.col_mylist_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_mylist_snusid + " " + INTEGER + ", "
-            + FeedEntry.col_mylist_myrank + " " + INTEGER + " "
+            + FeedEntry.col_mylist_myrank + " " + INTEGER + ", "
+            + FeedEntry.col_mylist_bookmark + " " + INTEGER + ", "
             + "FOREIGN KEY (" + FeedEntry.col_mylist_snusid + ") REFERENCES " + FeedEntry.DATABASE_TABLE_SNUS
             + "(" + FeedEntry.col_snus_id + ")" + ");";
 
@@ -86,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String col_snus_nicotinelevel = "NICOTINELEVEL";
         public static final String col_snus_totalrank = "TOTALRANK";
         public static final String col_snus_type = "TYPE";
+        public static final String col_snus_img = "IMG";
 
 
         //Table MANUFACTORER:
@@ -116,6 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String col_mylist_id = "_id";
         public static final String col_mylist_snusid = "SNUS_ID";
         public static final String col_mylist_myrank = "MYRANK";
+        public static final String col_mylist_bookmark = "BOOKMARK";
     }
 
 
@@ -141,6 +150,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean putDummyData(){
         SQLiteDatabase db = this.getWritableDatabase();
+        putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
+        putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
+        putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
+
+        putLine(db, 1, "General");
+        putLine(db, 1, "General G3");
+        putLine(db, 1, "Ettan");
+        putLine(db, 1, "Catch");
+        putLine(db, 2, "Skruf");
+        putLine(db, 2, "KNOX");
+        putLine(db, 2, "Smålands");
+        putLine(db, 3, "Lucky Strike");
+
+        putType(db, "Loose");
+        putType(db, "Portion");
+        putType(db, "White Loose");
+        putType(db, "White Portion");
+        putType(db, "White Tobacco Portion");
+
+        putTaste(db, "");
+        putTaste(db, "Licorice");
+        putTaste(db, "Coffee");
+        putTaste(db, "Blueberry");
+        putTaste(db, "Mint");
+        putTaste(db, "Tobacco");
+        putTaste(db, "Lemon");
+        putTaste(db, "Orange");
+        putTaste(db, "Apple");
+        putTaste(db, "Vanilla");
+
+        putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+
         return true;
     }
 
@@ -172,7 +213,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void putSnus(SQLiteDatabase db, String name, int manufactorer, int line, int taste1, int taste2, int taste3,
-                        double strength, double nicotinelevel, double rank, int type){
+                        double strength, double nicotinelevel, double rank, int type, byte[] img){
         ContentValues input = new ContentValues();
         input.put(FeedEntry.col_snus_name, name);
         input.put(FeedEntry.col_snus_manufactorer, manufactorer);
@@ -184,13 +225,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         input.put(FeedEntry.col_snus_nicotinelevel, nicotinelevel);
         input.put(FeedEntry.col_snus_totalrank, rank);
         input.put(FeedEntry.col_snus_type, type);
+        input.put(FeedEntry.col_snus_img, img);
         db.insert(FeedEntry.DATABASE_TABLE_SNUS, null, input);
     }
 
-    public void putMyList(SQLiteDatabase db, int snus, int rank){
+    public void putMyList(SQLiteDatabase db, int snus, int rank, int bookmark){
         ContentValues input = new ContentValues();
         input.put(FeedEntry.col_mylist_snusid, snus);
         input.put(FeedEntry.col_mylist_myrank, rank);
+        input.put(FeedEntry.col_mylist_bookmark, bookmark);
         db.insert(FeedEntry.DATABASE_TABLE_MYLIST, null, input);
     }
 }
