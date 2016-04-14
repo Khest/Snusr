@@ -4,8 +4,9 @@ import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 
 /**
- * Created by Dakh on 2016-04-14.
+ * Created by Knut Johan Hesten on 2016-04-14.
  */
+
 public enum Filtration {
     NAME("Name", DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
     PRODUCER("Producer", DatabaseHelper.FeedEntry.col_snus_manufactorer, FiltrationRule.LIKE),
@@ -23,6 +24,11 @@ public enum Filtration {
         this.filtrationRule = filtrationRule;
     }
 
+    /**
+     * Returns the filtration SQL string for a filter with a fixed value
+     * @param searchValue Delimiter for the rule. If Integer it finds exact, if String it finds nearest neighbour
+     * @return Returns the SQL string value of the specific rule
+     */
     public String filtrationString(Object searchValue) {
         if (searchValue.getClass() == Integer.class) {
             return this.filtrationRule.getRule(this.colName, (int)searchValue);
@@ -31,10 +37,20 @@ public enum Filtration {
         }
     }
 
+    /**
+     * Returns the filtration SQL string for a filter with range value
+     * @param startRange The minimum value in the range
+     * @param endRange The maximum value in the range
+     * @return Returns the SQL string value of the specific rule
+     */
     public String filtrationString(double startRange, double endRange) {
         return this.filtrationRule.getRule(this.colName, startRange, endRange);
     }
 
+    /**
+     * Gets the GUI name representation of the filtration rule
+     * @return String
+     */
     public String getGuiName() {return this.GuiName;}
 
     public enum FiltrationRule {
