@@ -1,14 +1,18 @@
 package no.hbv.gruppe1.snusr.snusr.dataclasses;
 
 /**
- * Created by Dakh on 2016-04-14.
+ * Created by Knut Johan Hesten on 2016-04-14.
+ * Functions as intermediate between database and view layer. Handles text and number formatting.
  */
-public class Snus {
+public final class Snus {
     Snus snus = new Snus();
 
     private static int id;
     private static String manufacturer, line, taste1, taste2, taste3, type;
     private static Double strenght, nicotinelvl, totalrank;
+
+    private Snus() {
+    }
 
     public static void setSnus(int id, String manufacturer, String line, String taste1, String taste2, String taste3, String type,
     Double strength, Double nicotinelvl, Double totalrank) {
