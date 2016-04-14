@@ -11,6 +11,10 @@ import android.view.ViewGroup;
  */
 public class SnusList extends Fragment {
 
+    /**
+     * Inneholder våre favorittsnus, alle snus og snus med bokmerke
+     *
+     */
     public SnusList() {
     }
 
