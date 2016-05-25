@@ -11,6 +11,7 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
  * Enumerable class that handles SQL generation for a variety of filters
  */
 public enum Filtration {
+    //TODO Endre første argument til entries i strings.xml
     NAME("Name", DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
     PRODUCER("Producer", DatabaseHelper.FeedEntry.col_snus_manufactorer, FiltrationRule.LIKE),
     POPULARITY("Poularity", DatabaseHelper.FeedEntry.col_snus_totalrank, FiltrationRule.RANGE),

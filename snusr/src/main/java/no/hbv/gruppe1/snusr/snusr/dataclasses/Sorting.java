@@ -3,9 +3,10 @@ package no.hbv.gruppe1.snusr.snusr.dataclasses;
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 /**
- * Sorting class for sorting query
+ * Enumerable class that handles sorting queries
  */
 public enum  Sorting {
+    //TODO Endre første argument til entries i strings.xml
     ALFABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
     POPULARITY("Popularitet", DatabaseHelper.FeedEntry.col_snus_totalrank),
     NONEBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
@@ -32,7 +33,7 @@ public enum  Sorting {
 
 
 /** Enum class contains ASC and DESC **/
-private enum Order{
+private enum Order {
     ASC("ASC"),
     DESC("DESC");
 

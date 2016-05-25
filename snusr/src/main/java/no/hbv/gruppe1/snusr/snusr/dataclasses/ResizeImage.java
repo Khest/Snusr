@@ -1,3 +1,5 @@
+package no.hbv.gruppe1.snusr.snusr.dataclasses;
+
 import android.graphics.Bitmap;
 
 import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
