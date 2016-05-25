@@ -1,17 +1,15 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-/**
- * @author Håkon Stensheim
- * @version 1.0
- * @since 2016-05-23
- */
+
 public class MainActivity extends AppCompatActivity {
 
     private final String PREFS_NAME = "PrefsFile";
@@ -21,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        DatabaseHelper db = new DatabaseHelper(this);
+        Intent intent = new Intent(this, Image_compress.class);
+        startActivity(intent);
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
             // Opprett database
