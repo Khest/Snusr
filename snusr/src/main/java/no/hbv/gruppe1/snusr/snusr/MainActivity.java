@@ -2,10 +2,13 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,16 +19,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        Intent intent = new Intent(this, Image_compress.class);
-        startActivity(intent);
+        DatabaseHelper db = new DatabaseHelper(this);
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
             // Opprett database
-
-
+            // Ved testing av appen kan det være greit å slette appen fra mobilen
+            // om det er gjort endringer i databasen, og lignende.
+            db.putDummyData();
             // Setter first_time til false, denne koden kjøres aldri igjen.
-            // settings.edit().putBoolean("first_time", false).apply();
+            settings.edit().putBoolean("first_time", false).apply();
         }
+        Toast.makeText(this, db.getSnus(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, Image_compress.class);
+        startActivity(intent);
     }
 
 
@@ -50,4 +56,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
