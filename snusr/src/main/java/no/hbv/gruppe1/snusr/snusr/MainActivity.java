@@ -19,8 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        Intent intent = new Intent(this, Image_compress.class);
-        startActivity(intent);
+        DatabaseHelper db = new DatabaseHelper(this);
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
             // Opprett database
@@ -31,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             settings.edit().putBoolean("first_time", false).apply();
         }
         Toast.makeText(this, db.getSnus(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, Image_compress.class);
+        startActivity(intent);
     }
 
 
