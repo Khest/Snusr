@@ -31,4 +31,9 @@ public class ImageHandler implements ImageHandlerInterface {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         return bos.toByteArray();
     }
+
+    @Override
+    public Bitmap convertByteToBitmap(Byte[] img){
+        return null;
+    }
 }
