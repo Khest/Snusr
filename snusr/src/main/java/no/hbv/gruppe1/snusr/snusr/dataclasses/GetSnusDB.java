@@ -23,7 +23,6 @@ public class GetSnusDB implements DatabaseGrabber {
      */
     @Override
     public Cursor fetchSnus(Context context, List<Filtration> filtrationList, Sorting sorting) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
         sb.append(snusDetailSqlJoinString());
@@ -39,8 +38,22 @@ public class GetSnusDB implements DatabaseGrabber {
         } else {
             sb.append(sorting.getSql());
         }
+        return dbCursor(context, sb.toString());
+    }
+
+    @Override
+    public Cursor fetchMyList(Context context) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
+        sb.append(snusDetailSqlJoinString());
+        sb.append(Sorting.ALPHABETICAL.getSql());
+        return dbCursor(context, sb.toString());
+    }
+
+    private Cursor dbCursor(Context context, String sqlString) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return db.rawQuery(sb.toString(), null);
+        return db.rawQuery(sqlString, null);
     }
 
     @Override
