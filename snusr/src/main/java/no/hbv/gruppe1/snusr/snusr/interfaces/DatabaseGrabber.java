@@ -18,5 +18,5 @@ public interface DatabaseGrabber {
 
     Cursor fetchMyList(Context context);
 
-    String snusDetailSqlJoinString();
+    Cursor fetchSpecificSnus(Context context, int snusId);
 }

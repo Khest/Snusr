@@ -50,23 +50,32 @@ public class GetSnusDB implements DatabaseGrabber {
         return dbCursor(context, sb.toString());
     }
 
+    @Override
+    public Cursor fetchSpecificSnus(Context context, int snusId) {
+        String sql = snusDetailSqlJoinString();
+        sql += " WHERE " + DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
+        return dbCursor(context, sql);
+    }
+
     private Cursor dbCursor(Context context, String sqlString) {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         return db.rawQuery(sqlString, null);
     }
 
-    @Override
-    public String snusDetailSqlJoinString() {
-        return " LEFT JOIN " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE + " ON " +
-                DatabaseHelper.FeedEntry.col_snus_line + " = " + DatabaseHelper.FeedEntry.col_line_id +
-                " LEFT JOIN " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTORER + " ON " +
-                DatabaseHelper.FeedEntry.col_snus_manufactorer + " = " + DatabaseHelper.FeedEntry.col_manufactorer_id +
-                " LEFT JOIN " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE + " ON " +
-                DatabaseHelper.FeedEntry.col_snus_taste1 + " = " + DatabaseHelper.FeedEntry.col_taste_id +
-                DatabaseHelper.FeedEntry.col_snus_taste2 + " = " + DatabaseHelper.FeedEntry.col_taste_id +
-                DatabaseHelper.FeedEntry.col_snus_taste3 + " = " + DatabaseHelper.FeedEntry.col_taste_id +
-                " LEFT JOIN " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE + " ON " +
-                DatabaseHelper.FeedEntry.col_snus_type + " = " + DatabaseHelper.FeedEntry.col_type_id;
+    private String snusDetailSqlJoinString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
+        sb.append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE).append(" ON ")
+                .append(DatabaseHelper.FeedEntry.col_snus_line).append(" = ").append(DatabaseHelper.FeedEntry.col_line_id)
+                .append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTORER).append(" ON ")
+                    .append(DatabaseHelper.FeedEntry.col_snus_manufactorer).append(" = ").append(DatabaseHelper.FeedEntry.col_manufactorer_id)
+                .append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE).append(" ON ")
+                    .append(DatabaseHelper.FeedEntry.col_snus_taste1).append(" = ").append(DatabaseHelper.FeedEntry.col_taste_id)
+                    .append(DatabaseHelper.FeedEntry.col_snus_taste2).append(" = ").append(DatabaseHelper.FeedEntry.col_taste_id)
+                    .append(DatabaseHelper.FeedEntry.col_snus_taste3).append(" = ").append(DatabaseHelper.FeedEntry.col_taste_id)
+                .append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE).append(" ON ")
+                .append(DatabaseHelper.FeedEntry.col_snus_type).append(" = ").append(DatabaseHelper.FeedEntry.col_type_id);
+        return sb.toString();
     }
 }
