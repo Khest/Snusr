@@ -16,7 +16,7 @@ public interface DatabaseGrabber {
 
     Cursor fetchSnus(Context context, List<Filtration> filtrationList, Sorting sorting);
 
-    Cursor fetchMyList(Context context);
+    Cursor fetchMyList(Context context, int restriction);
 
     Cursor fetchSpecificSnus(Context context, int snusId);
 }
