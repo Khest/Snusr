@@ -22,10 +22,49 @@ public enum Filtration {
 
     private String GuiName, colName;
     private FiltrationRule filtrationRule;
+    private String filterSql;
     Filtration(String name, String sql, FiltrationRule filtrationRule) {
         this.GuiName = name;
         this.colName = sql;
         this.filtrationRule = filtrationRule;
+    }
+
+    /**
+     * Sets the filtration SQL string for a filter based on either a searchValue OR start and end ranges
+     * @param searchValue The value to search for
+     * @param startRange The minimum value in the range
+     * @param endRange The maximum value in the range
+     */
+    public void defineVariables(Object searchValue, double startRange, double endRange) throws Exception {
+        if (searchValue == null || searchValue.toString().equals("")) {
+            if (searchValue.getClass() == Integer.class) {
+//                return this.filtrationRule.getRule(this.colName, (int)searchValue);
+                this.filterSql = this.filtrationRule.getRule(this.colName, (int)searchValue);
+            } else {
+                this.filterSql = this.filtrationRule.getRule(this.colName, searchValue.toString());
+//                return this.filtrationRule.getRule(this.colName, searchValue.toString());
+            }
+        } else if (!searchValue.equals("")) {
+            if (searchValue.getClass() == Integer.class) {
+                this.filterSql = this.filtrationRule.getRule(this.colName, (int)searchValue);
+//                return this.filtrationRule.getRule(this.colName, (int)searchValue);
+            } else {
+                this.filterSql = this.filtrationRule.getRule(this.colName, searchValue.toString());
+//                return this.filtrationRule.getRule(this.colName, searchValue.toString());
+            }
+        } else {
+            throw new Exception("No valid filter variable defined");
+        }
+    }
+
+    /**
+     * Gets the SQL String of the current filtration
+     * @return Returns SQL String value of the current filtration
+     */
+    public String getFilterSql() {
+        String s = this.filterSql;
+        this.filterSql = "";
+        return s;
     }
 
     /**
@@ -62,8 +101,8 @@ public enum Filtration {
         LIKE(" LIKE "),
         RANGE();
 
-        protected String getRule(String sqlSnippet, String searchValue) {
-            return " " + sqlSnippet + " " + getValue() + " \"%" + searchValue + "%\" ";
+        protected String getRule(String columnName, String searchValue) {
+            return " " + columnName + " " + getValue() + " \"%" + searchValue + "%\" ";
         }
 
         protected String getRule(String sqlSnippet, double searchValue) {

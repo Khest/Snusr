@@ -8,11 +8,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <application
-
+        
         android:allowBackup="true"
         android:icon="@drawable/strtup_screen_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -27,5 +28,4 @@
         <activity android:name=".BluetoothHandler">
         </activity>
     </application>
-
 </manifest>
