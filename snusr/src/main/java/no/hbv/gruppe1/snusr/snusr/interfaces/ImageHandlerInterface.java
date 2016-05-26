@@ -12,4 +12,5 @@ public interface ImageHandlerInterface {
     Object cropImage(Object input);
     Object resizeImage(Object input);
     byte[] convertBitmapToByte(Bitmap bitmap);
+    Bitmap convertByteToBitmap(Byte[] img);
 }
