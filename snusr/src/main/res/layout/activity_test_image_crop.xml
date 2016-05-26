@@ -13,8 +13,8 @@
         android:id="@+id/imageTest"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerInside"/>
+        android:scaleType="centerInside"
+        android:layout_alignParentTop="true" />
 
 
 
@@ -26,12 +26,10 @@
         android:layout_alignParentStart="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/imageView1"
-        android:layout_below="@+id/imageTest"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="92dp"
         android:layout_alignEnd="@+id/imageTest"
         android:scaleType="centerInside" />
 
@@ -40,6 +38,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/edit2"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/btn_save"
+        android:layout_above="@+id/edit"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>
