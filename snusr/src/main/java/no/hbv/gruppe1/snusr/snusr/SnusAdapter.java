@@ -50,12 +50,13 @@ public class SnusAdapter extends CursorAdapter {
         //Drawable stars = rating.getProgressDrawable();
         //DrawableCompat.setTint(stars, Color.YELLOW);
 
-        String snusname = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_line))
+        String snusname = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name))
                 + " " + cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name));
         txtSnusName.setText(snusname);
 
         txtRating.setText(String.valueOf(rating.getRating()));
 
+        rating.setRating(cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -64,14 +65,12 @@ public class SnusAdapter extends CursorAdapter {
             }
         });
         // Convert byte[] to Bitmap:
-//        ImageHandler imageHandler = new ImageHandler();
-//        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
-//        if(stream != null)
-//            img.setImageBitmap(imageHandler.convertByteToBitmap(stream));
-//        else
-            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.general_portion_styrke3));
-        //img.setImageBitmap(cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img)));
-        //rating.setRating(cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
+        ImageHandler imageHandler = new ImageHandler();
+        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
+        if(stream != null)
+            img.setImageBitmap(imageHandler.convertByteToBitmap(stream));
+        else
+            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
 
     }
 
