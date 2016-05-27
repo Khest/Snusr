@@ -17,8 +17,8 @@ public enum  Sorting {
     STRENGTH("Styrke", DatabaseHelper.FeedEntry.col_snus_strength);
 
 
-    String guiName, columnName;
-    Order order = Order.DESC;
+    private String guiName, columnName;
+    private Order order = Order.DESC;
     Sorting(String guiName, String columnName) {
         this.guiName = guiName;
         this.columnName = columnName;
@@ -32,17 +32,13 @@ public enum  Sorting {
         this.order = order;
     }
 
-    public Order getAscending() { return Order.ASC; }
-
-    public Order getDescending() { return Order.DESC; }
-
     public String getSql() {
         return " ORDER BY " + columnName +" " + this.order.toString();
     }
 
 
 /** Enum class contains ASC and DESC **/
-private enum Order {
+public enum Order {
     ASC("ASC"),
     DESC("DESC");
 
