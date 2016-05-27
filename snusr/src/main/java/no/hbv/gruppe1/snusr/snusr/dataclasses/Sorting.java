@@ -10,7 +10,7 @@ public enum  Sorting {
     ALPHABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
     POPULARITY("Popularitet", DatabaseHelper.FeedEntry.col_snus_totalrank),
     NOTBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
-    BOOKMARKED("Bokmarkert", DatabaseHelper.FeedEntry.col_mylist_bookmark),
+    BOOKMARKED("Bokmarkert", DatabaseHelper.FeedEntry.col_mylist_bookmark), //TODO fixme can't order by bookmarked as mylist isn't joined
     TASTE("Smak", DatabaseHelper.FeedEntry.col_snus_taste1),
     NICOTINELEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
     TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type),
