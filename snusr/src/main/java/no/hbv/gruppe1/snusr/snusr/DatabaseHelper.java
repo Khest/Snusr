@@ -2,15 +2,10 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.provider.BaseColumns;
-
-import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 
 /**
  * Created by Håkon Stensheim on 10.04.16.
@@ -21,7 +16,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
-    public static final String CREATE_TABLE_SNUS = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_SNUS + "("
+
+    public static final String DROP_TABLE_SNUS = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_SNUS + ";";
+    public static final String CREATE_TABLE_SNUS =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_SNUS + "("
             + FeedEntry.col_snus_id + " INTEGER PRIMARY KEY, "
             + FeedEntry.col_snus_name + " " + TEXT + ", "
             + FeedEntry.col_snus_manufactorer + " " + INTEGER + ", "
@@ -35,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + FeedEntry.col_snus_type + " " + INTEGER + ", "
             + FeedEntry.col_snus_img + " BLOB, "
             + "FOREIGN KEY (" + FeedEntry.col_snus_manufactorer + ") REFERENCES "
-            + FeedEntry.DATABASE_TABLE_MANUFACTORER + "(" + FeedEntry.col_manufactorer_id + "), "
+            + FeedEntry.DATABASE_TABLE_MANUFACTURER + "(" + FeedEntry.col_manufacturer_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_line + ") REFERENCES "
             + FeedEntry.DATABASE_TABLE_LINE + "(" + FeedEntry.col_line_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_taste1 + ") REFERENCES "
@@ -48,30 +46,40 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + FeedEntry.DATABASE_TABLE_TYPE + "(" + FeedEntry.col_type_id + "));"
             ;
 
-    public static final String CREATE_TABLE_LINE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_LINE + "("
+    public static final String DROP_TABLE_LINE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_LINE + ";";
+    public static final String CREATE_TABLE_LINE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_LINE + "("
             + FeedEntry.col_line_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_line_manufactorer + " " + INTEGER + ", "
             + FeedEntry.col_line_name + " " + TEXT + ", "
             + "FOREIGN KEY (" + FeedEntry.col_line_manufactorer + ") "
-            + "REFERENCES " + FeedEntry.DATABASE_TABLE_MANUFACTORER + "("
-            + FeedEntry.col_manufactorer_id + ")" + ");";
+            + "REFERENCES " + FeedEntry.DATABASE_TABLE_MANUFACTURER + "("
+            + FeedEntry.col_manufacturer_id + ")" + ");";
 
-    public static final String CREATE_TABLE_MANUFACTORER = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTORER
-            + "(" + FeedEntry.col_manufactorer_id + " " + INTEGER + " PRIMARY KEY, "
-            + FeedEntry.col_manufactorer_name + " " + TEXT + ", "
-            + FeedEntry.col_manufactorer_country + " " + TEXT + ", "
-            + FeedEntry.col_manufactorer_url + " " + TEXT+ ");";
+    public static final String DROP_TABLE_MANUFACTURER = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_MANUFACTURER + ";";
+    public static final String CREATE_TABLE_MANUFACTURER =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTURER
+            + "(" + FeedEntry.col_manufacturer_id + " " + INTEGER + " PRIMARY KEY, "
+            + FeedEntry.col_manufacturer_name + " " + TEXT + ", "
+            + FeedEntry.col_manufacturer_country + " " + TEXT + ", "
+            + FeedEntry.col_manufacturer_url + " " + TEXT+ ");";
 
-    public static final String CREATE_TABLE_TASTE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TASTE + "("
+    public static final String DROP_TABLE_TASTE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_TASTE + ";";
+    public static final String CREATE_TABLE_TASTE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TASTE + "("
             + FeedEntry.col_taste_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_taste_taste + " " + TEXT + ");";
 
-    public static final String CREATE_TABLE_TYPE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TYPE + "("
+    public static final String DROP_TABLE_TYPE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_TYPE + ";";
+    public static final String CREATE_TABLE_TYPE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TYPE + "("
             + FeedEntry.col_type_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_type_text + " " + TEXT + ");";
 
     // TODO: Add constraint for bookmark. Int 0/1 (bool)
-    public static final String CREATE_TABLE_MYLIST = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
+    public static final String DROP_TABLE_MYLIST = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_MYLIST + ";";
+    public static final String CREATE_TABLE_MYLIST =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
             + FeedEntry.col_mylist_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_mylist_snusid + " " + INTEGER + ", "
             + FeedEntry.col_mylist_myrank + " " + INTEGER + ", "
@@ -97,17 +105,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         public static final String col_snus_img = "IMG";
 
 
-        //Table MANUFACTORER:
-        public static final String DATABASE_TABLE_MANUFACTORER = "MANUFACTORER";
-        public static final String col_manufactorer_id = "_id";
-        public static final String col_manufactorer_name = "NAME";
-        public static final String col_manufactorer_url = "URL";
-        public static final String col_manufactorer_country = "COUNTRY";
+        //Table MANUFACTURER:
+        public static final String DATABASE_TABLE_MANUFACTURER = "MANUFACTURER";
+        public static final String col_manufacturer_id = "_id";
+        public static final String col_manufacturer_name = "NAME";
+        public static final String col_manufacturer_url = "URL";
+        public static final String col_manufacturer_country = "COUNTRY";
 
         //Table LINE:
         public static final String DATABASE_TABLE_LINE = "LINE";
         public static final String col_line_id = "_id";
-        public static final String col_line_manufactorer = "MANUFACTORER";
+        public static final String col_line_manufactorer = "MANUFACTURER";
         public static final String col_line_name = "NAME";
 
         //Table TASTE:
@@ -134,9 +142,22 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         this.context = context;
     }
 
+
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DROP_TABLE_MYLIST);
+        db.execSQL(DROP_TABLE_SNUS);
+        db.execSQL(DROP_TABLE_TASTE);
+        db.execSQL(DROP_TABLE_TYPE);
+        db.execSQL(DROP_TABLE_LINE);
+        db.execSQL(DROP_TABLE_MANUFACTURER);
+        onCreate(db);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_MANUFACTORER);
+        db.execSQL(CREATE_TABLE_MANUFACTURER);
         db.execSQL(CREATE_TABLE_LINE);
         db.execSQL(CREATE_TABLE_TYPE);
         db.execSQL(CREATE_TABLE_TASTE);
@@ -144,17 +165,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_MYLIST);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onCreate(db);
-    }
-
     public boolean putDummyData(){
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
-            putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
-            putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
+            putManufacturer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
+            putManufacturer(db, "Skruf", "www.skruf.se", "Sweden");
+            putManufacturer(db, "British American Tobacco", "www.bat.com", "England");
 
             putLine(db, 1, "General");
             putLine(db, 1, "General G3");
@@ -183,16 +199,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Vanilla");
 
             putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            putSnus(db, "Extra Weak",   2, 5, 2, 0, 0, 3, 0.6, 3, 3, null);
         } catch (Exception ex){return false;}
         return true;
     }
 
-    public void putManufactorer(SQLiteDatabase db, String name, String url, String country){
+    public void putManufacturer(SQLiteDatabase db, String name, String url, String country){
         ContentValues input = new ContentValues();
-        input.put(FeedEntry.col_manufactorer_name, name);
-        input.put(FeedEntry.col_manufactorer_url, url);
-        input.put(FeedEntry.col_manufactorer_country, country);
-        db.insert(FeedEntry.DATABASE_TABLE_MANUFACTORER, null, input);
+        input.put(FeedEntry.col_manufacturer_name, name);
+        input.put(FeedEntry.col_manufacturer_url, url);
+        input.put(FeedEntry.col_manufacturer_country, country);
+        db.insert(FeedEntry.DATABASE_TABLE_MANUFACTURER, null, input);
     }
 
     public void putLine(SQLiteDatabase db, int manufactorer, String name){

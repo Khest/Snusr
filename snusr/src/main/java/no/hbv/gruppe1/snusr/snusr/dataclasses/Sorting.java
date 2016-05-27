@@ -9,12 +9,11 @@ public enum  Sorting {
     //TODO Endre første argument til entries i strings.xml
     ALPHABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
     POPULARITY("Popularitet", DatabaseHelper.FeedEntry.col_snus_totalrank),
-    NOTBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
-    BOOKMARKED("Bokmarkert", DatabaseHelper.FeedEntry.col_mylist_bookmark),
     TASTE("Smak", DatabaseHelper.FeedEntry.col_snus_taste1),
     NICOTINELEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
     TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type),
-    STRENGTH("Styrke", DatabaseHelper.FeedEntry.col_snus_strength);
+    STRENGTH("Styrke", DatabaseHelper.FeedEntry.col_snus_strength),
+    NEWESTTOOLDEST("Nyeste til gamleste", DatabaseHelper.FeedEntry.col_snus_id);
 
 
     private String guiName, columnName;
