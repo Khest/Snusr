@@ -12,20 +12,60 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
  */
 public enum Filtration {
     //TODO Endre første argument til entries i strings.xml
-    NAME("Name", DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
-    PRODUCER("Producer", DatabaseHelper.FeedEntry.col_snus_manufactorer, FiltrationRule.LIKE),
-    POPULARITY("Poularity", DatabaseHelper.FeedEntry.col_snus_totalrank, FiltrationRule.RANGE),
-    STRENGTH("Strength", DatabaseHelper.FeedEntry.col_snus_strength, FiltrationRule.RANGE),
-    TASTE("Taste", DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.EXACT),
-    NICOTINE("Nicotine", DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
-    TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type, FiltrationRule.EXACT);
+    NAME("Name", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+            DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
+    PRODUCER("Producer", null,
+            DatabaseHelper.FeedEntry.col_snus_manufactorer, FiltrationRule.LIKE),
+    POPULARITY("Poularity", null,
+            DatabaseHelper.FeedEntry.col_snus_totalrank, FiltrationRule.RANGE),
+    STRENGTH("Strength", null,
+            DatabaseHelper.FeedEntry.col_snus_strength, FiltrationRule.RANGE),
+    TASTE("Taste", null,
+            DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.EXACT),
+    NICOTINE("Nicotine", null,
+            DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
+    TYPE("Type", null,
+            DatabaseHelper.FeedEntry.col_snus_type, FiltrationRule.EXACT);
 
     private String GuiName, colName;
     private FiltrationRule filtrationRule;
-    Filtration(String name, String sql, FiltrationRule filtrationRule) {
-        this.GuiName = name;
-        this.colName = sql;
+    private String filterSql;
+    Filtration(String realName, String tableName, String columnName, FiltrationRule filtrationRule) {
+        this.GuiName = realName;
+        this.colName = columnName;
         this.filtrationRule = filtrationRule;
+    }
+
+    /**
+     * Sets the filtration SQL string for a filter based on either a searchValue OR start and end ranges
+     * @param searchValue The value to search for
+     * @param startRange The minimum value in the range
+     * @param endRange The maximum value in the range
+     */
+    public void defineVariables(Object searchValue, Double startRange, Double endRange) throws Exception {
+        if (startRange != null && endRange != null && searchValue == null || searchValue.toString().equals("")) {
+            this.filtrationRule.getRule(this.colName, startRange, endRange);
+        } else if (!searchValue.equals("")) {
+            if (searchValue.getClass() == Integer.class) {
+//                return this.filtrationRule.getRule(this.colName, (int)searchValue);
+                this.filterSql = this.filtrationRule.getRule(this.colName, (int)searchValue);
+            } else {
+                this.filterSql = this.filtrationRule.getRule(this.colName, searchValue.toString());
+//                return this.filtrationRule.getRule(this.colName, searchValue.toString());
+            }
+        } else {
+            throw new Exception("No valid filter variable defined");
+        }
+    }
+
+    /**
+     * Gets the SQL String of the current filtration
+     * @return Returns SQL String value of the current filtration
+     */
+    public String getFilterSql() {
+        String s = this.filterSql;
+        this.filterSql = "";
+        return s;
     }
 
     /**
@@ -47,7 +87,7 @@ public enum Filtration {
      * @param endRange The maximum value in the range
      * @return Returns the SQL string value of the specific rule
      */
-    public String filtrationString(double startRange, double endRange) {
+    public String filtrationString(Double startRange, Double endRange) {
         return this.filtrationRule.getRule(this.colName, startRange, endRange);
     }
 
@@ -62,14 +102,14 @@ public enum Filtration {
         LIKE(" LIKE "),
         RANGE();
 
-        protected String getRule(String sqlSnippet, String searchValue) {
-            return " " + sqlSnippet + " " + getValue() + " \"%" + searchValue + "%\" ";
+        protected String getRule(String columnName, String searchValue) {
+            return " " + columnName + " " + getValue() + " \"%" + searchValue + "%\" ";
         }
 
         protected String getRule(String sqlSnippet, double searchValue) {
             return " " + sqlSnippet + " " + getValue() + String.valueOf(searchValue) + " ";
         }
-        protected String getRule(String sqlSnippet, double startRange, double endRange) {
+        protected String getRule(String sqlSnippet, Double startRange, Double endRange) {
             return " " + sqlSnippet + " > " + String.valueOf(startRange) + " AND " + sqlSnippet + " < " + String.valueOf(endRange) + " ";
         }
 

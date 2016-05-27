@@ -7,33 +7,38 @@ import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
  */
 public enum  Sorting {
     //TODO Endre første argument til entries i strings.xml
-    ALFABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
+    ALPHABETICAL("Sortering A-Z", DatabaseHelper.FeedEntry.col_line_name),
     POPULARITY("Popularitet", DatabaseHelper.FeedEntry.col_snus_totalrank),
-    NONEBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
+    NOTBOOKMARKED("Ikke bokmarkert",DatabaseHelper.FeedEntry.col_mylist_bookmark),
     BOOKMARKED("Bokmarkert", DatabaseHelper.FeedEntry.col_mylist_bookmark),
     TASTE("Smak", DatabaseHelper.FeedEntry.col_snus_taste1),
-    NICOTINLEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
+    NICOTINELEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
     TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type),
-    STRENGHT("Styrke", DatabaseHelper.FeedEntry.col_snus_strength);
+    STRENGTH("Styrke", DatabaseHelper.FeedEntry.col_snus_strength);
 
 
-    String guiName, sql;
-    Sorting(String guiName, String sql) {
+    private String guiName, columnName;
+    private Order order = Order.DESC;
+    Sorting(String guiName, String columnName) {
         this.guiName = guiName;
-        this.sql = sql;
+        this.columnName = columnName;
     }
 
     public String getGuiName() {
         return guiName;
     }
 
-    public String getSql(Order order) {
-        return " ORDER BY " + sql +" " + order.toString();
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public String getSql() {
+        return " ORDER BY " + columnName +" " + this.order.toString();
     }
 
 
 /** Enum class contains ASC and DESC **/
-private enum Order {
+public enum Order {
     ASC("ASC"),
     DESC("DESC");
 
