@@ -180,6 +180,9 @@ public class GetSnusDBTest extends AndroidTestCase {
         Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
+    public void testUpgrade() throws  Exception {
+        db.onUpgrade(db.getWritableDatabase(), 1, 2);
+    }
 
     public void tearDown() throws Exception {
         db.close();

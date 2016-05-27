@@ -16,7 +16,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
-    public static final String CREATE_TABLE_SNUS = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_SNUS + "("
+
+    public static final String DROP_TABLE_SNUS = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_SNUS + ";";
+    public static final String CREATE_TABLE_SNUS =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_SNUS + "("
             + FeedEntry.col_snus_id + " INTEGER PRIMARY KEY, "
             + FeedEntry.col_snus_name + " " + TEXT + ", "
             + FeedEntry.col_snus_manufactorer + " " + INTEGER + ", "
@@ -43,7 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + FeedEntry.DATABASE_TABLE_TYPE + "(" + FeedEntry.col_type_id + "));"
             ;
 
-    public static final String CREATE_TABLE_LINE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_LINE + "("
+    public static final String DROP_TABLE_LINE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_LINE + ";";
+    public static final String CREATE_TABLE_LINE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_LINE + "("
             + FeedEntry.col_line_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_line_manufactorer + " " + INTEGER + ", "
             + FeedEntry.col_line_name + " " + TEXT + ", "
@@ -51,22 +56,30 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + "REFERENCES " + FeedEntry.DATABASE_TABLE_MANUFACTURER + "("
             + FeedEntry.col_manufacturer_id + ")" + ");";
 
-    public static final String CREATE_TABLE_MANUFACTURER = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTURER
+    public static final String DROP_TABLE_MANUFACTURER = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_MANUFACTURER + ";";
+    public static final String CREATE_TABLE_MANUFACTURER =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTURER
             + "(" + FeedEntry.col_manufacturer_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_manufacturer_name + " " + TEXT + ", "
             + FeedEntry.col_manufacturer_country + " " + TEXT + ", "
             + FeedEntry.col_manufacturer_url + " " + TEXT+ ");";
 
-    public static final String CREATE_TABLE_TASTE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TASTE + "("
+    public static final String DROP_TABLE_TASTE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_TASTE + ";";
+    public static final String CREATE_TABLE_TASTE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TASTE + "("
             + FeedEntry.col_taste_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_taste_taste + " " + TEXT + ");";
 
-    public static final String CREATE_TABLE_TYPE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TYPE + "("
+    public static final String DROP_TABLE_TYPE = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_TYPE + ";";
+    public static final String CREATE_TABLE_TYPE =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TYPE + "("
             + FeedEntry.col_type_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_type_text + " " + TEXT + ");";
 
     // TODO: Add constraint for bookmark. Int 0/1 (bool)
-    public static final String CREATE_TABLE_MYLIST = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
+    public static final String DROP_TABLE_MYLIST = "DROP TABLE IF EXISTS " + FeedEntry.DATABASE_TABLE_MYLIST + ";";
+    public static final String CREATE_TABLE_MYLIST =
+            "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MYLIST + "("
             + FeedEntry.col_mylist_id + " " + INTEGER + " PRIMARY KEY, "
             + FeedEntry.col_mylist_snusid + " " + INTEGER + ", "
             + FeedEntry.col_mylist_myrank + " " + INTEGER + ", "
@@ -129,6 +142,19 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         this.context = context;
     }
 
+
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DROP_TABLE_MYLIST);
+        db.execSQL(DROP_TABLE_SNUS);
+        db.execSQL(DROP_TABLE_TASTE);
+        db.execSQL(DROP_TABLE_TYPE);
+        db.execSQL(DROP_TABLE_LINE);
+        db.execSQL(DROP_TABLE_MANUFACTURER);
+        onCreate(db);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_MANUFACTURER);
@@ -137,11 +163,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_TASTE);
         db.execSQL(CREATE_TABLE_SNUS);
         db.execSQL(CREATE_TABLE_MYLIST);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onCreate(db);
     }
 
     public boolean putDummyData(){
