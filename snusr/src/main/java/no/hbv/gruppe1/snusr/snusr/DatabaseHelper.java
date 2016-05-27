@@ -2,15 +2,10 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.provider.BaseColumns;
-
-import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 
 /**
  * Created by Håkon Stensheim on 10.04.16.
@@ -35,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + FeedEntry.col_snus_type + " " + INTEGER + ", "
             + FeedEntry.col_snus_img + " BLOB, "
             + "FOREIGN KEY (" + FeedEntry.col_snus_manufactorer + ") REFERENCES "
-            + FeedEntry.DATABASE_TABLE_MANUFACTORER + "(" + FeedEntry.col_manufactorer_id + "), "
+            + FeedEntry.DATABASE_TABLE_MANUFACTURER + "(" + FeedEntry.col_manufacturer_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_line + ") REFERENCES "
             + FeedEntry.DATABASE_TABLE_LINE + "(" + FeedEntry.col_line_id + "), "
             + "FOREIGN KEY (" + FeedEntry.col_snus_taste1 + ") REFERENCES "
@@ -53,14 +48,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + FeedEntry.col_line_manufactorer + " " + INTEGER + ", "
             + FeedEntry.col_line_name + " " + TEXT + ", "
             + "FOREIGN KEY (" + FeedEntry.col_line_manufactorer + ") "
-            + "REFERENCES " + FeedEntry.DATABASE_TABLE_MANUFACTORER + "("
-            + FeedEntry.col_manufactorer_id + ")" + ");";
+            + "REFERENCES " + FeedEntry.DATABASE_TABLE_MANUFACTURER + "("
+            + FeedEntry.col_manufacturer_id + ")" + ");";
 
-    public static final String CREATE_TABLE_MANUFACTORER = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTORER
-            + "(" + FeedEntry.col_manufactorer_id + " " + INTEGER + " PRIMARY KEY, "
-            + FeedEntry.col_manufactorer_name + " " + TEXT + ", "
-            + FeedEntry.col_manufactorer_country + " " + TEXT + ", "
-            + FeedEntry.col_manufactorer_url + " " + TEXT+ ");";
+    public static final String CREATE_TABLE_MANUFACTURER = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_MANUFACTURER
+            + "(" + FeedEntry.col_manufacturer_id + " " + INTEGER + " PRIMARY KEY, "
+            + FeedEntry.col_manufacturer_name + " " + TEXT + ", "
+            + FeedEntry.col_manufacturer_country + " " + TEXT + ", "
+            + FeedEntry.col_manufacturer_url + " " + TEXT+ ");";
 
     public static final String CREATE_TABLE_TASTE = "CREATE TABLE " + FeedEntry.DATABASE_TABLE_TASTE + "("
             + FeedEntry.col_taste_id + " " + INTEGER + " PRIMARY KEY, "
@@ -97,17 +92,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         public static final String col_snus_img = "IMG";
 
 
-        //Table MANUFACTORER:
-        public static final String DATABASE_TABLE_MANUFACTORER = "MANUFACTORER";
-        public static final String col_manufactorer_id = "_id";
-        public static final String col_manufactorer_name = "NAME";
-        public static final String col_manufactorer_url = "URL";
-        public static final String col_manufactorer_country = "COUNTRY";
+        //Table MANUFACTURER:
+        public static final String DATABASE_TABLE_MANUFACTURER = "MANUFACTURER";
+        public static final String col_manufacturer_id = "_id";
+        public static final String col_manufacturer_name = "NAME";
+        public static final String col_manufacturer_url = "URL";
+        public static final String col_manufacturer_country = "COUNTRY";
 
         //Table LINE:
         public static final String DATABASE_TABLE_LINE = "LINE";
         public static final String col_line_id = "_id";
-        public static final String col_line_manufactorer = "MANUFACTORER";
+        public static final String col_line_manufactorer = "MANUFACTURER";
         public static final String col_line_name = "NAME";
 
         //Table TASTE:
@@ -136,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_MANUFACTORER);
+        db.execSQL(CREATE_TABLE_MANUFACTURER);
         db.execSQL(CREATE_TABLE_LINE);
         db.execSQL(CREATE_TABLE_TYPE);
         db.execSQL(CREATE_TABLE_TASTE);
@@ -152,9 +147,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public boolean putDummyData(){
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            putManufactorer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
-            putManufactorer(db, "Skruf", "www.skruf.se", "Sweden");
-            putManufactorer(db, "British American Tobacco", "www.bat.com", "England");
+            putManufacturer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
+            putManufacturer(db, "Skruf", "www.skruf.se", "Sweden");
+            putManufacturer(db, "British American Tobacco", "www.bat.com", "England");
 
             putLine(db, 1, "General");
             putLine(db, 1, "General G3");
@@ -183,16 +178,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Vanilla");
 
             putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            putSnus(db, "Extra Weak",   2, 5, 2, 0, 0, 3, 0.6, 3, 3, null);
         } catch (Exception ex){return false;}
         return true;
     }
 
-    public void putManufactorer(SQLiteDatabase db, String name, String url, String country){
+    public void putManufacturer(SQLiteDatabase db, String name, String url, String country){
         ContentValues input = new ContentValues();
-        input.put(FeedEntry.col_manufactorer_name, name);
-        input.put(FeedEntry.col_manufactorer_url, url);
-        input.put(FeedEntry.col_manufactorer_country, country);
-        db.insert(FeedEntry.DATABASE_TABLE_MANUFACTORER, null, input);
+        input.put(FeedEntry.col_manufacturer_name, name);
+        input.put(FeedEntry.col_manufacturer_url, url);
+        input.put(FeedEntry.col_manufacturer_country, country);
+        db.insert(FeedEntry.DATABASE_TABLE_MANUFACTURER, null, input);
     }
 
     public void putLine(SQLiteDatabase db, int manufactorer, String name){
