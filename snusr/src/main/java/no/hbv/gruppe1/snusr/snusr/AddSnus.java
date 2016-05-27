@@ -1,12 +1,17 @@
 package no.hbv.gruppe1.snusr.snusr;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 
 
 /**
@@ -28,6 +33,12 @@ public class AddSnus extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    RatingBar rating;
+    ImageView snusImage;
+    EditText innName, innManu;
+    Button btnAdd, btnAddSnusImage;
+    Spinner spinSweet, spinSalt, spinTaste, spinStr;
 
     /**
      * Use this factory method to create a new instance of
@@ -61,10 +72,24 @@ public class AddSnus extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_snus, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v =  inflater.inflate(R.layout.fragment_add_snus, container, false);
+        snusImage = (ImageView) v.findViewById(R.id.addSnus_imgview);
+        rating = (RatingBar) v.findViewById(R.id.ratingbar_addsnus);
+        innName = (EditText) v.findViewById(R.id.etxt_name);
+        innManu = (EditText) v.findViewById(R.id.etxt_manu);
+        btnAdd = (Button) v.findViewById(R.id.btn_addsnus);
+        btnAddSnusImage = (Button) v.findViewById(R.id.btn_addSnusImage);
+        spinSalt = (Spinner) v.findViewById(R.id.spin_salt);
+        spinSweet = (Spinner) v.findViewById(R.id.spin_sweet);
+        spinStr = (Spinner) v.findViewById(R.id.spin_str);
+        spinTaste = (Spinner) v.findViewById(R.id.spin_taste);
+
+        return v;
+    }
+
+    public void addSnus(){
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

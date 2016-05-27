@@ -10,7 +10,7 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
 /**
  * Created by hakonst on 14.04.16.
  */
-public class ImageHandler implements ImageHandlerInterface {
+public abstract class ImageHandler implements ImageHandlerInterface {
     @Override
     public Object handleInputStream(Object input) {
         return null;

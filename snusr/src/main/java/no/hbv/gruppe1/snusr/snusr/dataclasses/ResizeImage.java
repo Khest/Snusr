@@ -8,7 +8,7 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.ImageHandlerInterface;
  * Created by lassetangeras on 14.04.2016.
  */
 
-public class ResizeImage implements ImageHandlerInterface{
+public abstract class ResizeImage implements ImageHandlerInterface{
 
     @Override
     public Object handleInputStream(Object input) {
