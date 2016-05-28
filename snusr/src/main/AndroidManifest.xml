@@ -12,7 +12,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/strtup_screen_logo"
+        android:icon="@drawable/general_los_styrke3"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -26,7 +26,9 @@
         </activity>
         <activity android:name=".Image_compress" >
         </activity>
-        <activity android:name=".BluetoothHandler" >
+        <activity android:name=".CameraHandler" >
+        </activity>
+        <activity android:name=".PhoneGallery" >
         </activity>
         <activity
             android:name=".NavigationDrawer"

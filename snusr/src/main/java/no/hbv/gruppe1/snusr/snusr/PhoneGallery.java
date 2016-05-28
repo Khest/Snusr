@@ -36,7 +36,7 @@ public class PhoneGallery extends Activity {
             //    .getExternalStorageDirectory()
               //  .getAbsolutePath();
 
-        String targetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+        String targetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
         //String targetPath = path + "/test/";
 
@@ -95,11 +95,20 @@ public class PhoneGallery extends Activity {
             }
             Bitmap bm = decodeSampledBitmapFromUri(itemList.get(position), 220, 220);
 
+
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bm.compress(Bitmap.CompressFormat.JPEG, 20, stream); //Funker best å konvertere til JPEG. //TODO comprimering funker ikke enda..
+//            byte[] byteArray = stream.toByteArray();
+//            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
             imageView.setImageBitmap(bm);
+           // Log.d("tree", bm.toString());
             return imageView;
         }
 
         public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
+
+
 
             Bitmap bm = null;
             // First decode with inJustDecodeBounds=true to check dimensions
