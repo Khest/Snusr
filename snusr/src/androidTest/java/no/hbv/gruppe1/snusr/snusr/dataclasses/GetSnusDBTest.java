@@ -139,7 +139,6 @@ public class GetSnusDBTest extends AndroidTestCase {
         Cursor c = getSnusDB.fetchSnus(context, filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
     public void testTasteText() throws Exception {
@@ -153,7 +152,7 @@ public class GetSnusDBTest extends AndroidTestCase {
         assertEquals(1, c.getCount());
 //        if (!c.getString(c.getColumnIndex("_TASTE1")).toLowerCase().contains(val1))
 //            throw new RuntimeException("result does not contain " + val1);
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+//        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
     public void testNictotine() throws Exception {
@@ -177,10 +176,28 @@ public class GetSnusDBTest extends AndroidTestCase {
         Cursor c = getSnusDB.fetchSnus(context, filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
-    public void testUpgrade() throws  Exception {
+    public void testWildcard() throws Exception {
+        List<Filtration> filtrations = new ArrayList<>();
+        Filtration f = Filtration.WILDCARD;
+        String value = "sweden";
+        f.setSearchValue(value);
+        filtrations.add(f);
+        Cursor c = getSnusDB.fetchSnus(context, filtrations, null);
+        assertNotNull(c);
+    }
+
+    public void testSorting() throws Exception {
+        Sorting s = Sorting.TYPE;
+        Cursor c = getSnusDB.fetchSnus(context, null, s);
+        assertNotNull(c);
+        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+        Log.d(TAG, String.valueOf(c.getCount()));
+    }
+
+
+    public void _testUpgrade() throws  Exception {
         db.onUpgrade(db.getWritableDatabase(), 1, 2);
     }
 
