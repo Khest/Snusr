@@ -1,6 +1,5 @@
 package no.hbv.gruppe1.snusr.snusr.dataclasses;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.test.AndroidTestCase;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Dakh on 2016-05-28.
+ * Created by Knut Johan Hesten 2016-05-28.
  */
 public class SnusTest extends AndroidTestCase {
     public static final String TAG = "SnusrDebug";

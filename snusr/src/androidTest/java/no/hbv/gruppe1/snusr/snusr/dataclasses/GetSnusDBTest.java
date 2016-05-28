@@ -11,22 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Dakh on 2016-05-26.
+ * Created by Knut Johan Hesten 2016-05-26.
  */
 public class GetSnusDBTest extends AndroidTestCase {
-    public static final String TAG = "SnusrDebug";
-    private GetSnusDB getSnusDB;
-    private RenamingDelegatingContext context;
-    private DatabaseHelper db;
 
-    public void setUp() {
-        context = new RenamingDelegatingContext(getContext(), "test_");
-        db = new DatabaseHelper(context);
-        db.putDummyData();
-        getSnusDB = new GetSnusDB();
-    }
+        private GetSnusDB getSnusDB;
+        private RenamingDelegatingContext context;
+        private DatabaseHelper db;
 
-    public void _testFetchSnus() {
+        public void setUp() {
+            context = new RenamingDelegatingContext(getContext(), "test_");
+            db = new DatabaseHelper(context);
+            db.putDummyData();
+            getSnusDB = new GetSnusDB();
+        }
+
+    public void testFetchSnus() {
         Cursor c = getSnusDB.fetchSnus(context, null, null);
         assertNotNull(c);
         if (c.getCount() <= 0 ) throw new RuntimeException("Empty cursor in test 1");
@@ -35,7 +35,7 @@ public class GetSnusDBTest extends AndroidTestCase {
         System.out.println(c.getString(1));
     }
 
-    public void _testFetchSnusWithFiltration() throws Exception {
+    public void testFetchSnusWithFiltration() throws Exception {
         List<Filtration> filtrations = new  ArrayList<>();
         filtrations.add(Filtration.LINE);
         filtrations.get(0).setSearchValue("General");
@@ -45,7 +45,7 @@ public class GetSnusDBTest extends AndroidTestCase {
         c.moveToFirst();
     }
 
-    public void _testFetchSnusWithOrder() throws Exception {
+    public void testFetchSnusWithOrder() throws Exception {
         Sorting s = Sorting.STRENGTH;
         s.setOrder(Sorting.Order.ASC);
         Cursor c = getSnusDB.fetchSnus(context, null, s);
@@ -53,7 +53,7 @@ public class GetSnusDBTest extends AndroidTestCase {
         if (c.getCount() <= 0) throw new RuntimeException("test 3 empty cursor");
     }
 
-    public void _testFetchSnusWithFiltrationAndOrder() throws Exception {
+    public void testFetchSnusWithFiltrationAndOrder() throws Exception {
         Sorting s = Sorting.STRENGTH;
         s.setOrder(Sorting.Order.ASC);
         List<Filtration> filtrations = new ArrayList<>();
@@ -115,7 +115,7 @@ public class GetSnusDBTest extends AndroidTestCase {
         Cursor c = getSnusDB.fetchSnus(context, filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
+        Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
     public void testStrengthFiltration() throws Exception {
@@ -192,12 +192,12 @@ public class GetSnusDBTest extends AndroidTestCase {
         Sorting s = Sorting.TYPE;
         Cursor c = getSnusDB.fetchSnus(context, null, s);
         assertNotNull(c);
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
-        Log.d(TAG, String.valueOf(c.getCount()));
+        Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
+        Log.d(Globals.TAG, String.valueOf(c.getCount()));
     }
 
 
-    public void _testUpgrade() throws  Exception {
+    public void testUpgrade() throws  Exception {
         db.onUpgrade(db.getWritableDatabase(), 1, 2);
     }
 
