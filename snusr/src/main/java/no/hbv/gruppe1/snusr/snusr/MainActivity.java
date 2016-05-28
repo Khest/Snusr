@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
             // Setter first_time til false, denne koden kjøres aldri igjen.
             settings.edit().putBoolean("first_time", false).apply();
         }
-        Toast.makeText(this, db.getSnus(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, NavigationDrawer.class);
         startActivity(intent);
     }

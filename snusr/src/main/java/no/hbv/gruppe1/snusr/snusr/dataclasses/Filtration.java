@@ -4,9 +4,7 @@ import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 /**
  * Created by Knut Johan Hesten 2016-04-14.
- */
-
-/**
+ *
  * Enumerable class that handles SQL generation for a variety of filters
  */
 public enum Filtration {
@@ -23,7 +21,7 @@ public enum Filtration {
             DatabaseHelper.FeedEntry.col_snus_strength, FiltrationRule.RANGE),
     TASTE_NUMBER("Taste", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.TASTE_NUMBER),
-    TASTE_TEXT("Taste text", GetSnusDB.TASTE_TABLE_ALIAS_1,
+    TASTE_TEXT("Taste text", DatabaseInteractor.TASTE_TABLE_ALIAS_1,
             DatabaseHelper.FeedEntry.col_taste_taste, FiltrationRule.LIKE),
     NICOTINE("Nicotine", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
@@ -34,11 +32,11 @@ public enum Filtration {
     WILDCARD("Wildcard", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.WILDCARD);
 
-    private String GuiName, tableName, columnName;
+    private String guiName, tableName, columnName;
     private FiltrationRule filtrationRule;
     private String filterSql;
-    Filtration(String realName, String tableName, String columnName, FiltrationRule filtrationRule) {
-        this.GuiName = realName;
+    Filtration(String guiName, String tableName, String columnName, FiltrationRule filtrationRule) {
+        this.guiName = guiName;
         this.tableName = tableName;
         this.columnName = columnName;
         this.filtrationRule = filtrationRule;
@@ -73,42 +71,13 @@ public enum Filtration {
         return s;
     }
 
-    /**
-     * Returns the filtration SQL string for a filter with a fixed value
-     * @param searchValue Delimiter for the rule. If Integer it finds exact, if String it finds nearest neighbour
-     * @return Returns the SQL string value of the specific rule
-     */
-//    public String filtrationString(Object searchValue) {
-//        if (searchValue.getClass() == Integer.class) {
-//            return this.filtrationRule.getRule(this.tableName, this.columnName, (int)searchValue);
-//        } else {
-//            return this.filtrationRule.getRule(this.tableName, this.columnName, searchValue.toString());
-//        }
-//    }
-
-    /**
-     * Returns the filtration SQL string for a filter with range value
-     * @param startRange The minimum value in the range
-     * @param endRange The maximum value in the range
-     * @return Returns the SQL string value of the specific rule
-     */
-//    public String filtrationString(Double startRange, Double endRange) {
-//        return this.filtrationRule.getRule(this.tableName, this.columnName, startRange, endRange);
-//    }
-
-    /**
-     * Gets the GUI name representation of the filtration rule
-     * @return String
-     */
-//    public String getGuiName() {return this.GuiName;}
-
     public enum FiltrationRule {
-        EXACT(" = ") {
+        EXACT() {
             protected String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2) {
                 return " " + tableName + "." + columnName + " = " + String.valueOf(searchValue1) + " ";
             }
         },
-        LIKE(" LIKE ") {
+        LIKE() {
             protected String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2) {
                 return " " + tableName + "." + columnName + " LIKE " + " \"%" + searchValue1 + "%\" COLLATE NOCASE ";
             }
@@ -134,7 +103,7 @@ public enum Filtration {
                             " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
                         " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_name +
                             " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
-                        " OR " + GetSnusDB.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste +
+                        " OR " + DatabaseInteractor.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste +
                             " LIKE \"%" + String.valueOf(searchValue1 + "%\"" +
                         " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_country +
                             " LIKE \"%" + String.valueOf(searchValue1)) + "%\"" +
@@ -142,12 +111,15 @@ public enum Filtration {
             }
         };
 
+        /**
+         * Gets the specific rule for the current FiltrationRule
+         * @param tableName         Table name to apply filtration to
+         * @param columnName        Column name to apply filtration to
+         * @param searchValue1      The first search value.
+         * @param searchValue2      Optional second search value. If included defines a range to reach for
+         * @return                  Returns the sql string for the filtration value
+         */
         protected abstract String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2);
-
-        private String value;
-        FiltrationRule(String value) {
-            this.value = value;
-        }
 
         FiltrationRule() { }
     }
