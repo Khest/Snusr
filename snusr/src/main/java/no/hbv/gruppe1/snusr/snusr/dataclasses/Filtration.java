@@ -28,7 +28,11 @@ public enum Filtration {
     NICOTINE("Nicotine", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
     TYPE_NUMBER("Type", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
-            DatabaseHelper.FeedEntry.col_snus_type, FiltrationRule.EXACT);
+            DatabaseHelper.FeedEntry.col_snus_type, FiltrationRule.EXACT),
+    TYPE_TEXT("Type", DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE,
+            DatabaseHelper.FeedEntry.col_type_text, FiltrationRule.LIKE),
+    WILDCARD("Wildcard", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+            DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.WILDCARD);
 
     private String GuiName, tableName, columnName;
     private FiltrationRule filtrationRule;
@@ -119,7 +123,22 @@ public enum Filtration {
             protected String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2) {
                 return " " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste1 + " = " + String.valueOf(searchValue1) +
                         " OR " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste2 + " = " + String.valueOf(searchValue1) +
-                        " OR " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste3 + " = " + String.valueOf(searchValue1);
+                        " OR " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste3 + " = " + String.valueOf(searchValue1) + " ";
+            }
+        },
+        WILDCARD() {
+            protected String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2) {
+                return " " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." + DatabaseHelper.FeedEntry.col_snus_name +
+                            " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
+                        " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE + "." + DatabaseHelper.FeedEntry.col_line_name +
+                            " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
+                        " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_name +
+                            " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
+                        " OR " + GetSnusDB.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste +
+                            " LIKE \"%" + String.valueOf(searchValue1 + "%\"" +
+                        " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_country +
+                            " LIKE \"%" + String.valueOf(searchValue1)) + "%\"" +
+                        " ";
             }
         };
 

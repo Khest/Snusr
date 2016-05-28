@@ -50,7 +50,7 @@ public class GetSnusDB implements DatabaseGrabber {
         } else {
             sb.append(sorting.getSql());
         }
-        Log.d(TAG, sb.toString());
+        //Log.d(TAG, sb.toString());
         return dbCursor(context, sb.toString());
     }
 

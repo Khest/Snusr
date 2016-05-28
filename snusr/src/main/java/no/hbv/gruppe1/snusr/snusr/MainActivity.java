@@ -2,8 +2,6 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -30,10 +28,9 @@ public class MainActivity extends AppCompatActivity {
             settings.edit().putBoolean("first_time", false).apply();
         }
         Toast.makeText(this, db.getSnus(), Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, Image_compress.class);
+        Intent intent = new Intent(this, NavigationDrawer.class);
         startActivity(intent);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,5 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }
