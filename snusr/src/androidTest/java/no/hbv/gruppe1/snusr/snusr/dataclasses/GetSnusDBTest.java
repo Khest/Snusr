@@ -47,7 +47,7 @@ public class GetSnusDBTest extends AndroidTestCase {
 
     public void testFetchSnusWithOrder() throws Exception {
         Sorting s = Sorting.STRENGTH;
-        s.setOrder(Sorting.Order.ASC);
+        s.setOrder(Sorting.Order.ASCENDING);
         Cursor c = getSnusDB.fetchSnus(context, null, s);
         assertNotNull(c);
         if (c.getCount() <= 0) throw new RuntimeException("test 3 empty cursor");
@@ -55,7 +55,7 @@ public class GetSnusDBTest extends AndroidTestCase {
 
     public void testFetchSnusWithFiltrationAndOrder() throws Exception {
         Sorting s = Sorting.STRENGTH;
-        s.setOrder(Sorting.Order.ASC);
+        s.setOrder(Sorting.Order.ASCENDING);
         List<Filtration> filtrations = new ArrayList<>();
         filtrations.add(Filtration.MANUFACTURER);
         filtrations.get(0).setSearchValue("swedish");

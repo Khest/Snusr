@@ -2,16 +2,14 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 /**
- * Created by Håkon Stensheim on 10.04.16.
+ * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    Context context;
     public static final int DATABASE_VERSION = 1;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
@@ -139,7 +137,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public DatabaseHelper(Context context){
         super(context, FeedEntry.DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
 
@@ -254,21 +251,5 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         input.put(FeedEntry.col_mylist_myrank, rank);
         input.put(FeedEntry.col_mylist_bookmark, bookmark);
         db.insert(FeedEntry.DATABASE_TABLE_MYLIST, null, input);
-    }
-
-    public String getSnus(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT " + FeedEntry.DATABASE_TABLE_SNUS + "." + FeedEntry.col_snus_name + ", "
-                + FeedEntry.DATABASE_TABLE_LINE + "." + FeedEntry.col_line_name
-                + " FROM " + FeedEntry.DATABASE_TABLE_SNUS
-                + " LEFT JOIN "
-                + FeedEntry.DATABASE_TABLE_LINE + " ON " + FeedEntry.DATABASE_TABLE_SNUS + "." + FeedEntry.col_snus_line
-                + " = " + FeedEntry.DATABASE_TABLE_LINE + "." + FeedEntry.col_line_id
-                + ";", null);
-        c.moveToFirst();
-        String text = c.getString(1);
-        text = text + " " + c.getString(0);
-        c.close();
-        return text;
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import android.util.Log;
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseGrabber;
 
@@ -14,10 +13,6 @@ import java.util.List;
  * Created by Knut Johan Hesten 2016-05-26.
  */
 public class GetSnusDB implements DatabaseGrabber {
-    public static final int MYLIST_FAVOURITES = 1;
-    public static final int MYLIST_BOOKMARKS  = 0;
-    public static final int MYLIST_ALL        = -1;
-
     public static final String TASTE_TABLE_ALIAS_1 = "_TASTE1";
     public static final String TASTE_COLUMN_ALIAS_1 = "TasteId1";
     public static final String TASTE_TABLE_ALIAS_2 = "_TASTE2";
@@ -56,9 +51,9 @@ public class GetSnusDB implements DatabaseGrabber {
 
     /**
      * Returns my favourites
-     * @param context Application context
-     * @param restriction Specify whether to get favourites, bookmarks or both via integer
-     * @return Returns cursor of my favourites
+     * @param context           Application context
+     * @param restriction       Specify whether to get favourites, bookmarks or both via integer
+     * @return                  Returns cursor containing the user's favourites
      */
     @Override
     public Cursor fetchMyList(Context context, int restriction) {
@@ -67,7 +62,7 @@ public class GetSnusDB implements DatabaseGrabber {
         sb.append(" WHERE ").append(DatabaseHelper.FeedEntry.col_snus_id)
                 .append(" = ")
                             .append(DatabaseHelper.FeedEntry.col_mylist_snusid);
-        if (restriction != MYLIST_ALL) {
+        if (restriction != Globals.MYLIST_ALL) {
             sb.append(" AND ").append(DatabaseHelper.FeedEntry.col_mylist_bookmark)
                     .append(" = ").append(String.valueOf(restriction));
         }
@@ -77,9 +72,9 @@ public class GetSnusDB implements DatabaseGrabber {
 
     /**
      * Fetches a specific snus
-     * @param context Application context
-     * @param snusId The snus internal ID
-     * @return Returns cursor containing the specific snus
+     * @param context           Application context
+     * @param snusId            The snus internal ID
+     * @return                  Returns cursor containing the specific snus
      */
     @Override
     public Cursor fetchSpecificSnus(Context context, int snusId) {
@@ -88,6 +83,11 @@ public class GetSnusDB implements DatabaseGrabber {
         return dbCursor(context, sql);
     }
 
+    /**
+     * Fetches a list of manufacturers
+     * @param context           Application context
+     * @return                  Returns a navigable cursor containing id and names of the manufacturers
+     */
     @Override
     public Cursor fetchManufacturers(Context context) {
         String sql = "SELECT " +
@@ -104,6 +104,7 @@ public class GetSnusDB implements DatabaseGrabber {
         return db.rawQuery(sqlString, null);
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     private String snusDetailSqlJoinString() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT *, ")
