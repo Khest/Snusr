@@ -42,7 +42,7 @@ public enum  Sorting {
      * @return          Returns SQL order
      */
     public String getSql() {
-        return " ORDER BY " + columnName +" " + this.order.getString();
+        return " ORDER BY " + columnName +" " + this.order.getOrder();
     }
 
 
@@ -60,7 +60,7 @@ public enum  Sorting {
          * Gets the SQL representation of the order
          * @return      Returns SQL representation of the order
          */
-        public String getString() {
+        public String getOrder() {
             return string;
         }
 }

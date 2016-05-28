@@ -21,7 +21,7 @@ public enum Filtration {
             DatabaseHelper.FeedEntry.col_snus_strength, FiltrationRule.RANGE),
     TASTE_NUMBER("Taste", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.TASTE_NUMBER),
-    TASTE_TEXT("Taste text", GetSnusDB.TASTE_TABLE_ALIAS_1,
+    TASTE_TEXT("Taste text", DatabaseInteractor.TASTE_TABLE_ALIAS_1,
             DatabaseHelper.FeedEntry.col_taste_taste, FiltrationRule.LIKE),
     NICOTINE("Nicotine", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
@@ -103,7 +103,7 @@ public enum Filtration {
                             " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
                         " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_name +
                             " LIKE \"%" + String.valueOf(searchValue1) + "%\"" +
-                        " OR " + GetSnusDB.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste +
+                        " OR " + DatabaseInteractor.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste +
                             " LIKE \"%" + String.valueOf(searchValue1 + "%\"" +
                         " OR " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER + "." + DatabaseHelper.FeedEntry.col_manufacturer_country +
                             " LIKE \"%" + String.valueOf(searchValue1)) + "%\"" +

@@ -53,7 +53,7 @@ public final class Snus {
         filtrationList.add(f1);
         filtrationList.add(f2);
         filtrationList.add(f3);
-        GetSnusDB db = new GetSnusDB();
+        DatabaseInteractor db = new DatabaseInteractor();
         Cursor c = db.fetchSnus(context, filtrationList, null);
         return (c.getCount() > 0);
     }
