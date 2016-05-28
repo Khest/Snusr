@@ -33,28 +33,32 @@
         android:layout_height="40dp"
         android:id="@+id/spin_sweet"
         android:layout_below="@+id/etxt_manu"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:entries="@array/spinnerItems"/>
 
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:id="@+id/spin_salt"
         android:layout_below="@+id/spin_sweet"
-        android:layout_alignEnd="@+id/spin_sweet" />
+        android:layout_alignEnd="@+id/spin_sweet"
+        android:entries="@array/spinnerItems"/>
 
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:id="@+id/spin_taste"
         android:layout_below="@+id/spin_salt"
-        android:layout_alignEnd="@+id/spin_salt" />
+        android:layout_alignEnd="@+id/spin_salt"
+        android:entries="@array/spinnerItems"/>
 
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:id="@+id/spin_str"
         android:layout_below="@+id/spin_taste"
-        android:layout_alignEnd="@+id/spin_taste" />
+        android:layout_alignEnd="@+id/spin_taste"
+        android:entries="@array/spinnerItems"/>
 
     <Button
         android:layout_width="wrap_content"

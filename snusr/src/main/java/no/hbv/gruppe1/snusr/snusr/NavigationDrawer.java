@@ -54,7 +54,7 @@ public class NavigationDrawer extends AppCompatActivity
                 fragment = new SendFileFragment();
                 break;
             case 1:
-                fragment = null;
+                fragment = new AddSnus();
                 break;
             case 2:
                 fragment = null;
