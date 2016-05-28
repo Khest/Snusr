@@ -5,14 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
-import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseGrabber;
+import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseInteraction;
 
 import java.util.List;
 
 /**
  * Created by Knut Johan Hesten 2016-05-26.
  */
-public class GetSnusDB implements DatabaseGrabber {
+public class DatabaseInteractor implements DatabaseInteraction {
     public static final String TASTE_TABLE_ALIAS_1 = "_TASTE1";
     public static final String TASTE_COLUMN_ALIAS_1 = "TasteId1";
     public static final String TASTE_TABLE_ALIAS_2 = "_TASTE2";

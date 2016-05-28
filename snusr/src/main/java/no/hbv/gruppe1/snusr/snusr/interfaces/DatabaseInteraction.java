@@ -12,7 +12,7 @@ import java.util.List;
  *
  * Interface for common database tasks
  */
-public interface DatabaseGrabber {
+public interface DatabaseInteraction {
 
     /**
      * Fetches a list of snus
