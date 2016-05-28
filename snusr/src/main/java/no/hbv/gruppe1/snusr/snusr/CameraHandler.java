@@ -31,7 +31,8 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
 
     String mCurrentPhotoPath; //Create imageFile
     ImageView imageFromCamera;
-    Bitmap imageSend;
+    Bitmap dstBmp;
+
 
 
     @Override
@@ -52,6 +53,11 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
      */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //handle camera and return image
+        try {
+            throw new Exception("========================================================");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -82,7 +88,7 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "SnusR_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+                Environment.DIRECTORY_DCIM);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -163,7 +169,30 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
-        imageFromCamera.setImageBitmap(bitmap);
+
+        if (bitmap.getWidth() >= bitmap.getHeight()){
+
+            dstBmp = Bitmap.createBitmap(
+                    bitmap,
+                    bitmap.getWidth()/2 - bitmap.getHeight()/2,
+                    0,
+                    bitmap.getHeight(),
+                    bitmap.getHeight()
+            );
+            imageFromCamera.setImageBitmap(dstBmp);
+
+        }else {
+
+            dstBmp = Bitmap.createBitmap(
+                    bitmap,
+                    0,
+                    bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
+                    bitmap.getWidth(),
+                    bitmap.getWidth()
+            );
+            imageFromCamera.setImageBitmap(dstBmp);
+        }
+            //imageFromCamera.setImageBitmap(bitmap);
 
     }
 }

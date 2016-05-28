@@ -35,13 +35,6 @@ public class SnusList extends Fragment {
         listview = (ListView) view.findViewById(R.id.snuslist);
         GetSnusDB db = new GetSnusDB();
         Cursor cur = db.fetchSnus(getActivity(), null, null);
-        //DatabaseHelper helper = new DatabaseHelper(getActivity());
-        //SQLiteDatabase db = helper.getWritableDatabase();
-        //Cursor cur = db.rawQuery("SELECT * FROM SNUS", null);
-
-//        while(cur.moveToNext()){
-//            Toast.makeText(getActivity(), cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name)), Toast.LENGTH_LONG).show();
-//        }
 
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
         listview.setAdapter(adapter);
