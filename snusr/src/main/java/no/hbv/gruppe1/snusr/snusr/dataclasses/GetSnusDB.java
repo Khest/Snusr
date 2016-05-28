@@ -63,7 +63,6 @@ public class GetSnusDB implements DatabaseGrabber {
     @Override
     public Cursor fetchMyList(Context context, int restriction) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
         sb.append(snusDetailSqlJoinString());
         sb.append(" WHERE ").append(DatabaseHelper.FeedEntry.col_snus_id)
                 .append(" = ")
@@ -86,6 +85,16 @@ public class GetSnusDB implements DatabaseGrabber {
     public Cursor fetchSpecificSnus(Context context, int snusId) {
         String sql = snusDetailSqlJoinString();
         sql += " WHERE " + DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
+        return dbCursor(context, sql);
+    }
+
+    @Override
+    public Cursor fetchManufacturers(Context context) {
+        String sql = "SELECT " +
+                    DatabaseHelper.FeedEntry.col_manufacturer_id + ", " +
+                    DatabaseHelper.FeedEntry.col_manufacturer_name +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER +
+                Sorting.ALPHABETICAL.getSql();
         return dbCursor(context, sql);
     }
 
