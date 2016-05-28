@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="no.hbv.gruppe1.snusr.snusr.addSnusManufacturer"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/manufacturer_img"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manufacturers:"
+        android:textSize="100dp"/>
+
+    <ListView
+        android:id="@+id/manufacturer_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+</LinearLayout>
