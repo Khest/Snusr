@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SnusTest extends AndroidTestCase {
     public static final String TAG = "SnusrDebug";
-    private GetSnusDB getSnusDB;
+    private DatabaseInteractor databaseInteractor;
     private RenamingDelegatingContext context;
     private DatabaseHelper db;
 
@@ -23,7 +23,7 @@ public class SnusTest extends AndroidTestCase {
         context = new RenamingDelegatingContext(getContext(), "test_");
         db = new DatabaseHelper(context);
         db.putDummyData();
-        getSnusDB = new GetSnusDB();
+        databaseInteractor = new DatabaseInteractor();
     }
 
     @SuppressWarnings("Duplicates")
@@ -41,7 +41,7 @@ public class SnusTest extends AndroidTestCase {
         filtrationList.add(f1);
         filtrationList.add(f2);
         filtrationList.add(f3);
-        Cursor c = getSnusDB.fetchSnus(context, filtrationList, null);
+        Cursor c = databaseInteractor.fetchSnus(context, filtrationList, null);
         Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
