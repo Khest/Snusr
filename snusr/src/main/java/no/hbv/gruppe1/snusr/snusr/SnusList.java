@@ -1,18 +1,14 @@
 package no.hbv.gruppe1.snusr.snusr;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import no.hbv.gruppe1.snusr.snusr.dataclasses.GetSnusDB;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 
 
 /**
@@ -33,7 +29,7 @@ public class SnusList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_snuslist, container, false);
 
         listview = (ListView) view.findViewById(R.id.snuslist);
-        GetSnusDB db = new GetSnusDB();
+        DatabaseInteractor db = new DatabaseInteractor();
         Cursor cur = db.fetchSnus(getActivity(), null, null);
 
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);

@@ -1,4 +1,4 @@
-package no.hbv.gruppe1.snusr.snusr;
+package no.hbv.gruppe1.snusr.snusr.dataclasses;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -30,17 +30,22 @@ public class BluetoothHandler{
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
-
-
-    public BluetoothAdapter mBluetoothAdapter;
-    public Set<BluetoothDevice> pairedDevices;
+    private BluetoothAdapter mBluetoothAdapter;
+    private Set<BluetoothDevice> pairedDevices;
 
     UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    public BluetoothHandler(Context context) {
+    public BluetoothHandler(Context context){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         mState = STATE_NONE;
     }
+
+    public boolean isBluetoothEnabled() {
+        return mBluetoothAdapter.isEnabled();
+    }
+
+
 
     private synchronized void setState(int state) {
         mState = state;
