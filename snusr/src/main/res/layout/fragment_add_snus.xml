@@ -73,7 +73,7 @@
         android:background="@drawable/cam_button"
         android:layout_above="@+id/etxt_name"
         android:layout_toEndOf="@+id/spin_str"
-        android:
+
         android:textColor="#ffffff"/>
 
     <RatingBar
