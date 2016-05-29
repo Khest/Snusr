@@ -60,16 +60,16 @@
         android:text="Add snus"
         android:id="@+id/btn_addsnus"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+
         android:id="@+id/btn_addSnusImage"
+        android:background="@drawable/CamButton"
         android:layout_above="@+id/etxt_name"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/btn_addsnus" />
+        android:layout_toEndOf="@+id/spin_str" />
 
     <RatingBar
         android:layout_width="wrap_content"
