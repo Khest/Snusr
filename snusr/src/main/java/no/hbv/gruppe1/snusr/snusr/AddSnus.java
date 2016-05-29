@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -57,6 +58,8 @@ public class AddSnus extends Fragment {
         spinTaste3 = (Spinner) v.findViewById(R.id.spin_taste3);
         spinType = (Spinner) v.findViewById(R.id.spin_str);
         spinTakePic = (Spinner) v.findViewById(R.id.spin_takepic);
+        Bitmap tempImage = BitmapFactory.decodeResource(getResources(), R.drawable.noimagefound);
+        snusImage.setImageBitmap(tempImage);
 
 
         btnAddSnusImage.setOnClickListener(new View.OnClickListener() {
