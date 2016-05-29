@@ -96,12 +96,13 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(context, sql);
     }
 
+
+
     private Cursor dbCursor(Context context, String sqlString) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db;
         context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
         db = databaseHelper.getReadableDatabase();
-
         return db.rawQuery(sqlString, null);
     }
 
