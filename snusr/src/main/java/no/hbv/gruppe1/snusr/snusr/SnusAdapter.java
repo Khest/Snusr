@@ -65,12 +65,12 @@ public class SnusAdapter extends CursorAdapter {
             }
         });
         // Convert byte[] to Bitmap:
-        ImageHandler imageHandler = new ImageHandler();
-        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
-        if(stream != null)
-            img.setImageBitmap(imageHandler.convertByteToBitmap(stream));
-        else
-            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
+        //ImageHandler imageHandler = new ImageHandler();
+//        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
+//        if(stream != null)
+//            img.setImageBitmap(imageHandler.convertByteToBitmap(stream));
+//        else
+//            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
 
     }
 

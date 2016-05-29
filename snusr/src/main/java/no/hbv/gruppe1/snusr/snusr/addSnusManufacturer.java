@@ -18,7 +18,6 @@ import android.widget.SimpleCursorAdapter;
 import java.util.List;
 
 import no.hbv.gruppe1.snusr.snusr.R;
-import no.hbv.gruppe1.snusr.snusr.dataclasses.GetSnusDB;
 
 
 public class addSnusManufacturer extends Fragment {
@@ -35,10 +34,10 @@ public class addSnusManufacturer extends Fragment {
 
         ImageView img = (ImageView) view.findViewById(R.id.manufacturer_img);
         ListView listView = (ListView) view.findViewById(R.id.manufacturer_list);
-        GetSnusDB db = new GetSnusDB();
-        Cursor cur = db
-        img.setImageBitmap(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.maxresdefault));
-        listView.setAdapter(new ManufacturerAdapter(this, cur, 0));
+        //GetSnusDB db = new GetSnusDB();
+        //Cursor cur = db
+        //img.setImageBitmap(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.maxresdefault));
+        //listView.setAdapter(new ManufacturerAdapter(this, cur, 0));
         return view;
     }
 
