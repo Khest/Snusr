@@ -20,6 +20,8 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public static final String TASTE_TABLE_ALIAS_3 = "_TASTE3";
     public static final String TASTE_COLUMN_ALIAS_3 = "TasteId3";
 
+    private SQLiteDatabase db;
+
     /**
      * Gets a Cursor to traverse snus data
      * @param context           Application context
@@ -28,7 +30,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
      * @return                  Returns a cursor with all snus in accordance with filters
      */
     @Override
-    public Cursor fetchSnus(Context context, List<Filtration> filtrationList, Sorting sorting) {
+    public Cursor fetchSnus(List<Filtration> filtrationList, Sorting sorting) {
         StringBuilder sb = new StringBuilder();
         sb.append(snusDetailSqlJoinString());
         if (filtrationList != null) {
@@ -44,7 +46,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
             sb.append(sorting.getSql());
         }
         //Log.d(TAG, sb.toString());
-        return dbCursor(context, sb.toString());
+        return dbCursor(sb.toString());
     }
 
     /**
@@ -54,7 +56,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
      * @return                  Returns cursor containing the user's favourites
      */
     @Override
-    public Cursor fetchMyList(Context context, int restriction) {
+    public Cursor fetchMyList(int restriction) {
         StringBuilder sb = new StringBuilder();
         sb.append(snusDetailSqlJoinString());
         sb.append(" WHERE ").append(DatabaseHelper.FeedEntry.col_snus_id)
@@ -65,7 +67,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
                     .append(" = ").append(String.valueOf(restriction));
         }
         sb.append(Sorting.ALPHABETICAL.getSql());
-        return dbCursor(context, sb.toString());
+        return dbCursor(sb.toString());
     }
 
     /**
@@ -75,10 +77,10 @@ public class DatabaseInteractor implements DatabaseInteraction {
      * @return                  Returns cursor containing the specific snus
      */
     @Override
-    public Cursor fetchSpecificSnus(Context context, int snusId) {
+    public Cursor fetchSpecificSnus(int snusId) {
         String sql = snusDetailSqlJoinString();
         sql += " WHERE " + DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
-        return dbCursor(context, sql);
+        return dbCursor(sql);
     }
 
     /**
@@ -87,23 +89,27 @@ public class DatabaseInteractor implements DatabaseInteraction {
      * @return                  Returns a navigable cursor containing id and names of the manufacturers
      */
     @Override
-    public Cursor fetchManufacturers(Context context) {
+    public Cursor fetchManufacturers() {
         String sql = "SELECT " +
                     DatabaseHelper.FeedEntry.col_manufacturer_id + ", " +
                     DatabaseHelper.FeedEntry.col_manufacturer_name +
                 " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER +
                 Sorting.ALPHABETICAL.getSql();
-        return dbCursor(context, sql);
+        return dbCursor(sql);
     }
 
-
-
-    private Cursor dbCursor(Context context, String sqlString) {
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db;
-        context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
-        db = databaseHelper.getReadableDatabase();
+    private Cursor dbCursor(String sqlString) {
         return db.rawQuery(sqlString, null);
+    }
+
+    public DatabaseInteractor(Context context) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
+        this.db = databaseHelper.getReadableDatabase();
+    }
+
+    public void close() {
+        this.db.close();
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
