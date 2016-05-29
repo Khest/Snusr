@@ -20,8 +20,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public static final String TASTE_TABLE_ALIAS_3 = "_TASTE3";
     public static final String TASTE_COLUMN_ALIAS_3 = "TasteId3";
 
-    public static final String TAG = "SnusrDebug";
-
     /**
      * Gets a Cursor to traverse snus data
      * @param context           Application context
@@ -100,7 +98,10 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     private Cursor dbCursor(Context context, String sqlString) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        SQLiteDatabase db;
+        context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
+        db = databaseHelper.getReadableDatabase();
+
         return db.rawQuery(sqlString, null);
     }
 
