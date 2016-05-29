@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="no.hbv.gruppe1.snusr.snusr.AddSnus">
+    android:layout_height="match_parent" tools:context="no.hbv.gruppe1.snusr.snusr.AddSnus"
+    android:id="@+id/">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -31,34 +32,27 @@
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:id="@+id/spin_sweet"
-        android:layout_below="@+id/etxt_manu"
-        android:layout_alignParentStart="true"
-        android:entries="@array/spinnerItems"/>
+        android:id="@+id/spin_taste2"
+        android:entries="@array/spinnerItemsStr"
+        android:layout_below="@+id/spin_taste1"
+        android:layout_alignStart="@+id/spin_taste1" />
 
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:id="@+id/spin_salt"
-        android:layout_below="@+id/spin_sweet"
-        android:layout_alignEnd="@+id/spin_sweet"
-        android:entries="@array/spinnerItems"/>
+        android:id="@+id/spin_taste3"
+        android:entries="@array/spinnerItemsStr"
+        android:layout_below="@+id/spin_taste2"
+        android:layout_alignStart="@+id/spin_taste2" />
 
     <Spinner
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:id="@+id/spin_taste"
-        android:layout_below="@+id/spin_salt"
-        android:layout_alignEnd="@+id/spin_salt"
-        android:entries="@array/spinnerItems"/>
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_str"
-        android:layout_below="@+id/spin_taste"
-        android:layout_alignEnd="@+id/spin_taste"
-        android:entries="@array/spinnerItems"/>
+        android:id="@+id/spin_taste1"
+        android:entries="@array/spinnerItemsTaste"
+        android:layout_marginStart="23dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -74,14 +68,57 @@
         android:text="New Button"
         android:id="@+id/btn_addSnusImage"
         android:layout_above="@+id/etxt_name"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/btn_addsnus" />
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingbar_addsnus"
-        android:layout_above="@+id/btn_addsnus"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="28dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/etxt_line"
+        android:layout_gravity="left|center_vertical"
+        android:hint="Line"
+        android:layout_below="@+id/etxt_manu"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/spin_takepic"
+        android:entries="@array/spinnerItemsCamera"
+        android:layout_above="@+id/etxt_name"
+        android:layout_toStartOf="@+id/btn_addSnusImage"/>
+
+    <Spinner
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:id="@+id/spin_type"
+        android:entries="@array/spinnerItemsTaste"
+        android:layout_above="@+id/spin_taste2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="38dp" />
+
+    <Spinner
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:id="@+id/spin_str"
+        android:entries="@array/spinnerItemsTaste"
+        android:layout_below="@+id/spin_type"
+        android:layout_alignEnd="@+id/spin_type" />
+
+    <Spinner
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:id="@+id/spin_nico"
+        android:entries="@array/spinnerItemsTaste"
+        android:layout_alignBottom="@+id/spin_taste3"
+        android:layout_alignEnd="@+id/spin_str" />
+
 
 </RelativeLayout>

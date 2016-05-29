@@ -1,80 +1,65 @@
 package no.hbv.gruppe1.snusr.snusr;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by lassetangeras on 26.05.2016.
  */
-public class CameraHandler extends AppCompatActivity {
+public class CameraHandler {
 
     private static final String REQUEST_CODE = "to";
 static final int REQUEST_TAKE_PHOTO = 1;
-static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};// Spørr om tilatelse for å nå bilder på device
+
 
     String mCurrentPhotoPath; //Create imageFile
-    ImageView imageFromCamera;
-    Bitmap dstBmp;
 
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_image_crop);
-
-        imageFromCamera = (ImageView) findViewById(R.id.imageView1);
-        //Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        //startActivityForResult(intent, 0);
-
-        dispatchTakePictureIntent();
-
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_test_image_crop);
+//
+//
+//        dispatchTakePictureIntent();
+//
+//    }
 
     /**
      *This create a photoFile and start camera intent
      */
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //handle camera and return image
-        try {
-            throw new Exception("========================================================");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Log.d("photoFile", "PhotoFile can´t be made");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                       Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//    public void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//            }
+//            // Continue only if the File was successfully created
+//            if (photoFile != null) {
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                        Uri.fromFile(photoFile));
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//    }
 
-            }
-        }
+    public String getFileUrl(){
+        return mCurrentPhotoPath;
     }
 
     /**
@@ -83,47 +68,60 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
      * File is set to be .jpg format
      * Environment.DIRECTORY_PICTURES set location for the image on device
      */
-    private File createImageFile() throws IOException {
+    public static File createImageFile(){
+        //Check if your application folder exists in the external storage, if not create it:
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Snuser");
+
+        if (! storageDir.exists()){
+            if (storageDir.mkdirs()) {
+                Log.d("SnusR", "created directory");
+            }else{
+                Log.d("SnusR", "created directory");
+                }
+        }
+
+
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "SnusR_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        String imageFileName = "SnusR_";
+        String fileNameExtension = ".jpg";
 
+        File mediaFile = new File(storageDir.getPath() + File.separator + imageFileName + timeStamp + fileNameExtension);
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
+
+        return mediaFile;
     }
+
+    static Uri getOutputMediaFileUri(){
+        return Uri.fromFile(createImageFile());
+    }
+
+
 
     /**
      * Starts Add picture to gallery and set picture size after a test on receiving from camera intent
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            galleryAddPic();
-            setPic();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            galleryAddPic();
+//            setPic();
+//        }
+//    }
 
-    public void compressImage(){
-        try {
-            Intent intent = new Intent(this, Image_compress.class);
-            intent.putExtra("Image", mCurrentPhotoPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void compressImage(){
+//        try {
+//            Intent intent = new Intent(this, Image_compress.class);
+//            intent.putExtra("Image", mCurrentPhotoPath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * combined file and url and send image to a device location folder "picture" (DIRECTORY_PICTURES - in createImageFile())
      */
-    private void galleryAddPic() {
+    public void galleryAddPic(Context context) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
@@ -133,9 +131,9 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         shareIntent.setType("image/jpeg");
-        startActivity(Intent.createChooser(shareIntent, REQUEST_CODE));
+        context.startActivity(Intent.createChooser(shareIntent, REQUEST_CODE));
 
-        this.sendBroadcast(mediaScanIntent);
+        context.sendBroadcast(mediaScanIntent);
     }
 
     /**
@@ -143,7 +141,7 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
      * The image bitmap is decoded and size is set
      * Then image is displayed in imageView
      */
-    private void setPic() {
+    public void setPic(ImageView imageFromCamera) {
         // Get the dimensions of the View
         int targetW = imageFromCamera.getWidth();
         int targetH = imageFromCamera.getHeight();
@@ -169,30 +167,41 @@ static final int REQUEST_IMAGE_CAPTURE = 1;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
+        imageFromCamera.setImageBitmap(bitmap);
 
-        if (bitmap.getWidth() >= bitmap.getHeight()){
+    }
 
-            dstBmp = Bitmap.createBitmap(
-                    bitmap,
-                    bitmap.getWidth()/2 - bitmap.getHeight()/2,
-                    0,
-                    bitmap.getHeight(),
-                    bitmap.getHeight()
-            );
-            imageFromCamera.setImageBitmap(dstBmp);
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
+    { // BEST QUALITY MATCH
 
-        }else {
+        //First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
 
-            dstBmp = Bitmap.createBitmap(
-                    bitmap,
-                    0,
-                    bitmap.getHeight() / 2 - bitmap.getWidth() / 2,
-                    bitmap.getWidth(),
-                    bitmap.getWidth()
-            );
-            imageFromCamera.setImageBitmap(dstBmp);
+        // Calculate inSampleSize, Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        int inSampleSize = 1;
+
+        if (height > reqHeight)
+        {
+            inSampleSize = Math.round((float)height / (float)reqHeight);
         }
-            //imageFromCamera.setImageBitmap(bitmap);
+        int expectedWidth = width / inSampleSize;
 
+        if (expectedWidth > reqWidth)
+        {
+            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+            inSampleSize = Math.round((float)width / (float)reqWidth);
+        }
+
+        options.inSampleSize = inSampleSize;
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        return BitmapFactory.decodeFile(path, options);
     }
 }

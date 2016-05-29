@@ -38,16 +38,24 @@
 
     <string name="action_example">Example action</string>
 
-        <string-array name="spinnerItems">
-            <item>1</item>
-            <item>2</item>
-            <item>3</item>
-            <item>4</item>
-            <item>5</item>
-            <item>6</item>
-            <item>7</item>
-            <item>8</item>
-            <item>9</item>
-            <item>10</item>
-        </string-array>
+    <string-array name="spinnerItemsStr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="spinnerItemsCamera">
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
+
+    <string-array name="spinnerItemsTaste">
+        <item>Mint</item>
+        <item>Peppermint</item>
+        <item>Lakris</item>
+        <item>Vanilje</item>
+        <item>Frukt</item>
+    </string-array>
 </resources>
