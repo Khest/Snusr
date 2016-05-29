@@ -45,11 +45,14 @@ public class BluetoothHandler2 {
     }
 
     public synchronized void connect(BluetoothDevice device) {
-        closeConnectThread();
+        if (status == STATE_CONNECTING) {
+            closeConnectThread();
+        }
         closeConnectedThread();
         connectThread = new ConnectThread(device);
         connectThread.start();
         setStatus(STATE_CONNECTING);
+        Log.i(Globals.TAG, " Status set to CONNECTING");
     }
 
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) { //, final String socketType
@@ -65,7 +68,6 @@ public class BluetoothHandler2 {
         bundle.putString("0", device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-
         setStatus(STATE_CONNECTED);
     }
 
@@ -81,7 +83,7 @@ public class BluetoothHandler2 {
     public void write(byte[] out) {
         ConnectedThread c;
         synchronized (this) {
-            if (!connectedThread.isAlive()) return;
+            if (status != STATE_CONNECTED) return;
             c = connectedThread;
         }
         c.write(out);
@@ -192,7 +194,8 @@ public class BluetoothHandler2 {
             BluetoothServerSocket tmp = null;
             try {
                 // MY_UUID is the app's UUID string, also used by the client code
-                tmp = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(Globals.APP_NAME, Globals.MY_UUID);
+                Log.i(Globals.TAG, " Listening for connections");
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(Globals.APP_NAME, Globals.MY_UUID);
                // tmp =(BluetoothSocket) mBluetoothAdapter.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
             } catch (IOException e) {
                 Log.e(Globals.TAG, " Bluetooth server error on connect: " + e.getMessage());
@@ -203,24 +206,39 @@ public class BluetoothHandler2 {
         }
 
         public void run() {
-            BluetoothSocket socket;
+            BluetoothSocket socket = null;
             // Keep listening until exception occurs or a socket is returned
-            while (status == STATE_CONNECTED) { //TODO Change to listen to connected state
+            Log.i(Globals.TAG, " State: " + status + " attempting to listen");
+            while (status != STATE_CONNECTED) {
                 try {
                     socket = mmServerSocket.accept();
-                // If a connection was accepted
+                    // If a connection was accepted
+                } catch (IOException e) {
+                    Log.e(Globals.TAG, "failed to connect " + e.getMessage());
+                    break;
+                }
                 if (socket != null) {
                     //receiveData(socket);
                     //mmServerSocket.close();
                     synchronized (BluetoothHandler2.this) {
-                        connected(socket, socket.getRemoteDevice());
+                        switch (status) {
+                            case STATE_WAITING:
+                            case STATE_CONNECTING:
+                                connected(socket, socket.getRemoteDevice());
+                                break;
+                            case STATE_NONE:
+                            case STATE_CONNECTED:
+                                try {
+                                    socket.close();
+                                } catch (IOException e) {
+                                    Log.e(Globals.TAG, "Could not close the socket " + e.getMessage());
+                                }
+                                break;
+                        }
                     }
-                    break;
-                }
-                } catch (IOException e) {
-                    break;
                 }
             }
+            Log.i(Globals.TAG, "End of Accept Thread ");
         }
 
         public void cancel() {
