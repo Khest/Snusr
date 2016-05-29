@@ -30,11 +30,9 @@
         </activity>
         <activity android:name=".PhoneGallery" >
         </activity>
-        <activity android:name=".CameraHandler" />
         <activity
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_main2" >
         </activity>
-    </application>
-
+</application>
 </manifest>
