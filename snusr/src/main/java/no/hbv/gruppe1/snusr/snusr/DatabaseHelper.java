@@ -150,7 +150,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DROP_TABLE_TYPE);
         db.execSQL(DROP_TABLE_LINE);
         db.execSQL(DROP_TABLE_MANUFACTURER);
-        onCreate(db);
     }
 
     @Override
@@ -198,6 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
             putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
             putSnus(db, "Extra Weak",   2, 5, 2, 0, 0, 3, 0.6, 3, 3, null);
+            db.close();
         } catch (Exception ex){return false;}
         return true;
     }
