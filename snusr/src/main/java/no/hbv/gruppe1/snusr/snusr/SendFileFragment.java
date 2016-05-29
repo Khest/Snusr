@@ -85,7 +85,7 @@ public class SendFileFragment extends Fragment {
                 case Globals.DEVICE_NAME_IDENTIFIER:
                     if (fragmentActivity != null) {
                         Toast.makeText(fragmentActivity,
-                                "Connected to " + msg.getData().getString(Globals.DEVICE_NAME),
+                                "Connected to " + msg.getData().getString("0"),
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -129,7 +129,6 @@ public class SendFileFragment extends Fragment {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         } else if (bluetoothHandler == null) {
             setUp();
-            //todo
         }
     }
 
