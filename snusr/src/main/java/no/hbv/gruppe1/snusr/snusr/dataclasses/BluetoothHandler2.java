@@ -169,6 +169,8 @@ public class BluetoothHandler2 {
                 connectThread = null;
             }
 
+            connected(mmSocket, mmDevice);
+
             // Do work to manage the connection (in a separate thread)
             //sendData(mmSocket);
         }
