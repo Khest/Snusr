@@ -154,7 +154,7 @@ public class SendFileFragment extends Fragment {
     }
 
     private void connectDevice(String address) {
-        bluetoothHandler.connectAsClient(mBluetoothAdapter.getRemoteDevice(address));
+        bluetoothHandler.connect(mBluetoothAdapter.getRemoteDevice(address));
     }
 
     private void connectDevice(Intent data) {
@@ -182,9 +182,9 @@ public class SendFileFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(Globals.TAG, " " + adapter.getItem(position));
-                //connectDevice(listDevices.get(position).getAddress());
-                Intent enableIntent = new Intent(listDevices.get(position).getAddress());
-                startActivityForResult(enableIntent, REQUEST_CONNECTION);
+                connectDevice(listDevices.get(position).getAddress());
+                //Intent enableIntent = new Intent(listDevices.get(position).getAddress(), SendFileFragment.class);
+                //startActivityForResult(enableIntent, REQUEST_CONNECTION);
 
 
                // Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
@@ -197,7 +197,11 @@ public class SendFileFragment extends Fragment {
             public void onClick(View v) {
                 //Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 //startActivityForResult(serverIntent, REQUEST_CONNECTION);
-                bluetoothHandler.write(" dette er en test! ".getBytes());
+                if (bluetoothHandler.getStatus() == bluetoothHandler.STATE_CONNECTED) {
+                    bluetoothHandler.write(" dette er en test! ".getBytes());
+                } else {
+                    Toast.makeText(getActivity(), " no't connected to anything", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
