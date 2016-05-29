@@ -16,33 +16,29 @@ public interface DatabaseInteraction {
 
     /**
      * Fetches a list of snus
-     * @param context           Application context
      * @param filtrationList    A list of {@link Filtration} to filter result
      * @param sorting           A {@link Sorting} that defines the sorting method used
      * @return                  Returns a navigable cursor for the result
      */
-    Cursor fetchSnus(Context context, List<Filtration> filtrationList, Sorting sorting);
+    Cursor fetchSnus(List<Filtration> filtrationList, Sorting sorting);
 
     /**
      * Fetches snus that are in "my list"
-     * @param context           Application context
      * @param restriction       Restrict what content is included.
      * @return                  Returns a navigable cursor for the result
      */
-    Cursor fetchMyList(Context context, int restriction);
+    Cursor fetchMyList(int restriction);
 
     /**
      * Fetches one specific snus based on ID
-     * @param context           Application context
      * @param snusId            The snus id
      * @return                  Returns a single snus
      */
-    Cursor fetchSpecificSnus(Context context, int snusId);
+    Cursor fetchSpecificSnus(int snusId);
 
     /**
      * Fetches a list of manufacturers
-     * @param context           Application context
      * @return                  Returns a navigable cursor containing id and names of the manufacturers
      */
-    Cursor fetchManufacturers(Context context);
+    Cursor fetchManufacturers();
 }
