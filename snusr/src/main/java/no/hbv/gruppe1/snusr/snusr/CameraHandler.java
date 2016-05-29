@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -69,11 +70,17 @@ static final int REQUEST_TAKE_PHOTO = 1;
      */
     public static File createImageFile(){
         //Check if your application folder exists in the external storage, if not create it:
-        File storageDir = new File(Environment.getExternalStorageDirectory()+File.separator+"Snuser");
-        if (!storageDir.exists())
-        {
-            storageDir.mkdirs();
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Snuser");
+
+        if (! storageDir.exists()){
+            if (storageDir.mkdirs()) {
+                Log.d("SnusR", "created directory");
+            }else{
+                Log.d("SnusR", "created directory");
+                }
         }
+
+
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "SnusR_";
@@ -84,6 +91,11 @@ static final int REQUEST_TAKE_PHOTO = 1;
 
         return mediaFile;
     }
+
+    static Uri getOutputMediaFileUri(){
+        return Uri.fromFile(createImageFile());
+    }
+
 
 
     /**

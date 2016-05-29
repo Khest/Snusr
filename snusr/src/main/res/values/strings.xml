@@ -46,6 +46,11 @@
         <item>5</item>
     </string-array>
 
+    <string-array name="spinnerItemsCamera">
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
+
     <string-array name="spinnerItemsTaste">
         <item>Mint</item>
         <item>Peppermint</item>

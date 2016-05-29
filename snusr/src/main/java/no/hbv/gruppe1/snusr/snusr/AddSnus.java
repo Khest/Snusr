@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,8 +19,9 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
+
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Snus;
 
 
 public class AddSnus extends Fragment {
@@ -26,20 +29,18 @@ public class AddSnus extends Fragment {
     ImageView snusImage;
     EditText innName, innManu, innLine;
     Button btnAdd, btnAddSnusImage;
-    Spinner spinSweet, spinSalt, spinTaste, spinStr;
+    Spinner spinTaste1, spinTaste2, spinTaste3, spinStr, spinType, spinTakePic, spinNico;
 
     int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 111;
     int SELECT_IMAGE = 222;
-
-
     Uri fileUri;
-    File file;
 
+    boolean cameraOpen = false;
     Context context;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_add_snus, container, false);
         context = getActivity();
         snusImage = (ImageView) v.findViewById(R.id.addSnus_imgview);
@@ -49,20 +50,44 @@ public class AddSnus extends Fragment {
         innLine = (EditText) v.findViewById(R.id.etxt_line);
         btnAdd = (Button) v.findViewById(R.id.btn_addsnus);
         btnAddSnusImage = (Button) v.findViewById(R.id.btn_addSnusImage);
-        spinSalt = (Spinner) v.findViewById(R.id.spin_salt);
-        spinSweet = (Spinner) v.findViewById(R.id.spin_sweet);
         spinStr = (Spinner) v.findViewById(R.id.spin_str);
-        spinTaste = (Spinner) v.findViewById(R.id.spin_taste);
+        spinNico = (Spinner) v.findViewById(R.id.spin_nico);
+        spinTaste2 = (Spinner) v.findViewById(R.id.spin_taste2);
+        spinTaste1 = (Spinner) v.findViewById(R.id.spin_taste1);
+        spinTaste3 = (Spinner) v.findViewById(R.id.spin_taste3);
+        spinType = (Spinner) v.findViewById(R.id.spin_str);
+        spinTakePic = (Spinner) v.findViewById(R.id.spin_takepic);
+
 
         btnAddSnusImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
-                //openGallery();
+                cameraOpen = true;
+                spinTakePic.performClick();
+            }
+        });
+
+        spinTakePic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0 && cameraOpen == true){
+                    cameraOpen = false;
+                    takePicture();
+                }
+                if(position == 1){
+                    cameraOpen = false;
+                    openGallery();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         return v;
     }
+
 
     public void openGallery(){
         Intent intent = new Intent();
@@ -72,11 +97,10 @@ public class AddSnus extends Fragment {
     }
 
     public void takePicture() {
+        Log.i("SnusrDebug", " TRYING STUFF");
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); //handle camera and return image
-//        CameraHandler cHandler = new CameraHandler();
-//        file = cHandler.createImageFile();
-//        fileUri = Uri.fromFile(file);
-//        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        fileUri = CameraHandler.getOutputMediaFileUri();
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
@@ -84,17 +108,18 @@ public class AddSnus extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if(resultCode == getActivity().RESULT_OK){
-                if(data != null){
-                    // Image captured and saved to fileUri specified in the Intent
-                    //Bitmap bitmap = CameraHandler.decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 700);
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    //innName.setText(data.getData().toString());
-                    snusImage.setImageBitmap(bitmap);
-                }
+        Log.i("SnusrDebug", " TRYING STUFF");
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            snusImage.setImageBitmap(bitmap);
+
+
         }
         if(requestCode == SELECT_IMAGE){
             if(resultCode == getActivity().RESULT_OK){
@@ -113,16 +138,28 @@ public class AddSnus extends Fragment {
     }
 
     public void addSnus(){
-        String mName, mManu, mSweet, mSalt, mTaste, mStr, mRating, mLine;
+        String mName;
+        int mManu, mTaste1, mTaste2, mTaste3, mLine, mType;
+        Bitmap mSnusImage;
+        Double mRank, mNicotin, mStr;
 
         mName = innName.getText().toString();
-        mManu = innManu.getText().toString();
-        mLine = innLine.getText().toString();
-        mSalt = spinSalt.getSelectedItem().toString();
-        mSweet = spinSweet.getSelectedItem().toString();
-        mStr = spinStr.getSelectedItem().toString();
-        mTaste = spinTaste.getSelectedItem().toString();
-
+        mManu = Integer.parseInt(innManu.getText().toString());
+        mLine = Integer.parseInt(innLine.getText().toString());
+        mTaste1 = Integer.parseInt(spinTaste1.getSelectedItem().toString());
+        mTaste2 = Integer.parseInt(spinTaste2.getSelectedItem().toString());
+        mStr = Double.parseDouble(String.valueOf(spinStr.getSelectedItem()));
+        mTaste3 = Integer.parseInt(spinTaste3.getSelectedItem().toString());
+        mType = Integer.parseInt(spinType.getSelectedItem().toString());
+        mRank = Double.parseDouble(String.valueOf(rating.getNumStars()));
+        mNicotin = Double.parseDouble(String.valueOf(spinNico.getSelectedItem()));
+        snusImage.buildDrawingCache();
+        mSnusImage = snusImage.getDrawingCache();
+        try {
+            Snus.setSnus(mName, 0, mLine, mTaste1, mTaste2, mTaste3, mType, mStr, mNicotin, mRank, mSnusImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
