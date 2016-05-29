@@ -11,13 +11,14 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private final String PREFS_NAME = "PrefsFile";
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        DatabaseHelper db = new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
             // Opprett database
@@ -53,5 +54,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            db.close();
+        }
+    }
 }
