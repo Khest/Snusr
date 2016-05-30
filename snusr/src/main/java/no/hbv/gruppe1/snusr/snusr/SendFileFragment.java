@@ -1,13 +1,12 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,9 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.BluetoothHandler2;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,11 +33,11 @@ import java.util.List;
 public class SendFileFragment extends Fragment {
     private ListView listDevicesView;
     private List<BluetoothDevice> listDevices;
-    Button btn_send, btn_search;
-    BluetoothHandler2 bluetoothHandler = null;
-    BluetoothAdapter mBluetoothAdapter = null;
-    ArrayAdapter<String> adapter;
-
+    private Button btn_send, btn_search;
+    private BluetoothHandler2 bluetoothHandler = null;
+    private BluetoothAdapter mBluetoothAdapter = null;
+    private ArrayAdapter<String> adapter;
+    private DatabaseInteractor interactor;
 
     //UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -57,6 +60,7 @@ public class SendFileFragment extends Fragment {
         }
     };
 
+    @SuppressLint("HandlerLeak")
     private final Handler messageHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -92,12 +96,21 @@ public class SendFileFragment extends Fragment {
                 case Globals.MESSAGE_READ:
                     byte[] buffer = (byte[]) msg.obj;
                     String incoming = new String(buffer, 0, msg.arg1);
-                    Toast.makeText(fragmentActivity, "Incoming: " + incoming, Toast.LENGTH_SHORT).show();
+                    try {
+                        doStuff(incoming);
+                    } catch (Exception ex) {
+                        Log.e(Globals.TAG, "Fatal error when receiving data, exiting " + ex.getMessage());
+                        throw new RuntimeException(ex);
+                    } finally {
+
+                    }
+                    //Toast.makeText(fragmentActivity, "Incoming: " + incoming, Toast.LENGTH_SHORT).show();
                     break;
                 case Globals.MESSAGE_WRITE:
                     byte[] buffer2 = (byte[]) msg.obj;
                     String outgoing = new String(buffer2);
-                    Toast.makeText(fragmentActivity, "Outgoing: " + outgoing, Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(fragmentActivity, "Outgoing: " + outgoing, Toast.LENGTH_SHORT).show();
                     break;
                 case Globals.MESSAGE_TOAST:
                     if (fragmentActivity != null) {
@@ -108,6 +121,126 @@ public class SendFileFragment extends Fragment {
         }
     };
 
+    synchronized void doStuff(String incoming) {
+        String arr1[] = incoming.split("\\"+delimiter);
+        Log.i(Globals.TAG, " " + incoming);
+        Log.i(Globals.TAG, " " + arr1[0] + " : " + arr1.length);
+       // Log.i(Globals.TAG, " " + Arrays.toString(arr1));
+        List<Filtration> filtrations = new ArrayList<>();
+        Filtration f = Filtration.MANUFACTURER;
+        f.setSearchValue(arr1[12]);
+        filtrations.add(f);
+        Cursor checkManufacturer = interactor.fetchSnus(filtrations, null);
+        long manufacturerNumber = Long.valueOf(arr1[2]);
+        if (checkManufacturer != null) {
+            if (checkManufacturer.getCount() == 0) {
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_name, arr1[12]);
+                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_country, arr1[13]);
+                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_url, arr1[14]);
+                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER, cv);
+            } else {
+                while (checkManufacturer.moveToNext()) {
+                    if (checkManufacturer.getString(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_name))
+                            .equals(arr1[12])) {
+                        manufacturerNumber = checkManufacturer.getLong(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_id));
+                        break;
+                    }
+                }
+            }
+        }
+        if (checkManufacturer != null) {
+            checkManufacturer.close();
+        }
+        f = Filtration.LINE_TEXT;
+        f.setSearchValue(arr1[16]);
+        filtrations.set(0, f);
+        Cursor checkLine = interactor.fetchSnus(filtrations, null);
+        long lineNumber = Long.valueOf(arr1[15]);
+        if (checkLine != null) {
+            if (checkLine.getCount() == 0) {
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.FeedEntry.col_line_name, arr1[16]);
+                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_id, manufacturerNumber);
+                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE, cv);
+            } else {
+                while (checkLine.moveToNext()) {
+                    if (checkLine.getString(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_name))
+                        .equals(arr1[16])) {
+                        lineNumber = checkLine.getLong(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_id));
+                        break;
+                    }
+                }
+            }
+        }
+        if (checkLine != null) {
+            checkLine.close();
+        }
+        Filtration f1 = Filtration.MANUFACTURER;
+        f1.setSearchValue(manufacturerNumber);
+        Filtration f2 = Filtration.LINE_NUMBER;
+        f2.setSearchValue(lineNumber);
+        Filtration f3 = Filtration.NAME;
+        f3.setSearchValue(arr1[1]);
+        filtrations.clear();
+        filtrations.add(f1);
+        filtrations.add(f2);
+        filtrations.add(f3);
+        Cursor checkSnus = interactor.fetchSnus(filtrations, null);
+        if (checkSnus != null) {
+            if (checkSnus.getCount() != 0) {
+                Log.d(Globals.TAG, "Snus exists, averaging totalrank");
+                ContentValues averageTotalRank = new ContentValues();
+                double currentAverageRank = checkSnus.getDouble(checkSnus.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_totalrank));
+                double incomingAverageRank = Double.valueOf(arr1[9]);
+                double newAverageRank = (currentAverageRank + incomingAverageRank) / 2;
+                averageTotalRank.put(DatabaseHelper.FeedEntry.col_snus_totalrank, newAverageRank);
+                interactor.update(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+                        averageTotalRank,
+                        DatabaseHelper.FeedEntry.col_snus_id + "=" + arr1[0], null);
+                return;
+            }
+        }
+        if (checkSnus != null) {
+            checkSnus.close();
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.FeedEntry.col_snus_name, arr1[1]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_manufactorer, Integer.valueOf(arr1[2]));
+        cv.put(DatabaseHelper.FeedEntry.col_snus_line, arr1[3]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_taste1, arr1[4]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_taste2, arr1[5]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_taste3, arr1[6]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_strength, arr1[7]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_nicotinelevel, arr1[8]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_totalrank, arr1[9]);
+        cv.put(DatabaseHelper.FeedEntry.col_snus_type, arr1[10]);
+        if (arr1.length == 19) {
+            cv.put(DatabaseHelper.FeedEntry.col_snus_img, arr1[18]);
+        }
+
+        long newSnusId = interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS, cv);
+        Log.d(Globals.TAG, "Inserted new snus with id " + String.valueOf(newSnusId));
+    }
+// 0   DatabaseHelper.FeedEntry.col_snus_id,
+// 1   DatabaseHelper.FeedEntry.col_snus_name,
+// 2   DatabaseHelper.FeedEntry.col_snus_manufactorer,
+// 3   DatabaseHelper.FeedEntry.col_snus_line,
+// 4   DatabaseHelper.FeedEntry.col_snus_taste1,
+// 5   DatabaseHelper.FeedEntry.col_snus_taste2,
+// 6   DatabaseHelper.FeedEntry.col_snus_taste3,
+// 7   DatabaseHelper.FeedEntry.col_snus_strength,
+// 8   DatabaseHelper.FeedEntry.col_snus_nicotinelevel,
+// 9   DatabaseHelper.FeedEntry.col_snus_totalrank,
+// 10  DatabaseHelper.FeedEntry.col_snus_type,
+// 11   DatabaseHelper.FeedEntry.col_manufacturer_id,
+// 12   DatabaseHelper.FeedEntry.col_manufacturer_name,
+// 13   DatabaseHelper.FeedEntry.col_manufacturer_country,
+// 14   DatabaseHelper.FeedEntry.col_manufacturer_url,
+// 15   DatabaseHelper.FeedEntry.col_line_id,
+// 16   DatabaseHelper.FeedEntry.col_line_name,
+// 17   DatabaseHelper.FeedEntry.col_line_manufactorer
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +249,13 @@ public class SendFileFragment extends Fragment {
         if (mBluetoothAdapter == null) {
             Toast.makeText(getActivity(), "Bluetooth is not available", Toast.LENGTH_LONG).show();
         }
+        this.interactor = new DatabaseInteractor(getActivity());
+    }
 
+    @Override
+    public void onDestroyView() {
+        interactor.close();
+        super.onDestroyView();
     }
 
     @Override
@@ -128,6 +267,7 @@ public class SendFileFragment extends Fragment {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         } else if (bluetoothHandler == null) {
+
             setUp();
         }
     }
@@ -140,6 +280,7 @@ public class SendFileFragment extends Fragment {
         if (bluetoothHandler != null) {
             bluetoothHandler.stop();
         }
+        interactor.close();
     }
 
     @Override
@@ -182,22 +323,43 @@ public class SendFileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(Globals.TAG, " " + adapter.getItem(position));
                 connectDevice(listDevices.get(position).getAddress());
-                //Intent enableIntent = new Intent(listDevices.get(position).getAddress(), SendFileFragment.class);
-                //startActivityForResult(enableIntent, REQUEST_CONNECTION);
-
-
-               // Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
-                //startActivityForResult(serverIntent, REQUEST_CONNECTION);
             }
         });
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
-                //startActivityForResult(serverIntent, REQUEST_CONNECTION);
-                if (bluetoothHandler.getStatus() == bluetoothHandler.STATE_CONNECTED) {
-                    bluetoothHandler.write(" dette er en test! ".getBytes());
+                if (bluetoothHandler.getStatus() == BluetoothHandler2.STATE_CONNECTED) {
+                    try {
+
+                        //String delimiter = "|";
+
+                        Cursor snusCursor = interactor.fetchSnus(null, null);
+
+                        while (snusCursor.moveToNext()) {
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : snusListOrder) {
+                                sb.append(snusCursor.getString(snusCursor.getColumnIndex(s))).append(delimiter);
+                            }
+                            byte[] b = snusCursor.getBlob(snusCursor.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_img));
+                            //String s = new String(b, "ISO-8859-1");
+                            Log.i(Globals.TAG, " Containing: " + sb.toString());
+                            if (b != null) {
+                                sb.append(new String(b, "ISO-8859-1"));
+                            }
+                            //sb.append(c.getBlob(c.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_img))).append(delimiter);
+                            Log.i(Globals.TAG, " Sending data for ID : " + snusCursor.getString(0));
+                            bluetoothHandler.write(sb.toString().getBytes());
+
+                        }
+                        //snusCursor.close(); // FIXME: 2016-05-30 closing this here ruins file transfer
+                    } catch (UnsupportedEncodingException uex) {
+                        Log.e(Globals.TAG, "Fatal error when converting byte to string " + uex.getMessage());
+                    } catch (Exception ex) {
+                        Log.e(Globals.TAG, "Fatal error " + ex.getMessage());
+                    }
+
+                   // bluetoothHandler.write(" dette er en test! ".getBytes());
                 } else {
                     Toast.makeText(getActivity(), " no't connected to anything", Toast.LENGTH_SHORT).show();
                 }
@@ -216,6 +378,31 @@ public class SendFileFragment extends Fragment {
             }
         });
     }
+
+    private static final String delimiter = "|";
+
+
+
+    private static final String snusListOrder[] = {
+            DatabaseHelper.FeedEntry.col_snus_id,
+            DatabaseHelper.FeedEntry.col_snus_name,
+            DatabaseHelper.FeedEntry.col_snus_manufactorer,
+            DatabaseHelper.FeedEntry.col_snus_line,
+            DatabaseHelper.FeedEntry.col_snus_taste1,
+            DatabaseHelper.FeedEntry.col_snus_taste2,
+            DatabaseHelper.FeedEntry.col_snus_taste3,
+            DatabaseHelper.FeedEntry.col_snus_strength,
+            DatabaseHelper.FeedEntry.col_snus_nicotinelevel,
+            DatabaseHelper.FeedEntry.col_snus_totalrank,
+            DatabaseHelper.FeedEntry.col_snus_type,
+            DatabaseHelper.FeedEntry.col_manufacturer_id,
+            DatabaseHelper.FeedEntry.col_manufacturer_name,
+            DatabaseHelper.FeedEntry.col_manufacturer_country,
+            DatabaseHelper.FeedEntry.col_manufacturer_url,
+            DatabaseHelper.FeedEntry.col_line_id,
+            DatabaseHelper.FeedEntry.col_line_name,
+            DatabaseHelper.FeedEntry.col_line_manufactorer
+    };
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
