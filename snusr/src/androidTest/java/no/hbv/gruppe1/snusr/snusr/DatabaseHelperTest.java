@@ -18,7 +18,6 @@ public class DatabaseHelperTest extends AndroidTestCase {
     }
 
     public void testAddEntry(){
-        db.putDummyData();
         SQLiteDatabase sqLiteDatabase = db.getReadableDatabase();
         assertNotNull(sqLiteDatabase);
     }

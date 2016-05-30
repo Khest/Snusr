@@ -17,12 +17,9 @@ public class SnusTest extends AndroidTestCase {
     public static final String TAG = "SnusrDebug";
     private DatabaseInteractor databaseInteractor;
     private RenamingDelegatingContext context;
-    private DatabaseHelper db;
 
     public void setUp() {
         context = new RenamingDelegatingContext(getContext(), "test_");
-        db = new DatabaseHelper(context);
-        db.putDummyData();
         databaseInteractor = new DatabaseInteractor(context);
     }
 
@@ -46,7 +43,7 @@ public class SnusTest extends AndroidTestCase {
     }
 
     public void tearDown() throws Exception {
-        db.close();
+        databaseInteractor.close();
         super.tearDown();
     }
 }

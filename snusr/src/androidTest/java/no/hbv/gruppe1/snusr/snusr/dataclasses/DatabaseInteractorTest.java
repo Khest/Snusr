@@ -17,12 +17,11 @@ public class DatabaseInteractorTest extends AndroidTestCase {
 
         private DatabaseInteractor databaseInteractor;
         private RenamingDelegatingContext context;
-        private DatabaseHelper db;
+        //private DatabaseHelper db;
 
         public void setUp() {
             context = new RenamingDelegatingContext(getContext(), "test_");
-            db = new DatabaseHelper(context);
-            db.putDummyData();
+            //db = new DatabaseHelper(context);
             databaseInteractor = new DatabaseInteractor(context);
         }
 
@@ -209,11 +208,11 @@ public class DatabaseInteractorTest extends AndroidTestCase {
     }
 
     public void testUpgrade() throws  Exception {
-        db.onUpgrade(db.getWritableDatabase(), 1, 2);
+        //db.onUpgrade(db.getWritableDatabase(), 1, 2);
     }
 
     public void tearDown() throws Exception {
-        db.close();
+        databaseInteractor.close();
         super.tearDown();
     }
 }
