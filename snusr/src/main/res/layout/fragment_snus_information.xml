@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="no.hbv.gruppe1.snusr.snusr.SnusInformationFragment">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:id="@+id/imgSnusInformation" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/txtSnusNameInformation"
+        android:layout_gravity="center"
+        android:layout_below="@+id/imgSnusInformation"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtBasicInformationLabel"
+        android:layout_below="@+id/txtSnusNameInformation"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:text="Basic information:"
+        android:textSize="20dp"
+        android:background="#FFEB3B" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Manufacturer:"
+        android:id="@+id/lblManufacturer"
+        android:layout_below="@+id/txtBasicInformationLabel"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Taste:"
+        android:id="@+id/lblTaste"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/lblManufacturer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Strength:"
+        android:id="@+id/lblStrength"
+        android:layout_below="@+id/lblTaste"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/txtManufacturer"
+        android:layout_below="@+id/txtBasicInformationLabel"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/txtTaste"
+        android:layout_below="@+id/txtManufacturer"
+        android:layout_alignStart="@+id/txtManufacturer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/txtStrength"
+        android:layout_below="@+id/txtTaste"
+        android:layout_alignStart="@+id/txtTaste" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingSnusInformation"
+        android:layout_below="@+id/txtStrength"
+        android:layout_alignParentEnd="true"
+        android:numStars="5"
+        android:stepSize="1"
+        android:isIndicator="true"/>
+
+</RelativeLayout>
