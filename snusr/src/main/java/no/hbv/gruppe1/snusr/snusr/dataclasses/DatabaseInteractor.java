@@ -24,7 +24,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     /**
      * Gets a Cursor to traverse snus data
-     * @param context           Application context
      * @param filtrationList    A list of Filtration that should apply
      * @param sorting           The sorting method to use
      * @return                  Returns a cursor with all snus in accordance with filters
@@ -51,7 +50,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     /**
      * Returns my favourites
-     * @param context           Application context
      * @param restriction       Specify whether to get favourites, bookmarks or both via integer
      * @return                  Returns cursor containing the user's favourites
      */
@@ -72,20 +70,19 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     /**
      * Fetches a specific snus
-     * @param context           Application context
      * @param snusId            The snus internal ID
      * @return                  Returns cursor containing the specific snus
      */
     @Override
     public Cursor fetchSpecificSnus(int snusId) {
         String sql = snusDetailSqlJoinString();
-        sql += " WHERE " + DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
+        sql += " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
+                DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
         return dbCursor(sql);
     }
 
     /**
      * Fetches a list of manufacturers
-     * @param context           Application context
      * @return                  Returns a navigable cursor containing id and names of the manufacturers
      */
     @Override
