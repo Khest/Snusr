@@ -101,13 +101,15 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     public DatabaseInteractor(Context context) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
+
+        //context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
         //try {
         //} catch (SQLiteCantOpenDatabaseException sqlex) {
         //    Log.e(Globals.TAG, "Fatal error opening database: " + sqlex.getMessage());
         //    throw new RuntimeException("OH GOD NO");
         //}
         this.db = databaseHelper.getReadableDatabase();
+//        db.close();
     }
 
     public String getMeta() {return this.db.getPath(); }

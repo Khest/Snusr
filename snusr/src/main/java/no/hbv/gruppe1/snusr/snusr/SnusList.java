@@ -45,12 +45,12 @@ public class SnusList extends Fragment {
 
     @Override
     public void onDestroy() {
+        db.close();
         super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
-        db.close();
         super.onDestroyView();
 
     }

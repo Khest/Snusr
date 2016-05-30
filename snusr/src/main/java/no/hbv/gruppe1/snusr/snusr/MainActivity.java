@@ -1,13 +1,17 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -36,9 +41,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        DatabaseInteractor db2 = new DatabaseInteractor(this);
-        db2.close();
-        db2 = null;
+        //DatabaseInteractor db2 = new DatabaseInteractor(this);
+        //db2.close();
+        //db2 = null;
         //DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         //Log.i(Globals.TAG, "MA ver: "+ db.getReadableDatabase().getVersion());
         if (settings.getBoolean("first_time", true)){
@@ -50,6 +55,12 @@ public class MainActivity extends AppCompatActivity
             // Setter first_time til false, denne koden kjøres aldri igjen.
             settings.edit().putBoolean("first_time", false).apply();
         }
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            Log.i(Globals.TAG, "Permission denied");
+        }
+
         //db.close();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);

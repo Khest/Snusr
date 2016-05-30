@@ -13,7 +13,7 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 12;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -164,12 +164,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_TASTE);
         db.execSQL(CREATE_TABLE_SNUS);
         db.execSQL(CREATE_TABLE_MYLIST);
-        putDummyData();
+        putDummyData(db);
     }
 
-    public boolean putDummyData(){
+    public boolean putDummyData(SQLiteDatabase db){
+        Log.i(Globals.TAG, " Putting dummy data");
         try {
-            SQLiteDatabase db = this.getWritableDatabase();
             putManufacturer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
             putManufacturer(db, "Skruf", "www.skruf.se", "Sweden");
             putManufacturer(db, "British American Tobacco", "www.bat.com", "England");
