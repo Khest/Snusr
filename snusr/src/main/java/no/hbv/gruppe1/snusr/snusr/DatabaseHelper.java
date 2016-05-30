@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + "(" + FeedEntry.col_snus_id + ")" + ");";
 
     public static abstract class FeedEntry implements BaseColumns{
-        public static final String DATABASE_NAME = "Snusr.db";
+        public static final String DATABASE_NAME = "snusr.db";
         //Table SNUS:
         public static final String DATABASE_TABLE_SNUS = "SNUS";
         public static final String col_snus_id = "SNUS_id";
