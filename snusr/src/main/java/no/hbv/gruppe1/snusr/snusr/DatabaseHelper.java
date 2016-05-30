@@ -5,12 +5,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 
 /**
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 9;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -89,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         public static final String DATABASE_NAME = "snusr.db";
         //Table SNUS:
         public static final String DATABASE_TABLE_SNUS = "SNUS";
-        public static final String col_snus_id = "SNUS_id";
+        public static final String col_snus_id = "_id";
         public static final String col_snus_name = "SNUS_NAME";
         public static final String col_snus_manufactorer = "SNUS_MANUFACTORER_ID";
         public static final String col_snus_line = "SNUS_LINE_ID";
@@ -150,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DROP_TABLE_TYPE);
         db.execSQL(DROP_TABLE_LINE);
         db.execSQL(DROP_TABLE_MANUFACTURER);
+        onCreate(db);
     }
 
     @Override
@@ -160,6 +164,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_TASTE);
         db.execSQL(CREATE_TABLE_SNUS);
         db.execSQL(CREATE_TABLE_MYLIST);
+        putDummyData();
     }
 
     public boolean putDummyData(){
@@ -197,8 +202,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
             putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
             putSnus(db, "Extra Weak",   2, 5, 2, 0, 0, 3, 0.6, 3, 3, null);
-            db.close();
-        } catch (Exception ex){return false;}
+        } catch (Exception ex){
+            Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());
+        }
         return true;
     }
 

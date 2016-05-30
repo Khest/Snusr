@@ -2,13 +2,6 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.provider.ContactsContract;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-
-import no.hbv.gruppe1.snusr.snusr.dataclasses.Snus;
 
 /**
  * @author Håkon Stensheim
@@ -73,5 +63,6 @@ public class SnusAdapter extends CursorAdapter {
 //            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
 
     }
+
 
 }

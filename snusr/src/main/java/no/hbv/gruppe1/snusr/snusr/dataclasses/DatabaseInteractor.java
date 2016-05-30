@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.List;
+
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseInteraction;
-
-import java.util.List;
 
 /**
  * Created by Knut Johan Hesten 2016-05-26.
@@ -102,11 +102,21 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public DatabaseInteractor(Context context) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
+        //try {
+        //} catch (SQLiteCantOpenDatabaseException sqlex) {
+        //    Log.e(Globals.TAG, "Fatal error opening database: " + sqlex.getMessage());
+        //    throw new RuntimeException("OH GOD NO");
+        //}
         this.db = databaseHelper.getReadableDatabase();
     }
 
+    public String getMeta() {return this.db.getPath(); }
+
+    public int getVersion() {return this.db.getVersion();}
+
     public void close() {
         this.db.close();
+        this.db = null;
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")

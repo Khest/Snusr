@@ -32,12 +32,14 @@ public class AddSnus extends Fragment {
     Button btnAdd, btnAddSnusImage;
     Spinner spinTaste1, spinTaste2, spinTaste3, spinStr, spinType, spinTakePic, spinNico;
 
-    int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 111;
-    int SELECT_IMAGE = 222;
+    final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 111;
+    final int SELECT_IMAGE = 222;
     Uri fileUri;
+
 
     boolean cameraOpen = false;
     Context context;
+
 
 
     @Override
