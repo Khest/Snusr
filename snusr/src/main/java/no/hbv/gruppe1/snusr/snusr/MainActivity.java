@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
+import no.hbv.gruppe1.snusr.snusr.dummydata.PutDummyDataExtra;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity
         //DatabaseInteractor db2 = new DatabaseInteractor(this);
         //db2.close();
         //db2 = null;
-        //DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
+        putDummyDataExtra.putDymmyData("1", "dummy_data/skruf_knox_starkportion_styrke3.png");
         //Log.i(Globals.TAG, "MA ver: "+ db.getReadableDatabase().getVersion());
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.

@@ -1,11 +1,13 @@
 package no.hbv.gruppe1.snusr.snusr.dataclasses;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
 
+import android.util.Log;
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseInteraction;
 
@@ -20,7 +22,9 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public static final String TASTE_TABLE_ALIAS_3 = "_TASTE3";
     public static final String TASTE_COLUMN_ALIAS_3 = "TasteId3";
 
+    private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
+    private Context context;
 
     /**
      * Gets a Cursor to traverse snus data
@@ -95,12 +99,22 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(sql);
     }
 
+    public void insert(String table, ContentValues values, String whereClause, String[] whereArgs) {
+        try (SQLiteDatabase writeable = this.databaseHelper.getWritableDatabase()) {
+            writeable.update(table, values, whereClause, whereArgs);
+
+        } catch (Exception ex) {
+            Log.e(Globals.TAG, "Fatal error on insertion " + ex.getMessage());
+        }
+    }
+
     private Cursor dbCursor(String sqlString) {
         return db.rawQuery(sqlString, null);
     }
 
     public DatabaseInteractor(Context context) {
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        this.context = context;
+        this.databaseHelper = new DatabaseHelper(context);
 
         //context.openOrCreateDatabase(DatabaseHelper.FeedEntry.DATABASE_NAME, DatabaseHelper.DATABASE_VERSION, null);
         //try {
