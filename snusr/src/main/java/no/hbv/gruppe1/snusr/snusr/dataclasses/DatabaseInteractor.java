@@ -117,8 +117,10 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public int getVersion() {return this.db.getVersion();}
 
     public void close() {
-        this.db.close();
-        this.db = null;
+        if (this.db != null) {
+            this.db.close();
+            this.db = null;
+        }
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
