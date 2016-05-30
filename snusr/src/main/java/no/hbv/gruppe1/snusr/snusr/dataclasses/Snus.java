@@ -6,11 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 /**
  * Created by Knut Johan Hesten on 2016-04-14.
@@ -55,7 +56,9 @@ public final class Snus {
         filtrationList.add(f3);
         DatabaseInteractor db = new DatabaseInteractor(context);
         Cursor c = db.fetchSnus(filtrationList, null);
-        return (c.getCount() > 0);
+        int count = c.getCount();
+        db.close();
+        return (count > 0);
     }
 
     public static void setName(String name) {
