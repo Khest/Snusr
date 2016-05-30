@@ -33,7 +33,7 @@ public class NavigationDrawer extends AppCompatActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mTitle = "SNUSR";
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
