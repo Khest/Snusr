@@ -46,7 +46,7 @@ public final class Snus {
     public static boolean snusExists(Context context) {
         List<Filtration> filtrationList = new ArrayList<>();
         Filtration f1 = Filtration.MANUFACTURER;
-        Filtration f2 = Filtration.LINE;
+        Filtration f2 = Filtration.LINE_NUMBER;
         Filtration f3 = Filtration.NAME;
         f1.setSearchValue(getManufacturer());
         f2.setSearchValue(getLine());

@@ -39,13 +39,13 @@ public class PutDummyDataExtra {
             di = new DatabaseInteractor(this.context);
             ContentValues cv = new ContentValues();
             cv.put(DatabaseHelper.FeedEntry.col_snus_img, b);
-            di.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+            di.update(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
                     cv, DatabaseHelper.FeedEntry.col_snus_id + "=" + id, null);
             Log.i(Globals.TAG, "Inserted dummy data into " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + " with ID " + id);
         } catch (IOException ioex) {
             Log.e(Globals.TAG, " Unable to load file : " + ioex.getMessage());
         } catch (Exception ex) {
-            Log.e(Globals.TAG, " A fatal error occured when trying to insert dummy data " + ex.getMessage());
+            Log.e(Globals.TAG, " A fatal error occured when trying to update dummy data " + ex.getMessage());
         } finally {
             if (di != null) {
                 di.close();

@@ -99,14 +99,62 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(sql);
     }
 
-    public void insert(String table, ContentValues values, String whereClause, String[] whereArgs) {
+    /**
+     * Fetches a list of lines
+     * @return          Returns a cursor containing id and names of lines
+     */
+    @Override
+    public Cursor fetchLines() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_line_id + ", " +
+                DatabaseHelper.FeedEntry.col_line_name +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE +
+                Sorting.ALPHABETICAL.getSql();
+        return dbCursor(sql);
+    }
+
+    @Override
+    public Cursor fetchTastes() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_taste_id + ", " +
+                DatabaseHelper.FeedEntry.col_taste_taste +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE +
+                Sorting.ALPHABETICAL.getSql();
+        return dbCursor(sql);
+    }
+
+    /**
+     * Update an entry in the database
+     * @param table         The table to update
+     * @param values        The {@link ContentValues} containing the key/value pairs to update
+     * @param whereClause   The where clause
+     * @param whereArgs     Where arguments. Can be null
+     */
+    @Override
+    public void update(String table, ContentValues values, String whereClause, String[] whereArgs) {
         try (SQLiteDatabase writeable = this.databaseHelper.getWritableDatabase()) {
             writeable.update(table, values, whereClause, whereArgs);
 
         } catch (Exception ex) {
-            Log.e(Globals.TAG, "Fatal error on insertion " + ex.getMessage());
+            Log.e(Globals.TAG, "Fatal error on update " + ex.getMessage());
         }
     }
+
+    /**
+     * Inserts into the database
+     * @param table     The table to insert into
+     * @param values    The {@link ContentValues} containing the key/value pairs to insert
+     */
+    @Override
+    public long insert(String table, ContentValues values) {
+        try (SQLiteDatabase writeable = this.databaseHelper.getWritableDatabase()) {
+           return writeable.insert(table, null, values);
+        } catch (Exception ex) {
+            Log.e(Globals.TAG, "Fatal error on insertion " + ex.getMessage());
+            return -1;
+        }
+    }
+
 
     private Cursor dbCursor(String sqlString) {
         return db.rawQuery(sqlString, null);
