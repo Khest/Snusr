@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Dakh on 2016-05-30.
+ * Created by Knut Johan Hesten 2016-05-30.
  */
 public class PutDummyDataExtra {
     private Context context;
