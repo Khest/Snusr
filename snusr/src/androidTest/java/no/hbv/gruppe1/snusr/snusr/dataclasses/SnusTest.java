@@ -23,7 +23,7 @@ public class SnusTest extends AndroidTestCase {
         context = new RenamingDelegatingContext(getContext(), "test_");
         db = new DatabaseHelper(context);
         db.putDummyData();
-        databaseInteractor = new DatabaseInteractor();
+        databaseInteractor = new DatabaseInteractor(context);
     }
 
     @SuppressWarnings("Duplicates")
@@ -41,7 +41,7 @@ public class SnusTest extends AndroidTestCase {
         filtrationList.add(f1);
         filtrationList.add(f2);
         filtrationList.add(f3);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrationList, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrationList, null);
         Log.d(TAG, DatabaseUtils.dumpCursorToString(c));
     }
 

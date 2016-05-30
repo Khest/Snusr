@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -89,47 +89,47 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         public static final String DATABASE_NAME = "Snusr.db";
         //Table SNUS:
         public static final String DATABASE_TABLE_SNUS = "SNUS";
-        public static final String col_snus_id = "_id";
-        public static final String col_snus_name = "NAME";
-        public static final String col_snus_manufactorer = "MANUFACTORER_ID";
-        public static final String col_snus_line = "LINE_ID";
+        public static final String col_snus_id = "SNUS_id";
+        public static final String col_snus_name = "SNUS_NAME";
+        public static final String col_snus_manufactorer = "SNUS_MANUFACTORER_ID";
+        public static final String col_snus_line = "SNUS_LINE_ID";
         public static final String col_snus_taste1 = "TASTE1";
         public static final String col_snus_taste2 = "TASTE2";
         public static final String col_snus_taste3 = "TASTE3";
         public static final String col_snus_strength = "STRENGTH";
         public static final String col_snus_nicotinelevel = "NICOTINELEVEL";
         public static final String col_snus_totalrank = "TOTALRANK";
-        public static final String col_snus_type = "TYPE";
+        public static final String col_snus_type = "SNUS_TYPE";
         public static final String col_snus_img = "IMG";
 
 
         //Table MANUFACTURER:
         public static final String DATABASE_TABLE_MANUFACTURER = "MANUFACTURER";
-        public static final String col_manufacturer_id = "_id";
-        public static final String col_manufacturer_name = "NAME";
+        public static final String col_manufacturer_id = "MANUFACTURER_id";
+        public static final String col_manufacturer_name = "MANUFACTURER_NAME";
         public static final String col_manufacturer_url = "URL";
         public static final String col_manufacturer_country = "COUNTRY";
 
         //Table LINE:
         public static final String DATABASE_TABLE_LINE = "LINE";
-        public static final String col_line_id = "_id";
-        public static final String col_line_manufactorer = "MANUFACTURER";
-        public static final String col_line_name = "NAME";
+        public static final String col_line_id = "LINE_id";
+        public static final String col_line_manufactorer = "LINE_MANUFACTURER";
+        public static final String col_line_name = "LINE_NAME";
 
         //Table TASTE:
         public static final String DATABASE_TABLE_TASTE = "TASTE";
-        public static final String col_taste_id = "_id";
-        public static final String col_taste_taste = "TASTE";
+        public static final String col_taste_id = "TASTE_id";
+        public static final String col_taste_taste = "TASTE_TASTE";
 
         //Table TYPE:
         public static final String DATABASE_TABLE_TYPE = "TYPE";
-        public static final String col_type_id = "_id";
-        public static final String col_type_text = "TEXT";
+        public static final String col_type_id = "TYPE_id";
+        public static final String col_type_text = "TYPE_TEXT";
 
         //Table MYLIST:
         public static final String DATABASE_TABLE_MYLIST = "MYLIST";
-        public static final String col_mylist_id = "_id";
-        public static final String col_mylist_snusid = "SNUS_ID";
+        public static final String col_mylist_id = "MYLIST_id";
+        public static final String col_mylist_snusid = "MYLIST_SNUS_ID";
         public static final String col_mylist_myrank = "MYRANK";
         public static final String col_mylist_bookmark = "BOOKMARK";
     }

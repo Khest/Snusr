@@ -23,11 +23,11 @@ public class DatabaseInteractorTest extends AndroidTestCase {
             context = new RenamingDelegatingContext(getContext(), "test_");
             db = new DatabaseHelper(context);
             db.putDummyData();
-            databaseInteractor = new DatabaseInteractor();
+            databaseInteractor = new DatabaseInteractor(context);
         }
 
     public void testFetchSnus() {
-        Cursor c = databaseInteractor.fetchSnus(context, null, null);
+        Cursor c = databaseInteractor.fetchSnus(null, null);
         assertNotNull(c);
         if (c.getCount() <= 0 ) throw new RuntimeException("Empty cursor in test 1");
         c.moveToFirst();
@@ -39,7 +39,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         List<Filtration> filtrations = new  ArrayList<>();
         filtrations.add(Filtration.LINE);
         filtrations.get(0).setSearchValue("General");
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         if (c.getCount() <= 0) throw new RuntimeException("empty cursor");
         c.moveToFirst();
@@ -48,7 +48,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
     public void testFetchSnusWithOrder() throws Exception {
         Sorting s = Sorting.STRENGTH;
         s.setOrder(Sorting.Order.ASCENDING);
-        Cursor c = databaseInteractor.fetchSnus(context, null, s);
+        Cursor c = databaseInteractor.fetchSnus(null, s);
         assertNotNull(c);
         if (c.getCount() <= 0) throw new RuntimeException("test 3 empty cursor");
     }
@@ -59,7 +59,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         List<Filtration> filtrations = new ArrayList<>();
         filtrations.add(Filtration.MANUFACTURER);
         filtrations.get(0).setSearchValue("swedish");
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, s);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, s);
         assertNotNull(c);
         if (c.getCount() <= 0) throw new RuntimeException("empty cursor");
     }
@@ -70,7 +70,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         String testValue = "strong";
         f.setSearchValue(testValue);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
         c.moveToFirst();
@@ -83,7 +83,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         String searchValue = "skruf";
         f.setSearchValue(searchValue);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
         c.moveToFirst();
@@ -97,7 +97,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         String searchValue = "swedish match";
         f.setSearchValue(searchValue);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
         c.moveToFirst();
@@ -112,10 +112,10 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         double val2 = 2.0;
         f.setSearchValue(val1, val2);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
-        Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
+        //Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
     }
 
     public void testStrengthFiltration() throws Exception {
@@ -125,7 +125,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         double val2 = 5.0;
         f.setSearchValue(val1, val2);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(2, c.getCount());
     }
@@ -136,7 +136,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         int val1 = 2;
         f.setSearchValue(val1);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
     }
@@ -147,7 +147,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         String val1 = "Licorice";
         f.setSearchValue(val1);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
 //        if (!c.getOrder(c.getColumnIndex("_TASTE1")).toLowerCase().contains(val1))
@@ -162,7 +162,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         double val2 = 1;
         f.setSearchValue(val1, val2);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
     }
@@ -173,7 +173,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         double val1 = 3;
         f.setSearchValue(val1);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
         assertEquals(1, c.getCount());
     }
@@ -184,18 +184,29 @@ public class DatabaseInteractorTest extends AndroidTestCase {
         String value = "sweden";
         f.setSearchValue(value);
         filtrations.add(f);
-        Cursor c = databaseInteractor.fetchSnus(context, filtrations, null);
+        Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
     }
 
     public void testSorting() throws Exception {
         Sorting s = Sorting.TYPE;
-        Cursor c = databaseInteractor.fetchSnus(context, null, s);
+        Cursor c = databaseInteractor.fetchSnus(null, s);
         assertNotNull(c);
-        Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
-        Log.d(Globals.TAG, String.valueOf(c.getCount()));
+        //Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
+        //Log.d(Globals.TAG, String.valueOf(c.getCount()));
     }
 
+    public void testGetSpecificSnus() throws Exception {
+        Cursor c = databaseInteractor.fetchSpecificSnus(1);
+        assertNotNull(c);
+        Log.d(Globals.TAG, DatabaseUtils.dumpCursorToString(c));
+        c.moveToFirst();
+        Log.d(Globals.TAG, c.getString(c.getColumnIndex(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE+"."+DatabaseHelper.FeedEntry.col_line_name)));
+        Log.d(Globals.TAG, c.getString(c.getColumnIndex(DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER+"."+DatabaseHelper.FeedEntry.col_manufacturer_name)));
+        Log.d(Globals.TAG, c.getString(c.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_name)));
+        Log.d(Globals.TAG, c.getString(1));
+        Log.d(Globals.TAG, "Count: " + String.valueOf(c.getCount()));
+    }
 
     public void testUpgrade() throws  Exception {
         db.onUpgrade(db.getWritableDatabase(), 1, 2);
