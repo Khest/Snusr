@@ -3,6 +3,7 @@ package no.hbv.gruppe1.snusr.snusr;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,11 +40,11 @@ public class SnusInformationFragment extends Fragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_snus_information, container, false);
-        if (getArguments() != null) {
-            snusID = savedInstanceState.getInt(DatabaseHelper.FeedEntry.col_snus_id);
-        } else {
-            snusID = 2;
-        }
+//        if (getArguments() != null) {
+//            snusID = savedInstanceState.getInt(DatabaseHelper.FeedEntry.col_snus_id);
+//        } else {
+//            snusID = 2;
+//        }
         txtName = (TextView) view.findViewById(R.id.txtSnusNameInformation);
         imgSnus = (ImageView) view.findViewById(R.id.imgSnusInformation);
         txtManufacturer = (TextView) view.findViewById(R.id.txtManufacturer);
@@ -73,9 +74,9 @@ public class SnusInformationFragment extends Fragment {
         byte[] array = cur.getBlob(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
         if (array != null) {
             ImageHandler imgHandler = new ImageHandler();
-            //imgSnus.setImageBitmap(imgHandler.convertByteToBitmap(array));
+            imgSnus.setImageBitmap(imgHandler.convertByteToBitmap(array));
         } else {
-            //imgSnus.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.noimagefound));
+            imgSnus.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.noimagefound));
         }
         cur.close();
         return view;

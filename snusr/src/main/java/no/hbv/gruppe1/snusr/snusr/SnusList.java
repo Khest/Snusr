@@ -89,7 +89,7 @@ public class SnusList extends Fragment {
                 TextView txtSnusId = (TextView) view.findViewById(R.id.txtSnusId);
                 String t = txtSnusId.getText().toString();
                 // Intent intent = new Intent(getActivity(), SnusInformationFragment.class);
-                //intent.putExtra("snusGetId", t);
+                // intent.putExtra("snusGetId", t);
                 Log.d("teste", t);
 
                 newFragmentSnusInformationFragment(t);

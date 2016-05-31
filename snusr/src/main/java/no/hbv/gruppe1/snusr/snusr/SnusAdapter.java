@@ -45,7 +45,7 @@ public class SnusAdapter extends CursorAdapter {
         //Drawable stars = rating.getProgressDrawable();
         //DrawableCompat.setTint(stars, Color.YELLOW);
 
-        String txtSnusIdCursor = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_id));
+        String txtSnusIdCursor = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_id));
 
         String snusname = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name))
                 + " " + cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name));
