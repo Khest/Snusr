@@ -200,9 +200,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Vanilla");
 
 
-            putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
-            putSnus(db, "Slim White", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
-            putSnus(db, "Snusy McSnusface", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            putSnus(db, "Extra Strong 1", 1, 2, 3, 0, 0, 5, 1.8, 1, 4, null);
+            putSnus(db, "Slim White 2", 1, 2, 3, 0, 0, 5, 1.8, 0, 2, null);
+            putSnus(db, "Snusy McSnusface 3", 1, 2, 3, 0, 0, 5, 1.8, 3, 4, null);
 
         } catch (Exception ex){
             Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());

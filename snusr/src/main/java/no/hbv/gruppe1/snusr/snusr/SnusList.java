@@ -2,7 +2,6 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.app.Fragment;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,6 +118,16 @@ public class SnusList extends Fragment {
         super.onDestroyView();
 
     }
+    public void search(String manu, String line, String snusname, List<Filtration> filtration){
+        db = new DatabaseInteractor(this.getActivity());
+        //DatabaseHelper h = new DatabaseHelper(getActivity());
+        //h.putDummyData();
+        Cursor cur = db.fetchCostume(manu, line, snusname);
+        SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
+        listview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        db.close();
+    }
 
     public void setUp(List<Filtration> list, Sorting sort){
         db = new DatabaseInteractor(this.getActivity());
@@ -127,5 +136,7 @@ public class SnusList extends Fragment {
         Cursor cur = db.fetchSnus(list, sort);
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
         listview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        db.close();
     }
 }

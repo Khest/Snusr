@@ -11,79 +11,200 @@
     <FrameLayout android:id="@+id/container" android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:visibility="gone"
-        android:id="@+id/searchLayout">
+        android:id="@+id/searchLayout"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:background="#5e5e5e"
+            android:id="@+id/SearchFiltrationTop">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:id="@+id/btnSearch"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:background="#005e5e5e"
+                android:textColor="#ffffff"
+                style="?android:attr/borderlessButtonStyle"
+                android:paddingLeft="15dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filtration/Sorting"
+                android:id="@+id/btnSortingFiltration"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="#005e5e5e"
+                android:textColor="#ffffff"
+                style="?android:attr/borderlessButtonStyle"
+                android:paddingRight="15dp"/>
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#dd313131"
-            android:id="@+id/searchWindow">
+            android:id="@+id/relativeLayoutSortingFiltrationWindow"
+            android:layout_below="@+id/SearchFiltrationTop"
+            android:visibility="gone">
 
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/eText_search"
-            android:layout_marginTop="31dp"
-            android:background="#ffffff"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:hint="Search"
-            android:textColorHint="#881e5d" />
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayoutManu"
-            android:layout_below="@id/eText_search"
-            android:layout_alignEnd="@+id/eText_search"
-            android:layout_alignStart="@+id/eText_search"
-            android:paddingTop="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Manufacturing"
-            android:id="@+id/textView"
-            android:textSize="20dp"
-            android:textColor="#ffffff"/>
-
-            <Spinner
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spin_serchManu"
-                android:layout_below="@+id/textView"
-                android:layout_alignParentStart="true" />
+                android:id="@+id/relativeLayoutSorting">
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relativeLayoutManu"
-            android:id="@+id/relativeLayoutLine"
-            android:layout_alignEnd="@+id/relativeLayoutManu"
-            android:layout_alignStart="@+id/relativeLayoutManu">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sorting"
+                    android:id="@+id/textViewSorting"
+                    android:textSize="30dp"
+                    android:textColor="#FFFFFF"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Line"
-            android:id="@+id/textView2"
-            android:textSize="20dp"
-            android:textColor="#ffffff"
-            android:layout_marginBottom="27dp"/>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spin_searchLine"
-                android:layout_below="@+id/textView2"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_Sorting"
+                    android:layout_below="@+id/textViewSorting"
+                    android:layout_alignParentStart="true"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:contextClickable="true"
+                    android:dropDownWidth="match_parent"
+                    android:focusable="true"
+                    android:importantForAccessibility="yes" />
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayoutLine"
+                android:layout_below="@+id/relativeLayoutSorting"
+                android:paddingBottom="20dp"
+                android:paddingTop="10dp"
+                android:layout_alignParentEnd="true">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sorting"
+                    android:id="@+id/btn_SortFiltration"
+                    android:background="#881e5d"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_alignParentStart="false" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#dd313131"
+            android:id="@+id/searchWindow"
+            android:layout_below="@+id/SearchFiltrationTop"
+            android:visibility="gone">
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/eText_search"
+                android:background="#ffffff"
+                android:hint="Search"
+                android:textColorHint="#881e5d"
+                android:textSize="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"/>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayoutManu"
+                android:layout_below="@id/eText_search"
+                android:paddingTop="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manufacturing"
+                    android:id="@+id/textView"
+                    android:textSize="30dp"
+                    android:textColor="#ffffff"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_serchManu"
+                    android:layout_below="@+id/textView"
+                    android:layout_alignParentStart="true"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayoutManu"
+                android:id="@+id/relativeLayoutLine"
+                android:layout_alignEnd="@+id/relativeLayoutManu"
+                android:layout_alignStart="@+id/relativeLayoutManu">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Line"
+                    android:id="@+id/textView2"
+                    android:textSize="30dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="27dp"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_searchLine"
+                    android:layout_below="@+id/textView2"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayoutFiltration"
+                android:paddingTop="10dp"
+                android:layout_below="@+id/relativeLayoutLine">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filtration"
+                    android:id="@+id/textViewFiltration"
+                    android:textSize="30dp"
+                    android:textColor="#FFFFFF"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_Filtration"
+                    android:layout_below="@+id/textViewFiltration"
+                    android:layout_alignParentStart="true"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:contextClickable="true"
+                    android:dropDownWidth="match_parent"
+                    android:importantForAccessibility="yes"
+                    android:spinnerMode="dropdown"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayoutFiltration"
                 android:paddingBottom="20dp"
                 android:paddingTop="10dp">
                 <Button
@@ -95,10 +216,14 @@
                     android:textColor="#ffffff"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="40dp" />
+                    android:layout_marginEnd="20dp" />
             </RelativeLayout>
         </RelativeLayout>
+
     </RelativeLayout>
+
+
+
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right
          languages and on the right side for right-to-left languages.

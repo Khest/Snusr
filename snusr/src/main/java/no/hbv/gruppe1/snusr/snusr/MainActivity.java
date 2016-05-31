@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,11 +19,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
@@ -59,6 +63,13 @@ public class MainActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
 
+    EditText txtSearch;
+    Spinner spinManu,spinLine, spinFiltration, spinSorting;
+    SortingAdapter sortingArrayAdapter;
+    FiltrationAdapter filtrationAdapter;
+    ManuAdapter manuAdapter;
+    int filtrationID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +81,11 @@ public class MainActivity extends AppCompatActivity
         //db2.close();
         //db2 = null;
         PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
-        putDummyDataExtra.putDymmyData("1", "dummy_data/skruf_knox_starkportion_styrke3.png");
 
+        for(int i= 1; i <= 10; i++){
+            String a = String.valueOf(i);
+            putDummyDataExtra.putDymmyData(a, "dummy_data/skruf_knox_starkportion_styrke3.png");
+        }
         //Log.i(Globals.TAG, "MA ver: "+ db.getReadableDatabase().getVersion());
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
@@ -99,6 +113,38 @@ public class MainActivity extends AppCompatActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+       addSearchFiltrationAdapter();
+    }
+
+    private void addSearchFiltrationAdapter() {
+        spinFiltration = (Spinner) findViewById(R.id.spin_Filtration);
+        spinSorting = (Spinner) findViewById(R.id.spin_Sorting);
+        spinManu = (Spinner) findViewById(R.id.spin_serchManu);
+        spinLine = (Spinner) findViewById(R.id.spin_searchLine);
+
+        List<Filtration> filtrationsList = Arrays.asList(Filtration.values());
+        List<Sorting> sortingsList = Arrays.asList(Sorting.values());
+
+        DatabaseInteractor db = new DatabaseInteractor(this);
+        Cursor mcur = db.fetchManufacturers();
+
+        manuAdapter = new ManuAdapter(this, mcur, 0);
+        filtrationAdapter = new FiltrationAdapter(getBaseContext(), filtrationsList);
+        sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
+
+        db.close();
+        spinManu.setAdapter(manuAdapter);
+        spinFiltration.setAdapter(filtrationAdapter);
+        spinSorting.setAdapter(sortingArrayAdapter);
+
+        filtrationAdapter.notifyDataSetChanged();
+        sortingArrayAdapter.notifyDataSetChanged();
+        spinFiltration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                filtrationID = position;
+            }
+        });
     }
 
     @Override
@@ -110,22 +156,26 @@ public class MainActivity extends AppCompatActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         android.app.Fragment fragment;
+        String fragTag = "";
         android.app.FragmentManager fragmentManager = getFragmentManager(); // For AppCompat use getSupportFragmentManager
         switch(position) {
             default:
             case 0:
                 fragment = new SnusList();
+                fragTag = "SnusList";
                 break;
             case 1:
                 fragment = new AddSnus();
+                fragTag = "AddSnus";
                 break;
             case 2:
                 fragment = new SendFileFragment();
+                fragTag = "SendFile";
                 break;
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, fragment, fragTag)
                 .commit();
     }
 
@@ -180,25 +230,99 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        RelativeLayout r =(RelativeLayout) findViewById(R.id.searchLayout);
-        //noinspection SimplifiableIfStatement
 
+        //noinspection SimplifiableIfStatement
+        final View layout = findViewById(R.id.searchLayout);
         if (id == R.id.action_search) {
             if(searchOpen == true){
                 item.setIcon(R.drawable.search);
-                r.setVisibility(View.GONE);
+                layout.setVisibility(View.GONE);
                 searchOpen = false;
             }else{
-                drawerLayout.closeDrawers();
                 item.setIcon(R.drawable.search_lilla);
-                r.setVisibility(View.VISIBLE);
-                searchOpen = true;
+                drawerLayout.closeDrawers();
+               searchWindow();
             }
             return  true;
 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void searchWindow(){
+        final View layout = findViewById(R.id.searchLayout);
+            layout.setVisibility(View.VISIBLE);
+            final Button buttonSearch = (Button) layout.findViewById(R.id.btnSearch);
+            final Button buttonSorting = (Button) layout.findViewById(R.id.btnSortingFiltration);
+        layout.findViewById(R.id.relativeLayoutSortingFiltrationWindow).setVisibility(View.GONE);
+        layout.findViewById(R.id.searchWindow).setVisibility(View.VISIBLE);
+        buttonSearch.setTextColor(Color.parseColor("#881e5d"));
+        buttonSorting.setTextColor(Color.parseColor("#FFFFFF"));
+            buttonSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    layout.findViewById(R.id.relativeLayoutSortingFiltrationWindow).setVisibility(View.GONE);
+                    layout.findViewById(R.id.searchWindow).setVisibility(View.VISIBLE);
+                    buttonSearch.setTextColor(Color.parseColor("#881e5d"));
+                    buttonSorting.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+            });
+            buttonSorting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    layout.findViewById(R.id.searchWindow).setVisibility(View.GONE);
+                    layout.findViewById(R.id.relativeLayoutSortingFiltrationWindow).setVisibility(View.VISIBLE);
+                    buttonSearch.setTextColor(Color.parseColor("#FFFFFF"));
+                    buttonSorting.setTextColor(Color.parseColor("#881e5d"));
+                    onSortClicked();
+                }
+            });
+            searchOpen = true;
+
+    }
+
+    public void onSearchClicked(){
+        Button btnSearch = (Button) findViewById(R.id.btn_search);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
+                EditText etxt = (EditText) findViewById(R.id.eText_search);
+                List<Filtration> list = new ArrayList();
+                list.add(filtrationAdapter.getItem(filtrationID));
+
+                if (snusList != null){
+                    final View layout = findViewById(R.id.searchLayout);
+                    layout.setVisibility(View.GONE);
+                    snusList.search("", "", String.valueOf(etxt.getText()), list);
+                }
+
+            }
+        });
+    }
+
+
+
+
+    public void onSortClicked(){
+        Button btnSort = (Button) findViewById(R.id.btn_SortFiltration);
+        final Sorting sorting = sortingArrayAdapter.getItem(spinSorting.getSelectedItemPosition());
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View rootView) {
+                Log.i(Globals.TAG, "Attempting to perform onClick");
+
+                SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
+                if (snusList != null){
+                    snusList.setUp(null, sorting);
+                    final View layout = findViewById(R.id.searchLayout);
+                    layout.setVisibility(View.GONE);
+                } else {
+                }
+            }
+        });
+
     }
 
 
@@ -232,23 +356,6 @@ public class MainActivity extends AppCompatActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
-            Button btnSearch = (Button) rootView.findViewById(R.id.btn_search);
-            EditText txtSearch = (EditText) rootView.findViewById(R.id.eText_search);
-            Spinner spinManu = (Spinner) rootView.findViewById(R.id.spin_serchManu);
-            Spinner spinLine = (Spinner) rootView.findViewById(R.id.spin_searchLine);
-
-            btnSearch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View rootView) {
-                    Log.i(Globals.TAG, "Attempting to perform onClick");
-                    SnusList snusList = (SnusList) getActivity().getFragmentManager().findFragmentById(R.id.snuslistFragment);
-                    if (snusList != null){
-                        snusList.setUp(null, Sorting.TYPE);
-                    } else {
-                        Log.i(Globals.TAG, " snuslist i onclick er null");
-                    }
-                }
-            });
             return rootView;
         }
 
