@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void searchWindow(){
+        onNavigationDrawerItemSelected(0);
         final View layout = findViewById(R.id.searchLayout);
         layout.setVisibility(View.VISIBLE);
             final Button buttonSearch = (Button) layout.findViewById(R.id.btnSearch);
@@ -334,9 +335,7 @@ public class MainActivity extends AppCompatActivity
                 list.add(f1);
                 list.add(f2);
                 list.add(f3);
-                list.add(f4);
-                list.add(f5);
-                list.add(f6);
+
 
                 if (snusList != null){
                     final View layout = findViewById(R.id.searchLayout);
@@ -344,6 +343,7 @@ public class MainActivity extends AppCompatActivity
                     search.setIcon(R.drawable.search);
                     Cursor c = db.fetchSnus(list, null);
                     snusList.search(c);
+                    clearAll();
                     Log.i(Globals.TAG, "search is not null");
                     //snusList.search("", "", String.valueOf(etxt.getText()), list);
                 }
@@ -352,25 +352,34 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void clearAll(){
+        EditText etxt = (EditText) findViewById(R.id.eText_search);
+        etxt.setText("");
+        spinManu.setSelection(0);
+        spinLine.setSelection(0);
+        spinTaste1.setSelection(0);
+        spinTaste2.setSelection(0);
+        spinTaste3.setSelection(0);
+        spinSorting.setSelection(0);
+    }
 
 
 
     public void onSortClicked(){
+        onNavigationDrawerItemSelected(0);
         Button btnSort = (Button) findViewById(R.id.btn_SortFiltration);
-        final Sorting sorting = sortingArrayAdapter.getItem(spinSorting.getSelectedItemPosition());
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View rootView) {
                 Log.i(Globals.TAG, "Attempting to perform onClick");
-
+                final Sorting sorting = sortingArrayAdapter.getItem(spinSorting.getSelectedItemPosition());
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
                 if (snusList != null){
-                    Log.i(Globals.TAG, "snuslist is not null");
                     snusList.setUp(null, sorting);
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
                     search.setIcon(R.drawable.search);
-                } else {
+                    clearAll();
                 }
             }
         });

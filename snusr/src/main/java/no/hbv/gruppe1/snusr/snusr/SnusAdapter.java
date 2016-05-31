@@ -8,13 +8,10 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 
@@ -146,7 +143,7 @@ public class SnusAdapter extends CursorAdapter {
     public Bitmap setBookmark(int isBookmarked){
         Bitmap output;
         if (isBookmarked==1){
-            output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50);
+            output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark_valgt, 50, 50);
         } else {
             output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50);
         }

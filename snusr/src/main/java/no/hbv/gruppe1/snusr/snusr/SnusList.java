@@ -51,7 +51,7 @@ public class SnusList extends Fragment {
         db = new DatabaseInteractor(this.getActivity());
         cur = db.fetchSnus(null, null);
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
-
+        btnAllesnus.setTextColor(Color.parseColor("#881e5d"));
         btnAllesnus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
