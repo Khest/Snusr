@@ -51,7 +51,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
         } else {
             sb.append(sorting.getSql());
         }
-        //Log.d(TAG, sb.toString());
+        //Log.i(Globals.TAG, sb.toString());
         return dbCursor(sb.toString());
     }
 
@@ -182,7 +182,8 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public int getVersion() {return this.db.getVersion();}
 
     public void resetDatabase() {
-        databaseHelper.onUpgrade(this.db, databaseHelper.DATABASE_VERSION, databaseHelper.DATABASE_VERSION);
+        databaseHelper.deleteDatabases(this.db);
+        databaseHelper.createDatabase(this.db);
     }
 
     public void close() {
@@ -206,9 +207,9 @@ public class DatabaseInteractor implements DatabaseInteraction {
                 .append(TASTE_TABLE_ALIAS_1).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
                     .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_1).append(", ")
                 .append(TASTE_TABLE_ALIAS_2).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
-                .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_2).append(", ")
+                    .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_2).append(", ")
                 .append(TASTE_TABLE_ALIAS_3).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
-                .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_3).append(" ")
+                    .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_3).append(" ")
                 .append(" FROM ")
                 .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
         sb.append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE).append(" ON ")
