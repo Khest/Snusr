@@ -4,11 +4,14 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -44,6 +47,9 @@ public class SnusList extends Fragment {
         btnAllesnus = (Button) view.findViewById(R.id.btn_allsnus);
         btnBook = (Button) view.findViewById(R.id.btn_book);
         btnMyfav = (Button) view.findViewById(R.id.btn_myfav);
+        db = new DatabaseInteractor(this.getActivity());
+        Cursor cur = db.fetchSnus(null, null);
+        SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
 
         btnAllesnus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,10 +83,30 @@ public class SnusList extends Fragment {
         });
 
        setUp(null, null);
+        listview.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView txtSnusId = (TextView) view.findViewById(R.id.txtSnusId);
+                String t = txtSnusId.getText().toString();
+                // Intent intent = new Intent(getActivity(), SnusInformationFragment.class);
+                //intent.putExtra("snusGetId", t);
+                Log.d("teste", t);
 
+                newFragmentSnusInformationFragment(t);
+
+            }
+        });
+        listview.setAdapter(adapter);
         return view;
     }
-
+    public void newFragmentSnusInformationFragment(String snusId){
+        SnusInformationFragment nextFrag= new SnusInformationFragment();
+        nextFrag.setSnusID(Integer.parseInt(snusId));
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.container, nextFrag)
+                .addToBackStack(null)
+                .commit();
+    }
     @Override
     public void onDestroy() {
         db.close();
