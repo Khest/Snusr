@@ -25,8 +25,9 @@ public enum  Sorting {
         this.columnName = columnName;
     }
 
-    public String getGuiName() {
-        return guiName;
+    @Override
+    public String toString() {
+        return this.guiName;
     }
 
     /**
@@ -48,12 +49,19 @@ public enum  Sorting {
 
     /** Enum class that handles ascending or descending ordering **/
     public enum Order {
-        ASCENDING("ASC"),
-        DESCENDING("DESC");
+        ASCENDING("Ascending", "ASC"),
+        DESCENDING("Descending", "DESC");
 
-        private String string;
-        Order(String string) {
-            this.string = string;
+        private String sqlValue;
+        private String guiName;
+        Order(String guiName, String sqlValue) {
+            this.guiName = guiName;
+            this.sqlValue = sqlValue;
+        }
+
+        @Override
+        public String toString() {
+            return this.guiName;
         }
 
         /**
@@ -61,7 +69,7 @@ public enum  Sorting {
          * @return      Returns SQL representation of the order
          */
         public String getOrder() {
-            return string;
+            return sqlValue;
         }
 }
 }

@@ -12,7 +12,7 @@ public enum Filtration {
     NAME("Name", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_name, FiltrationRule.LIKE),
     LINE_NUMBER("Line", DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE,
-            DatabaseHelper.FeedEntry.col_line_name, FiltrationRule.EXACT),
+            DatabaseHelper.FeedEntry.col_line_id, FiltrationRule.EXACT),
     LINE_TEXT("Line", DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE,
             DatabaseHelper.FeedEntry.col_line_name, FiltrationRule.LIKE),
     MANUFACTURER("Producer", DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER,
@@ -44,6 +44,11 @@ public enum Filtration {
         this.tableName = tableName;
         this.columnName = columnName;
         this.filtrationRule = filtrationRule;
+    }
+
+    @Override
+    public String toString() {
+        return this.guiName;
     }
 
     /**
