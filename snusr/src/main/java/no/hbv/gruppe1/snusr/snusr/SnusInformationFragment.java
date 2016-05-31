@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 
 
 /**
@@ -26,13 +27,24 @@ public class SnusInformationFragment extends Fragment {
     private RatingBar ratingInfo;
     private int snusID;
 
+    private DatabaseInteractor db;
 
 
     public SnusInformationFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
+    @Override
+    public void onDestroyView() {
+        Log.i(Globals.TAG, "Closing database in " + this.getClass().getName());
+        db.close();
+        super.onDestroyView();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +64,7 @@ public class SnusInformationFragment extends Fragment {
         txtStrength = (TextView) view.findViewById(R.id.txtStrength);
         ratingInfo = (RatingBar) view.findViewById(R.id.ratingSnusInformation);
 
-        DatabaseInteractor db = new DatabaseInteractor(getActivity());
+        db = new DatabaseInteractor(getActivity());
         Cursor cur = db.fetchSpecificSnus(snusID);
         cur.moveToFirst();
         txtName.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name)) + " "
@@ -68,7 +80,6 @@ public class SnusInformationFragment extends Fragment {
 
 
         String test = cur.getString(cur.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_name));
-        Log.i("treee", DatabaseUtils.dumpCursorToString(cur));
         txtTaste.setText(makeTasteString(taste1, taste2, taste3));
 
         byte[] array = cur.getBlob(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
@@ -78,7 +89,7 @@ public class SnusInformationFragment extends Fragment {
         } else {
             imgSnus.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.noimagefound));
         }
-        cur.close();
+
         return view;
     }
 
