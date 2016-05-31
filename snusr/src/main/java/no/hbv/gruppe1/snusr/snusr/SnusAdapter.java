@@ -38,16 +38,21 @@ public class SnusAdapter extends CursorAdapter {
         TextView txtRating = (TextView) view.findViewById(R.id.txtRating);
         ImageView img = (ImageView) view.findViewById(R.id.imgSnusThumbnail);
         ImageView imgBook = (ImageView) view.findViewById(R.id.imgBook);
+        TextView txtSnusId = (TextView) view.findViewById(R.id.txtSnusId);
+
         // Finds the ratingbar and sets the stars to yellow.
         RatingBar rating = (RatingBar) view.findViewById(R.id.ratingSnus);
         //Drawable stars = rating.getProgressDrawable();
         //DrawableCompat.setTint(stars, Color.YELLOW);
+
+        String txtSnusIdCursor = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_id));
 
         String snusname = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name))
                 + " " + cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name));
         txtSnusName.setText(snusname);
 
         txtRating.setText(String.valueOf(rating.getRating()));
+        txtSnusId.setText(txtSnusIdCursor);
 
         rating.setRating(cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

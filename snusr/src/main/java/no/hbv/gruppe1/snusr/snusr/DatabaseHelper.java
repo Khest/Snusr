@@ -13,7 +13,7 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 12;
+    public static final int DATABASE_VERSION = 13;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -206,6 +206,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Orange");
             putTaste(db, "Apple");
             putTaste(db, "Vanilla");
+
+
+            putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            putSnus(db, "Slim White", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            putSnus(db, "Snusy McSnusface", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
 
         } catch (Exception ex){
             Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());

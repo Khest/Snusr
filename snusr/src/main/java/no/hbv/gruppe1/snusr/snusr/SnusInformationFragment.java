@@ -1,10 +1,11 @@
 package no.hbv.gruppe1.snusr.snusr;
 
+import android.app.Fragment;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import no.hbv.gruppe1.snusr.snusr.R;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 
 
@@ -26,7 +24,8 @@ public class SnusInformationFragment extends Fragment {
     private ImageView imgSnus;
     private TextView txtName, txtManufacturer, txtTaste, txtStrength;
     private RatingBar ratingInfo;
-    private static int snusID;
+    private int snusID;
+
 
 
     public SnusInformationFragment() {
@@ -41,11 +40,11 @@ public class SnusInformationFragment extends Fragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_snus_information, container, false);
-        if (getArguments() != null) {
-            snusID = savedInstanceState.getInt(DatabaseHelper.FeedEntry.col_snus_id);
-        } else {
-            snusID = 2;
-        }
+//        if (getArguments() != null) {
+//            snusID = savedInstanceState.getInt(DatabaseHelper.FeedEntry.col_snus_id);
+//        } else {
+//            snusID = 2;
+//        }
         txtName = (TextView) view.findViewById(R.id.txtSnusNameInformation);
         imgSnus = (ImageView) view.findViewById(R.id.imgSnusInformation);
         txtManufacturer = (TextView) view.findViewById(R.id.txtManufacturer);
@@ -60,10 +59,18 @@ public class SnusInformationFragment extends Fragment {
                 + cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name)));
         txtManufacturer.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_name)));
         txtStrength.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_strength)));
-        String taste1 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_snus_taste1));
-        String taste2 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_TABLE_ALIAS_2 + "." + DatabaseHelper.FeedEntry.col_snus_taste2));
-        String taste3 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_TABLE_ALIAS_3 + "." + DatabaseHelper.FeedEntry.col_snus_taste3));
+        //Log.i("treee", cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE + "." + DatabaseHelper.FeedEntry.col_taste_taste)));
+        String taste1 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_COLUMN_TEXT_ALIAS_1 ));
+        String taste2 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_COLUMN_TEXT_ALIAS_2 ));
+        String taste3 = cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_COLUMN_TEXT_ALIAS_3 ));
+
+        //Log.i("treee", cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste)));
+
+
+        String test = cur.getString(cur.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_name));
+        Log.i("treee", DatabaseUtils.dumpCursorToString(cur));
         txtTaste.setText(makeTasteString(taste1, taste2, taste3));
+
         byte[] array = cur.getBlob(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
         if (array != null) {
             ImageHandler imgHandler = new ImageHandler();
@@ -75,14 +82,25 @@ public class SnusInformationFragment extends Fragment {
         return view;
     }
 
+    public void setSnusID(int snusID){
+        this.snusID = snusID;
+    }
+
     public String makeTasteString(String taste1, String taste2, String taste3){
         String output = "";
-        if (!taste1.equals(""))
-            output = output + taste1;
-        if (!taste2.equals(""))
-            output = output + ", " + taste2;
-        if (!taste3.equals(""))
-            output = output + ", " + taste3;
+
+        if(taste1 != null) {
+            if (!taste1.equals(""))
+                output = output + taste1;
+        }
+        if(taste2 != null) {
+            if (!taste2.equals(""))
+                output = output + ", " + taste2;
+        }
+        if(taste3 != null) {
+            if (!taste3.equals(""))
+                output = output + ", " + taste3;
+        }
         return output;
     }
 
