@@ -24,6 +24,7 @@ import android.widget.Spinner;
 
 import java.util.List;
 
+import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Sorting;
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        //DatabaseInteractor db2 = new DatabaseInteractor(this);
+        DatabaseInteractor db2 = new DatabaseInteractor(this);
+        db2.resetDatabase();
+        db2.close();
         //db2.close();
         //db2 = null;
         PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
