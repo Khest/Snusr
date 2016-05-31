@@ -13,20 +13,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#dd313131"
-        android:visibility="visible"
+        android:layout_height="200dp"
+        android:visibility="gone"
         android:id="@+id/searchLayout">
-        <Button
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search"
-            android:id="@+id/btn_search"
-            android:background="#881e5d"
-            android:textColor="#ffffff"
-            android:layout_below="@+id/spin_searchLine"
-            android:layout_alignEnd="@+id/spin_searchLine"
-            android:layout_marginTop="77dp" />
+            android:background="#dd313131"
+            android:id="@+id/searchWindow">
 
         <EditText
             android:layout_width="300dp"
@@ -38,44 +32,72 @@
             android:layout_centerHorizontal="true"
             android:hint="Search"
             android:textColorHint="#881e5d" />
-
-        <Spinner
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spin_serchManu"
-            android:layout_above="@+id/textView2"
-            android:layout_alignStart="@+id/textView"
-            android:layout_alignEnd="@+id/eText_search" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spin_searchLine"
-            android:layout_centerVertical="true"
-            android:layout_alignEnd="@+id/spin_serchManu"
-            android:layout_alignStart="@+id/textView2" />
-
+            android:id="@+id/relativeLayoutManu"
+            android:layout_below="@id/eText_search"
+            android:layout_alignEnd="@+id/eText_search"
+            android:layout_alignStart="@+id/eText_search"
+            android:paddingTop="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Manufacturing"
             android:id="@+id/textView"
-            android:layout_below="@+id/eText_search"
-            android:layout_alignStart="@+id/eText_search"
             android:textSize="20dp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"/>
 
-        <TextView
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spin_serchManu"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayoutManu"
+            android:id="@+id/relativeLayoutLine"
+            android:layout_alignEnd="@+id/relativeLayoutManu"
+            android:layout_alignStart="@+id/relativeLayoutManu">
+
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Line"
             android:id="@+id/textView2"
             android:textSize="20dp"
             android:textColor="#ffffff"
-            android:layout_marginBottom="27dp"
-            android:layout_above="@+id/spin_searchLine"
-            android:layout_alignStart="@+id/spin_serchManu" />
+            android:layout_marginBottom="27dp"/>
 
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spin_searchLine"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayoutLine"
+                android:paddingBottom="20dp"
+                android:paddingTop="10dp">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search"
+                    android:id="@+id/btn_search"
+                    android:background="#881e5d"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="40dp" />
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right

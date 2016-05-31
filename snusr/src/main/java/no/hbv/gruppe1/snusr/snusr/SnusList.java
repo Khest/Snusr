@@ -4,15 +4,17 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.List;
+
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
-import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Sorting;
 
 
 /**
@@ -20,14 +22,19 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
  */
 public class SnusList extends Fragment {
 
+
+
     ListView listview;
     Button btnAllesnus, btnBook, btnMyfav;
     private DatabaseInteractor db;
+
+
     /**
      * Inneholder våre favorittsnus, alle snus og snus med bokmerke
      */
     public SnusList() {
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
@@ -69,16 +76,8 @@ public class SnusList extends Fragment {
             }
         });
 
-        db = new DatabaseInteractor(this.getActivity());
-        //DatabaseHelper h = new DatabaseHelper(getActivity());
-        //h.putDummyData();
-        Cursor cur = db.fetchSnus(null, null);
+       setUp(null, null);
 
-
-        Log.i(Globals.TAG, "Num found: " + String.valueOf(cur.getCount()));
-        Log.i(Globals.TAG, "SnusList ver:" + String.valueOf(db.getVersion()));
-        SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
-        listview.setAdapter(adapter);
         return view;
     }
 
@@ -92,5 +91,14 @@ public class SnusList extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
+    }
+
+    public void setUp(List<Filtration> list, Sorting sort){
+        db = new DatabaseInteractor(this.getActivity());
+        //DatabaseHelper h = new DatabaseHelper(getActivity());
+        //h.putDummyData();
+        Cursor cur = db.fetchSnus(list, sort);
+        SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
+        listview.setAdapter(adapter);
     }
 }

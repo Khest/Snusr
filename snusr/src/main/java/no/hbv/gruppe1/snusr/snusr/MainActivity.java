@@ -17,13 +17,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
+import java.util.List;
+
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Sorting;
 import no.hbv.gruppe1.snusr.snusr.dummydata.PutDummyDataExtra;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, Search.onSearchOpenInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,6 +43,15 @@ public class MainActivity extends AppCompatActivity
 
     DrawerLayout drawerLayout;
 
+    public void onSearch(List<Filtration> list, Sorting sort) {
+        if(list != null || sort != null){
+            SnusList snusList = (SnusList) getFragmentManager().findFragmentById(R.id.snuslistFragment);
+            if (snusList != null){
+                snusList.setUp(list, sort);
+            }
+
+        }
+    }
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -182,12 +198,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSearch(boolean isOpen) {
-        if(isOpen){
 
-        }
-    }
 
     /**
      * A placeholder fragment containing a simple view.
@@ -218,6 +229,23 @@ public class MainActivity extends AppCompatActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
+            Button btnSearch = (Button) rootView.findViewById(R.id.btn_search);
+            EditText txtSearch = (EditText) rootView.findViewById(R.id.eText_search);
+            Spinner spinManu = (Spinner) rootView.findViewById(R.id.spin_serchManu);
+            Spinner spinLine = (Spinner) rootView.findViewById(R.id.spin_searchLine);
+
+            btnSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View rootView) {
+                    Log.i(Globals.TAG, "Attempting to perform onClick");
+                    SnusList snusList = (SnusList) getActivity().getFragmentManager().findFragmentById(R.id.snuslistFragment);
+                    if (snusList != null){
+                        snusList.setUp(null, Sorting.TYPE);
+                    } else {
+                        Log.i(Globals.TAG, " snuslist i onclick er null");
+                    }
+                }
+            });
             return rootView;
         }
 
@@ -228,5 +256,6 @@ public class MainActivity extends AppCompatActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
 
 }
