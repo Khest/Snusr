@@ -281,7 +281,7 @@ public class BluetoothHandler2 {
 
         public void run() {
             Log.i(Globals.TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[Integer.MAX_VALUE];
+            byte[] buffer = new byte[8096];
             int bytes;
 
             // Keep listening to the InputStream while connected
@@ -293,7 +293,7 @@ public class BluetoothHandler2 {
                     // Send the obtained bytes to the UI Activity
                    mHandler.obtainMessage(Globals.MESSAGE_READ, bytes, -1, buffer) //TODO Handle incoming data properly
                            .sendToTarget();
-                    Log.i(Globals.TAG, "Sent data worth " + bytes);
+                    Log.i(Globals.TAG, "Received data worth " + bytes + " bytes");
                 } catch (IOException e) {
                     Log.e(Globals.TAG, "disconnected", e);
                     connectionLost();
