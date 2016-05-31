@@ -8,161 +8,168 @@
         android:layout_width="match_parent"
         android:layout_height="116dp"
         android:id="@+id/addSnus_imgview"
-        android:layout_gravity="left|top" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etxt_name"
-        android:layout_gravity="left|center_vertical"
-        android:hint="Name"
-        android:layout_below="@+id/addSnus_imgview"
-        android:layout_alignParentStart="true"
-        android:textColor="#881e5d"
-        android:textColorHighlight="#881e5d"
-        android:textColorHint="#881e5d"
-        android:textColorLink="#881e5d"
-        android:drawableTint="#881e5d"
-        android:backgroundTint="#881e5d" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etxt_manu"
-        android:layout_gravity="left|center_vertical"
-        android:layout_below="@+id/etxt_name"
-        android:layout_alignParentStart="true"
-        android:hint="Manufacturing"
-        android:textColor="#881e5d"
-        android:textColorHighlight="#881e5d"
-        android:textColorHint="#881e5d"
-        android:textColorLink="#881e5d"
-        android:drawableTint="#881e5d"
-        android:backgroundTint="#881e5d" />
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_taste2"
-        android:entries="@array/spinnerItemsTaste"
-        android:layout_below="@+id/spin_taste1"
-        android:layout_alignStart="@+id/spin_taste1"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d"
-        android:focusable="false"
-        android:foregroundTint="#881e5d" />
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_taste3"
-        android:entries="@array/spinnerItemsTaste"
-        android:layout_below="@+id/spin_taste2"
-        android:layout_alignStart="@+id/spin_taste2"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d"
-        android:focusable="false"
-        android:foregroundTint="#881e5d" />
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_taste1"
-        android:entries="@array/spinnerItemsTaste"
-        android:layout_marginStart="23dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d" />
+        android:contentDescription="@string/add_snus_desc_image"
+        android:layout_gravity="start|top" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add snus"
-        android:id="@+id/btn_addsnus"
-        android:background="#881e5d"
-        android:textColor="#ffffff"
-        android:layout_below="@+id/ratingbar_addsnus"
-        android:layout_alignEnd="@+id/btn_addSnusImage" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_snus_text_add_snus"
+            android:id="@+id/btn_addsnus"
+            android:background="#881e5d"
+            android:textColor="#ffffff"
+            android:layout_alignParentBottom="true" android:layout_alignEnd="@+id/add_snus_misc_group"
+            android:layout_margin="15dp"/>
 
     <Button
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/btn_addSnusImage"
-        android:background="@drawable/cam_button"
-        android:layout_above="@+id/etxt_name"
-        android:layout_toEndOf="@+id/spin_str"
-        android:textColor="#ffffff"/>
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_addSnusImage"
+            android:background="@drawable/cam_button"
+            android:textColor="#ffffff"
+            android:layout_alignBottom="@+id/addSnus_imgview" android:layout_alignParentEnd="true"/>
 
     <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratingbar_addsnus"
-        android:layout_below="@+id/spin_taste3"
-        android:layout_alignStart="@+id/spin_taste3"
-        android:layout_marginTop="47dp"
-        android:progressTint="#ffcf00"
-        android:secondaryProgressTint="#881e5d"/>
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etxt_line"
-        android:layout_gravity="left|center_vertical"
-        android:hint="Line"
-        android:layout_below="@+id/etxt_manu"
-        android:layout_alignParentEnd="true"
-        android:textColor="#881e5d"
-        android:textColorHighlight="#881e5d"
-        android:textColorHint="#881e5d"
-        android:textColorLink="#881e5d"
-        android:drawableTint="#881e5d"
-        android:backgroundTint="#881e5d" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingbar_addsnus"
+            android:progressTint="#ffcf00"
+            android:secondaryProgressTint="#881e5d" android:layout_below="@+id/add_snus_taste_group"
+            android:layout_alignParentStart="true" android:layout_marginTop="15dp"/>
 
     <Spinner
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/spin_takepic"
         android:entries="@array/spinnerItemsCamera"
-        android:layout_above="@+id/etxt_name"
         android:layout_toStartOf="@+id/btn_addSnusImage"/>
 
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_type"
-        android:entries="@array/spinnerItemsType"
-        android:layout_above="@+id/spin_taste2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="38dp"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d"
-        android:focusable="false"
-        android:foregroundTint="#881e5d" />
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_str"
-        android:entries="@array/spinnerItemsStr"
-        android:layout_below="@+id/spin_type"
-        android:layout_alignEnd="@+id/spin_type"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d"
-        android:focusable="false"
-        android:foregroundTint="#881e5d" />
-
-    <Spinner
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:id="@+id/spin_nico"
-        android:entries="@array/spinnerItemsStr"
-        android:layout_alignBottom="@+id/spin_taste3"
-        android:layout_alignEnd="@+id/spin_str"
-        android:textColor="#881e5d"
-        android:backgroundTint="#881e5d"
-        android:focusable="false"
-        android:foregroundTint="#881e5d" />
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false" android:layout_below="@+id/addSnus_imgview"
+            android:id="@+id/add_snus_manu_line_name">
+        <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_add_snus_manufacturer"
+                android:layout_gravity="start|center_vertical"
+                android:hint="@string/add_snus_hint_manufacturer"
+                android:layout_alignParentStart="true"
+                android:textColor="#881e5d"
+                android:textColorHighlight="#881e5d"
+                android:textColorHint="#881e5d"
+                android:textColorLink="#881e5d"
+                android:drawableTint="#881e5d"
+                android:backgroundTint="#881e5d" android:layout_alignParentTop="true"/>
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_addsnus_line"
+            android:layout_gravity="start|center_vertical"
+            android:layout_below="@+id/spinner_add_snus_manufacturer"
+            android:layout_alignParentStart="true"
+            android:hint="@string/add_snus_hint_line"
+            android:textColor="#881e5d"
+            android:textColorHighlight="#881e5d"
+            android:textColorHint="#881e5d"
+            android:textColorLink="#881e5d"
+            android:drawableTint="#881e5d"
+            android:backgroundTint="#881e5d" />
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etxt_name"
+                android:layout_gravity="start|center_vertical"
+                android:hint="@string/add_snus_hint_name"
+                android:singleLine="true"
+                android:layout_below="@+id/spinner_addsnus_line"
+                android:layout_alignParentEnd="true"
+                android:textColor="#881e5d"
+                android:textColorHighlight="#881e5d"
+                android:textColorHint="#881e5d"
+                android:textColorLink="#881e5d"
+                android:drawableTint="#881e5d"
+                android:backgroundTint="#881e5d" />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/add_snus_taste_group"
+            android:layout_below="@+id/add_snus_manu_line_name">
+        <Spinner
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:id="@+id/spin_taste1"
+                android:layout_marginStart="23dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:textColor="#881e5d"
+                android:backgroundTint="#881e5d" android:layout_alignParentTop="true"/>
+        <Spinner
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:id="@+id/spin_taste2"
+            android:layout_below="@+id/spin_taste1"
+            android:layout_alignStart="@+id/spin_taste1"
+            android:textColor="#881e5d"
+            android:backgroundTint="#881e5d"
+            android:focusable="false"
+            android:foregroundTint="#881e5d" />
+        <Spinner
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:id="@+id/spin_taste3"
+            android:layout_below="@+id/spin_taste2"
+            android:layout_alignStart="@+id/spin_taste2"
+            android:textColor="#881e5d"
+            android:backgroundTint="#881e5d"
+            android:focusable="false"
+            android:foregroundTint="#881e5d" />
+    </RelativeLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/add_snus_misc_group"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/add_snus_manu_line_name">
+        <Spinner
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:id="@+id/spin_type"
+                android:entries="@array/spinnerItemsType"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="38dp"
+                android:textColor="#881e5d"
+                android:backgroundTint="#881e5d"
+                android:focusable="false"
+                android:foregroundTint="#881e5d" android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+        <EditText
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:id="@+id/etxt_strength"
+                android:inputType="numberSigned"
+                android:hint="@string/add_snus_hint_strength"
+                android:maxLength="1"
+                android:textColor="#881e5d"
+                android:backgroundTint="#881e5d"
+                android:foregroundTint="#881e5d"
+                android:layout_alignParentRight="false"
+                android:layout_alignBottom="@+id/spin_type" android:layout_alignParentStart="false"/>
+        <EditText
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:id="@+id/etxt_nicotine_level"
+                android:inputType="numberDecimal"
+                android:hint="@string/add_snus_hint_nicotine_level"
+                android:maxLength="1"
+                android:entries="@array/spinnerItemsStr"
+                android:layout_alignEnd="@+id/etxt_strength"
+                android:textColor="#881e5d"
+                android:backgroundTint="#881e5d"
+                android:foregroundTint="#881e5d" android:layout_alignParentRight="false"
+                android:layout_alignBottom="@+id/etxt_strength"/>
+    </LinearLayout>
 
 
 </RelativeLayout>
