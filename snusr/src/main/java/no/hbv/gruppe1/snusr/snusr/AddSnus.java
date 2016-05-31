@@ -161,7 +161,7 @@ public class AddSnus extends Fragment {
         snusImage.buildDrawingCache();
         mSnusImage = snusImage.getDrawingCache();
         try {
-            Snus.setSnus(mName, 0, mLine, mTaste1, mTaste2, mTaste3, mType, mStr, mNicotin, mRank, mSnusImage);
+            Snus.setSnus(mName, mManu, mLine, mTaste1, mTaste2, mTaste3, mType, mStr, mNicotin, mRank, mSnusImage);
         } catch (Exception e) {
             e.printStackTrace();
         }

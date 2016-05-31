@@ -29,6 +29,11 @@ public class Search extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
+    public interface onSearchOpenInterface{
+        public void onSearch(boolean isOpen);
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

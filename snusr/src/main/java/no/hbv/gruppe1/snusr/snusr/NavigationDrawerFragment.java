@@ -57,6 +57,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+
     public NavigationDrawerFragment() {
     }
 
@@ -164,6 +165,7 @@ public class NavigationDrawerFragment extends Fragment {
                     SharedPreferences sp = PreferenceManager
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+
                 }
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
@@ -242,17 +244,28 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        MainActivity a = (MainActivity) getActivity();
+        View r = a.findViewById(R.id.searchLayout);
         if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+            a.setSearchOpen(false);
+            item.setIcon(R.drawable.search);
+            r.setVisibility(View.GONE);
         }
-/*
-        if (item.getItemId() == R.id.action_example) {
-          //Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }*/
+//        if (item.getItemId() == R.id.action_search) {
+//            if(a.searchOpen == true){
+//                item.setIcon(R.drawable.search);
+//                r.setVisibility(View.GONE);
+//                a.searchOpen = false;
+//            }else{
+//                //r.setVisibility(View.VISIBLE);
+//                //a.searchOpen = true;
+//            }
+
+ //       }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
