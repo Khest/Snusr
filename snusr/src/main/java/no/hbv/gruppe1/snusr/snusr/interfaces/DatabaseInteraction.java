@@ -1,5 +1,6 @@
 package no.hbv.gruppe1.snusr.snusr.interfaces;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
@@ -41,4 +42,17 @@ public interface DatabaseInteraction {
      * @return                  Returns a navigable cursor containing id and names of the manufacturers
      */
     Cursor fetchManufacturers();
+
+    Cursor fetchLines();
+
+    Cursor fetchTastes();
+
+    /**
+     * Closes the database connection
+     */
+    void close();
+
+    void update(String table, ContentValues values, String whereClause, String where[]);
+
+    long insert(String table, ContentValues values);
 }

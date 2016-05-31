@@ -42,7 +42,7 @@ public class SnusInformationFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_snus_information, container, false);
         if (getArguments() != null) {
-            snusID = savedInstanceState.getInt("snusID");
+            snusID = savedInstanceState.getInt(DatabaseHelper.FeedEntry.col_snus_id);
         } else {
             snusID = 2;
         }

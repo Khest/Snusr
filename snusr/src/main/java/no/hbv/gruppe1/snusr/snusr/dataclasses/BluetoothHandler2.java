@@ -105,7 +105,7 @@ public class BluetoothHandler2 {
         bundle.putString(Globals.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-
+        Log.i(Globals.TAG, "Device connection was lost");
         // Start the service over to restart listening mode
         BluetoothHandler2.this.start();
     }
@@ -151,6 +151,7 @@ public class BluetoothHandler2 {
             } catch (Exception e) {
                 Log.e(Globals.TAG, " Error creating socket"); }
             mmSocket = temporarySocket;
+            Log.i(Globals.TAG, "Bluetooth Socket created");
         }
 
         public void run() {
@@ -163,6 +164,7 @@ public class BluetoothHandler2 {
                 mmSocket.connect();
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and get out
+                Log.i(Globals.TAG, " Unable to connect, closing the socket " + connectException.getMessage());
                 try {
                     mmSocket.close();
                 } catch (IOException closeException) {
@@ -279,7 +281,7 @@ public class BluetoothHandler2 {
 
         public void run() {
             Log.i(Globals.TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[Integer.MAX_VALUE];
             int bytes;
 
             // Keep listening to the InputStream while connected
@@ -291,6 +293,7 @@ public class BluetoothHandler2 {
                     // Send the obtained bytes to the UI Activity
                    mHandler.obtainMessage(Globals.MESSAGE_READ, bytes, -1, buffer) //TODO Handle incoming data properly
                            .sendToTarget();
+                    Log.i(Globals.TAG, "Sent data worth " + bytes);
                 } catch (IOException e) {
                     Log.e(Globals.TAG, "disconnected", e);
                     connectionLost();
