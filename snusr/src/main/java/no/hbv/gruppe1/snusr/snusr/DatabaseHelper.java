@@ -171,6 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putManufacturer(db, "Swedish Match", "www.swedishmatch.com", "Sweden");
             putManufacturer(db, "Skruf", "www.skruf.se", "Sweden");
             putManufacturer(db, "British American Tobacco", "www.bat.com", "England");
+            putManufacturer(db, "Ettan", "www.ettan.com", "Sweden");
 
 
             putLine(db, 1, "General");
@@ -199,10 +200,50 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Apple");
             putTaste(db, "Vanilla");
 
+//           1  name
+//           2  manufactorer
+//           3  line
+//           4  taste1
+//           5  taste2
+//           6  taste3
+//           7  strength
+//           8  nicotinelevel
+//           9  totalrank
+//           10 type
+//           11 img
 
-            putSnus(db, "Extra Strong 1", 1, 2, 3, 0, 0, 5, 1.8, 1, 4, null);
-            putSnus(db, "Slim White 2", 1, 2, 3, 0, 0, 5, 1.8, 0, 2, null);
-            putSnus(db, "Snusy McSnusface 3", 1, 2, 3, 0, 0, 5, 1.8, 3, 4, null);
+            //Swedish Match    1        2  3  4  5  6  7   8   9  10  11
+            putSnus(db, "Extra Strong", 1, 2, 2, 7, 5, 4, 1.4, 1, 4, null);
+            putSnus(db, "Strong",       1, 2, 2, 8, 6, 3, 1.3, 3, 2, null);
+            putSnus(db, "White",        1, 1, 3, 9, 7, 1, 0.1, 1, 4, null);
+            putSnus(db, "Slim White",   1, 2, 4, 2, 8, 3, 1.3, 5, 2, null);
+            putSnus(db, "Slim",         1, 2, 5, 3, 9, 2, 0.2, 0, 3, null);
+            putSnus(db, "Normal",       1, 1, 6, 4, 2, 2, 0.2, 3, 1, null);
+
+            //Skruf            1        2  3  4  5  6  7   8   9  10  11
+            putSnus(db, "Extra Strong", 2, 2, 2, 2, 2, 4, 1.4, 3, 1, null);
+            putSnus(db, "Strong",       2, 2, 5, 4, 8, 3, 1.3, 3, 2, null);
+            putSnus(db, "White",        2, 2, 6, 3, 7, 1, 0.1, 0, 4, null);
+            putSnus(db, "Slim White",   2, 2, 7, 2, 8, 3, 1.3, 1, 3, null);
+            putSnus(db, "Slim",         2, 2, 8, 6, 9, 2, 0.2, 4, 5, null);
+            putSnus(db, "Normal",       2, 2, 9, 7, 2, 2, 0.2, 3, 5, null);
+
+            //Knox            1        2  3  4  5  6  7   8   9  10  11
+            putSnus(db, "Extra Strong", 3, 6, 9, 2, 5, 4, 1.4, 5, 1, null);
+            putSnus(db, "Strong",       3, 6, 5, 8, 5, 3, 1.3, 5, 2, null);
+            putSnus(db, "White",        3, 6, 3, 9, 5, 4, 1.4, 2, 4, null);
+            putSnus(db, "Slim White",   3, 6, 2, 8, 5, 1, 0.1, 1, 3, null);
+            putSnus(db, "Slim",         3, 6, 2, 5, 9, 4, 1.4, 0, 2, null);
+            putSnus(db, "Normal",       3, 6, 5, 7, 2, 4, 1.4, 0, 2, null);
+
+            //Ettan            1        2  3  4  5  6  7   8   9  10  11
+            putSnus(db, "Extra Strong", 4, 3, 7, 9, 2, 4, 1.4, 0, 2, null);
+            putSnus(db, "Strong",       4, 3, 8, 8, 3, 3, 1.3, 2, 1, null);
+            putSnus(db, "White",        4, 3, 9, 8, 4, 2, 0.2, 3, 4, null);
+            putSnus(db, "Slim White",   4, 3, 2, 7, 6, 2, 0.2, 4, 4, null);
+            putSnus(db, "Slim",         4, 3, 3, 6, 5, 2, 0.2, 4, 2, null);
+            putSnus(db, "Normal",       4, 3, 4, 5, 2, 2, 0.2, 0, 5, null);
+
 
         } catch (Exception ex){
             Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());
