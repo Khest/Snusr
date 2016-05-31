@@ -97,7 +97,9 @@ public class SendFileFragment extends Fragment {
                     byte[] buffer = (byte[]) msg.obj;
                     String incoming = new String(buffer, 0, msg.arg1);
                     try {
-                        doStuff(incoming);
+                        synchronized (incoming) {
+                            doStuff(incoming);
+                        }
                     } catch (Exception ex) {
                         Log.e(Globals.TAG, "Fatal error when receiving data, exiting " + ex.getMessage());
                         throw new RuntimeException(ex);
@@ -108,6 +110,7 @@ public class SendFileFragment extends Fragment {
                     break;
                 case Globals.MESSAGE_WRITE:
                     byte[] buffer2 = (byte[]) msg.obj;
+
                     String outgoing = new String(buffer2);
 
                     //Toast.makeText(fragmentActivity, "Outgoing: " + outgoing, Toast.LENGTH_SHORT).show();
@@ -121,106 +124,106 @@ public class SendFileFragment extends Fragment {
         }
     };
 
-    synchronized void doStuff(String incoming) {
+    void doStuff(String incoming) {
         String arr1[] = incoming.split("\\"+delimiter);
-        Log.i(Globals.TAG, " " + incoming);
+        //Log.i(Globals.TAG, " " + incoming);
         Log.i(Globals.TAG, " " + arr1[0] + " : " + arr1.length);
-       // Log.i(Globals.TAG, " " + Arrays.toString(arr1));
-        List<Filtration> filtrations = new ArrayList<>();
-        Filtration f = Filtration.MANUFACTURER;
-        f.setSearchValue(arr1[12]);
-        filtrations.add(f);
-        Cursor checkManufacturer = interactor.fetchSnus(filtrations, null);
-        long manufacturerNumber = Long.valueOf(arr1[2]);
-        if (checkManufacturer != null) {
-            if (checkManufacturer.getCount() == 0) {
-                ContentValues cv = new ContentValues();
-                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_name, arr1[12]);
-                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_country, arr1[13]);
-                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_url, arr1[14]);
-                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER, cv);
-            } else {
-                while (checkManufacturer.moveToNext()) {
-                    if (checkManufacturer.getString(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_name))
-                            .equals(arr1[12])) {
-                        manufacturerNumber = checkManufacturer.getLong(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_id));
-                        break;
-                    }
-                }
-            }
-        }
-        if (checkManufacturer != null) {
-            checkManufacturer.close();
-        }
-        f = Filtration.LINE_TEXT;
-        f.setSearchValue(arr1[16]);
-        filtrations.set(0, f);
-        Cursor checkLine = interactor.fetchSnus(filtrations, null);
-        long lineNumber = Long.valueOf(arr1[15]);
-        if (checkLine != null) {
-            if (checkLine.getCount() == 0) {
-                ContentValues cv = new ContentValues();
-                cv.put(DatabaseHelper.FeedEntry.col_line_name, arr1[16]);
-                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_id, manufacturerNumber);
-                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE, cv);
-            } else {
-                while (checkLine.moveToNext()) {
-                    if (checkLine.getString(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_name))
-                        .equals(arr1[16])) {
-                        lineNumber = checkLine.getLong(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_id));
-                        break;
-                    }
-                }
-            }
-        }
-        if (checkLine != null) {
-            checkLine.close();
-        }
-        Filtration f1 = Filtration.MANUFACTURER;
-        f1.setSearchValue(manufacturerNumber);
-        Filtration f2 = Filtration.LINE_NUMBER;
-        f2.setSearchValue(lineNumber);
-        Filtration f3 = Filtration.NAME;
-        f3.setSearchValue(arr1[1]);
-        filtrations.clear();
-        filtrations.add(f1);
-        filtrations.add(f2);
-        filtrations.add(f3);
-        Cursor checkSnus = interactor.fetchSnus(filtrations, null);
-        if (checkSnus != null) {
-            if (checkSnus.getCount() != 0) {
-                Log.d(Globals.TAG, "Snus exists, averaging totalrank");
-                ContentValues averageTotalRank = new ContentValues();
-                double currentAverageRank = checkSnus.getDouble(checkSnus.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_totalrank));
-                double incomingAverageRank = Double.valueOf(arr1[9]);
-                double newAverageRank = (currentAverageRank + incomingAverageRank) / 2;
-                averageTotalRank.put(DatabaseHelper.FeedEntry.col_snus_totalrank, newAverageRank);
-                interactor.update(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
-                        averageTotalRank,
-                        DatabaseHelper.FeedEntry.col_snus_id + "=" + arr1[0], null);
-                return;
-            }
-        }
-        if (checkSnus != null) {
-            checkSnus.close();
-        }
-        ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.FeedEntry.col_snus_name, arr1[1]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_manufactorer, Integer.valueOf(arr1[2]));
-        cv.put(DatabaseHelper.FeedEntry.col_snus_line, arr1[3]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_taste1, arr1[4]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_taste2, arr1[5]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_taste3, arr1[6]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_strength, arr1[7]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_nicotinelevel, arr1[8]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_totalrank, arr1[9]);
-        cv.put(DatabaseHelper.FeedEntry.col_snus_type, arr1[10]);
-        if (arr1.length == 19) {
-            cv.put(DatabaseHelper.FeedEntry.col_snus_img, arr1[18]);
-        }
-
-        long newSnusId = interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS, cv);
-        Log.d(Globals.TAG, "Inserted new snus with id " + String.valueOf(newSnusId));
+        Log.i(Globals.TAG, " " + Arrays.toString(arr1));
+//        List<Filtration> filtrations = new ArrayList<>();
+//        Filtration f = Filtration.MANUFACTURER;
+//        f.setSearchValue(arr1[12]);
+//        filtrations.add(f);
+//        Cursor checkManufacturer = interactor.fetchSnus(filtrations, null);
+//        long manufacturerNumber = Long.valueOf(arr1[2]);
+//        if (checkManufacturer != null) {
+//            if (checkManufacturer.getCount() == 0) {
+//                ContentValues cv = new ContentValues();
+//                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_name, arr1[12]);
+//                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_country, arr1[13]);
+//                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_url, arr1[14]);
+//                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER, cv);
+//            } else {
+//                while (checkManufacturer.moveToNext()) {
+//                    if (checkManufacturer.getString(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_name))
+//                            .equals(arr1[12])) {
+//                        manufacturerNumber = checkManufacturer.getLong(checkManufacturer.getColumnIndex(DatabaseHelper.FeedEntry.col_manufacturer_id));
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        if (checkManufacturer != null) {
+//            //checkManufacturer.close();
+//        }
+//        f = Filtration.LINE_TEXT;
+//        f.setSearchValue(arr1[16]);
+//        filtrations.set(0, f);
+//        Cursor checkLine = interactor.fetchSnus(filtrations, null);
+//        long lineNumber = Long.valueOf(arr1[15]);
+//        if (checkLine != null) {
+//            if (checkLine.getCount() == 0) {
+//                ContentValues cv = new ContentValues();
+//                cv.put(DatabaseHelper.FeedEntry.col_line_name, arr1[16]);
+//                cv.put(DatabaseHelper.FeedEntry.col_manufacturer_id, manufacturerNumber);
+//                interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE, cv);
+//            } else {
+//                while (checkLine.moveToNext()) {
+//                    if (checkLine.getString(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_name))
+//                        .equals(arr1[16])) {
+//                        lineNumber = checkLine.getLong(checkLine.getColumnIndex(DatabaseHelper.FeedEntry.col_line_id));
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        if (checkLine != null) {
+//            //checkLine.close();
+//        }
+//        Filtration f1 = Filtration.MANUFACTURER;
+//        f1.setSearchValue(manufacturerNumber);
+//        Filtration f2 = Filtration.LINE_NUMBER;
+//        f2.setSearchValue(lineNumber);
+//        Filtration f3 = Filtration.NAME;
+//        f3.setSearchValue(arr1[1]);
+//        filtrations.clear();
+//        filtrations.add(f1);
+//        filtrations.add(f2);
+//        filtrations.add(f3);
+//        Cursor checkSnus = interactor.fetchSnus(filtrations, null);
+//        if (checkSnus != null) {
+//            if (checkSnus.getCount() != 0) {
+//                Log.d(Globals.TAG, "Snus exists, averaging totalrank");
+//                ContentValues averageTotalRank = new ContentValues();
+//                double currentAverageRank = checkSnus.getDouble(checkSnus.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_totalrank));
+//                double incomingAverageRank = Double.valueOf(arr1[9]);
+//                double newAverageRank = (currentAverageRank + incomingAverageRank) / 2;
+//                averageTotalRank.put(DatabaseHelper.FeedEntry.col_snus_totalrank, newAverageRank);
+//                interactor.update(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+//                        averageTotalRank,
+//                        DatabaseHelper.FeedEntry.col_snus_id + "=" + arr1[0], null);
+//                return;
+//            }
+//        }
+//        if (checkSnus != null) {
+//            //checkSnus.close();
+//        }
+//        ContentValues cv = new ContentValues();
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_name, arr1[1]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_manufactorer, Integer.valueOf(arr1[2]));
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_line, arr1[3]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_taste1, arr1[4]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_taste2, arr1[5]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_taste3, arr1[6]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_strength, arr1[7]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_nicotinelevel, arr1[8]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_totalrank, arr1[9]);
+//        cv.put(DatabaseHelper.FeedEntry.col_snus_type, arr1[10]);
+//        if (arr1.length == 19) {
+//            cv.put(DatabaseHelper.FeedEntry.col_snus_img, arr1[18]);
+//        }
+//
+//        long newSnusId = interactor.insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS, cv);
+//        Log.d(Globals.TAG, "Inserted new snus with id " + String.valueOf(newSnusId));
     }
 // 0   DatabaseHelper.FeedEntry.col_snus_id,
 // 1   DatabaseHelper.FeedEntry.col_snus_name,
@@ -332,11 +335,10 @@ public class SendFileFragment extends Fragment {
                 if (bluetoothHandler.getStatus() == BluetoothHandler2.STATE_CONNECTED) {
                     try {
 
-                        //String delimiter = "|";
-
                         Cursor snusCursor = interactor.fetchSnus(null, null);
 
-                        while (snusCursor.moveToNext()) {
+                        //while (snusCursor.moveToNext()) {
+                        snusCursor.moveToFirst();
                             StringBuilder sb = new StringBuilder();
                             for (String s : snusListOrder) {
                                 sb.append(snusCursor.getString(snusCursor.getColumnIndex(s))).append(delimiter);
@@ -351,7 +353,7 @@ public class SendFileFragment extends Fragment {
                             Log.i(Globals.TAG, " Sending data for ID : " + snusCursor.getString(0));
                             bluetoothHandler.write(sb.toString().getBytes());
 
-                        }
+                        //}
                         //snusCursor.close(); // FIXME: 2016-05-30 closing this here ruins file transfer
                     } catch (UnsupportedEncodingException uex) {
                         Log.e(Globals.TAG, "Fatal error when converting byte to string " + uex.getMessage());
@@ -359,7 +361,6 @@ public class SendFileFragment extends Fragment {
                         Log.e(Globals.TAG, "Fatal error " + ex.getMessage());
                     }
 
-                   // bluetoothHandler.write(" dette er en test! ".getBytes());
                 } else {
                     Toast.makeText(getActivity(), " no't connected to anything", Toast.LENGTH_SHORT).show();
                 }
