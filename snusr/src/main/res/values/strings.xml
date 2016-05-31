@@ -50,6 +50,8 @@
     <string name="add_snus_successful">Snus added!</string>
     <string name="add_snus_failed">Snus could not be added. Contact the developers.</string>
     <string name="add_snus_snus_exists">Snus already exists</string>
+    <string name="add_snus_error_nicotine">You must set a nicotine level</string>
+    <string name="add_snus_error_strength">You must set a strength level</string>
 
     <string-array name="spinnerItemsStr">
         <item>1</item>
