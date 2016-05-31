@@ -276,10 +276,17 @@ public class DatabaseInteractor implements DatabaseInteraction {
     @Override
     public Cursor fetchTastes() {
         String sql = "SELECT " +
-                DatabaseHelper.FeedEntry.col_taste_id + ", " +
+                DatabaseHelper.FeedEntry.col_taste_id + " AS _id, " +
                 DatabaseHelper.FeedEntry.col_taste_taste +
-                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE +
-                Sorting.ALPHABETICAL.getSql();
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE;
+        return dbCursor(sql);
+    }
+
+    public Cursor fetchTypes() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_type_id + " AS _id, " +
+                DatabaseHelper.FeedEntry.col_type_text +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE;
         return dbCursor(sql);
     }
 
