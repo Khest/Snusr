@@ -13,15 +13,22 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
+
 /**
  * @author Håkon Stensheim
  */
 public class SnusAdapter extends CursorAdapter {
 
     private LayoutInflater inflater;
+    private boolean bookmarked;
+    private int id;
+    private DatabaseInteractor db;
+    Context context;
 
     public SnusAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+        this.context = context;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -34,6 +41,7 @@ public class SnusAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Set the contentvalues for the view:
+        db = new DatabaseInteractor(context);
         TextView txtSnusName = (TextView) view.findViewById(R.id.txtSnusName);
         TextView txtRating = (TextView) view.findViewById(R.id.txtRating);
         ImageView img = (ImageView) view.findViewById(R.id.imgSnusThumbnail);
@@ -45,25 +53,32 @@ public class SnusAdapter extends CursorAdapter {
         //Drawable stars = rating.getProgressDrawable();
         //DrawableCompat.setTint(stars, Color.YELLOW);
 
-        String txtSnusIdCursor = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_id));
+        id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_id));
 
         String snusname = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name))
                 + " " + cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name));
         txtSnusName.setText(snusname);
 
         txtRating.setText(String.valueOf(rating.getRating()));
-        txtSnusId.setText(txtSnusIdCursor);
+        txtSnusId.setText(String.valueOf(id));
 
         rating.setRating(cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 // Update the rating in MYLIST in DB:
-
+                int rat = Math.round(rating);
+                db.updatePersonalRankingAndUpdateAverage(rat);
             }
         });
 
-        imgBook.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50));
+        imgBook.setImageBitmap(setBookmark(cursor));
+        imgBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.setMyListBookmark(id);
+            }
+        });
 
         // Convert byte[] to Bitmap:
         //ImageHandler imageHandler = new ImageHandler();
@@ -72,7 +87,6 @@ public class SnusAdapter extends CursorAdapter {
             img.setImageBitmap(convertByteToBitmap(stream));
         else
             img.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.noimagefound, 150, 150));
-            //img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
 
     }
 
@@ -119,6 +133,17 @@ public class SnusAdapter extends CursorAdapter {
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         Bitmap mbitmap = bitmap.createScaledBitmap(bitmap, 250, 250, true);
         return mbitmap;
+    }
+
+    public Bitmap setBookmark(Cursor cursor){
+        Bitmap output;
+        int isBookmarked = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_mylist_bookmark));
+        if (isBookmarked==1){
+            output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50);
+        } else {
+            output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50);
+        }
+        return output;
     }
 
 

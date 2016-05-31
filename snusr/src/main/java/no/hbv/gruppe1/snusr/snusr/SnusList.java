@@ -2,6 +2,7 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.app.Fragment;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
