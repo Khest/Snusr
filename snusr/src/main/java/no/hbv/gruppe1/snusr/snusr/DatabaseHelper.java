@@ -143,27 +143,33 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void deleteDatabases(SQLiteDatabase db) {
         db.execSQL(DROP_TABLE_MYLIST);
         db.execSQL(DROP_TABLE_SNUS);
         db.execSQL(DROP_TABLE_TASTE);
         db.execSQL(DROP_TABLE_TYPE);
         db.execSQL(DROP_TABLE_LINE);
         db.execSQL(DROP_TABLE_MANUFACTURER);
-        onCreate(db);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void createDatabase(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_MANUFACTURER);
         db.execSQL(CREATE_TABLE_LINE);
         db.execSQL(CREATE_TABLE_TYPE);
         db.execSQL(CREATE_TABLE_TASTE);
         db.execSQL(CREATE_TABLE_SNUS);
         db.execSQL(CREATE_TABLE_MYLIST);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        deleteDatabases(db);
+        onCreate(db);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        createDatabase(db);
         putDummyData(db);
     }
 
@@ -201,10 +207,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Apple");
             putTaste(db, "Vanilla");
 
-
-            for(int i = 1; i <= 100; i++){
-                putSnus(db, "Extra Strong", i, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
-            }
         } catch (Exception ex){
             Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());
         }
