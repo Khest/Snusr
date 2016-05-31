@@ -47,6 +47,10 @@ public interface DatabaseInteraction {
 
     Cursor fetchTastes();
 
+    int updatePersonalRankingAndUpdateAverage(int snusId, double ranking);
+
+    int setMyListBookmarked(int snusId);
+
     /**
      * Closes the database connection
      */

@@ -39,6 +39,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public Cursor fetchSnus(List<Filtration> filtrationList, Sorting sorting) {
         StringBuilder sb = new StringBuilder();
         sb.append(snusDetailSqlJoinString());
+        sb.append(leftJoinMyList());
         if (filtrationList != null) {
             sb.append(" WHERE ");
             for (int i = 0; i < filtrationList.size(); i++) {
@@ -56,6 +57,85 @@ public class DatabaseInteractor implements DatabaseInteraction {
     }
 
     /**
+     * Sets a ranking in the personal list, or if the snus does not exist there inserts it into the personal list
+     * @param snusId        The snus ID
+     * @param ranking       Snus ranking
+     * @return              Returns int depending on what action was performed
+     */
+    @Override
+    public int updatePersonalRankingAndUpdateAverage(int snusId, double ranking) {
+        Cursor c = fetchSpecificSnus(snusId);
+        c.moveToFirst();
+        if (c.getInt(c.getColumnIndex(DatabaseHelper.FeedEntry.col_mylist_snusid)) != 0) {
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseHelper.FeedEntry.col_mylist_myrank, ranking);
+            update(DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST, cv, DatabaseHelper.FeedEntry.col_mylist_snusid + "=" + String.valueOf(snusId), null);
+            updateAndSetAverage(snusId, c.getDouble(c.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_totalrank)), ranking);
+            return Globals.MYLIST_RATED;
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseHelper.FeedEntry.col_mylist_snusid, snusId);
+            cv.put(DatabaseHelper.FeedEntry.col_mylist_myrank, ranking);
+            long insertValue = insert(DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST, cv);
+            updateAndSetAverage(snusId, c.getDouble(c.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_totalrank)), ranking);
+            return Globals.MYLIST_ADDED;
+        }
+    }
+
+    /**
+     * Updates and sets the average in the main snus list
+     */
+    private void updateAndSetAverage(int snusId, double currentRanking, double incomingRanking) {
+        double newRanking = currentRanking + incomingRanking / 2;
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.FeedEntry.col_snus_totalrank, newRanking);
+        update(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS, cv, DatabaseHelper.FeedEntry.col_snus_id + "=" + String.valueOf(snusId), null);
+    }
+
+    /**
+     * Sets or unsets the bookmark flag on a snus. If the snus does not exist in my list it will insert it.
+     * @param snusId    ID of the snus to set
+     * @return          Returns an int describing whether the snus was added to or removed from bookmarks
+     */
+    @Override
+    public int setMyListBookmarked(int snusId) {
+        Cursor c = fetchSpecificSnus(snusId);
+        c.moveToFirst();
+        ContentValues cv = new ContentValues();
+        if (c.getInt(c.getColumnIndex(DatabaseHelper.FeedEntry.col_mylist_snusid)) != 0) {
+            if (c.getInt(c.getColumnIndex(DatabaseHelper.FeedEntry.col_mylist_bookmark)) == Globals.MYLIST_BOOKMARKED) {
+                cv.put(DatabaseHelper.FeedEntry.col_mylist_bookmark, Globals.MYLIST_REMOVED_FROM_BOOKMARKS);
+                update(
+                        DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST,
+                        cv,
+                        DatabaseHelper.FeedEntry.col_mylist_snusid + "=" + String.valueOf(snusId),
+                        null);
+                return Globals.MYLIST_REMOVED_FROM_BOOKMARKS;
+            } else {
+                cv.put(DatabaseHelper.FeedEntry.col_mylist_bookmark, Globals.MYLIST_BOOKMARKED);
+                update(
+                        DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST,
+                        cv,
+                        DatabaseHelper.FeedEntry.col_mylist_snusid + "=" + String.valueOf(snusId),
+                        null);
+                return Globals.MYLIST_BOOKMARKED;
+
+            }
+        } else {
+            cv.put(DatabaseHelper.FeedEntry.col_mylist_snusid, snusId);
+            cv.put(DatabaseHelper.FeedEntry.col_mylist_bookmark, Globals.MYLIST_BOOKMARKED);
+            insert(
+                    DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST,
+                    cv);
+            return Globals.MYLIST_ADDED;
+        }
+    }
+
+    //updateRankingPersonalAndAverage(int 1 -> if exist in my list update ranking i mylist else insert and set ranking,
+
+    //setMyListBookmarked
+
+    /**
      * Returns my favourites
      * @param restriction       Specify whether to get favourites, bookmarks or both via integer
      * @return                  Returns cursor containing the user's favourites
@@ -64,16 +144,17 @@ public class DatabaseInteractor implements DatabaseInteraction {
     public Cursor fetchMyList(int restriction) {
         StringBuilder sb = new StringBuilder();
         sb.append(snusDetailSqlJoinString());
-        sb.append(" WHERE ").append(DatabaseHelper.FeedEntry.col_snus_id)
-                .append(" = ")
-                            .append(DatabaseHelper.FeedEntry.col_mylist_snusid);
+        sb.append(leftJoinMyList());
         if (restriction != Globals.MYLIST_ALL) {
-            sb.append(" AND ").append(DatabaseHelper.FeedEntry.col_mylist_bookmark)
+            sb.append(" WHERE ").append(DatabaseHelper.FeedEntry.col_mylist_bookmark)
                     .append(" = ").append(String.valueOf(restriction));
         }
         sb.append(Sorting.ALPHABETICAL.getSql());
         return dbCursor(sb.toString());
     }
+
+
+
 
     /**
      * Fetches a specific snus
@@ -82,7 +163,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
      */
     @Override
     public Cursor fetchSpecificSnus(int snusId) {
-        String sql = snusDetailSqlJoinString();
+        String sql = snusDetailSqlJoinString() + leftJoinMyList();
         sql += " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
                 DatabaseHelper.FeedEntry.col_snus_id + " = " + String.valueOf(snusId);
         return dbCursor(sql);
@@ -248,13 +329,21 @@ public class DatabaseInteractor implements DatabaseInteraction {
                 .append(" = ")
                     .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE).append(".")
                         .append(DatabaseHelper.FeedEntry.col_type_id)
-//                .append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE).append(" ON ")
-//                    .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS).append(".")
-//                        .append(DatabaseHelper.FeedEntry.col_snus_line)
-//                .append(" = ")
-//                    .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE).append(".")
-//                        .append(DatabaseHelper.FeedEntry.col_line_id)
         ;
+        return sb.toString();
+    }
+
+    private String leftJoinMyList() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" LEFT JOIN ")
+                .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST).append(" ON ")
+                    .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS).append(".")
+                        .append(DatabaseHelper.FeedEntry.col_snus_id)
+                .append(" = ")
+                    .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_MYLIST).append(".")
+                        .append(DatabaseHelper.FeedEntry.col_mylist_snusid)
+                .append(" ")
+                ;
         return sb.toString();
     }
 }
