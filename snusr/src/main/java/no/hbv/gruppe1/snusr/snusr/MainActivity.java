@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         filtrationAdapter = new FiltrationAdapter(getBaseContext(), filtrationsList);
         sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
 
-        db.close();
+
         spinManu.setAdapter(manuAdapter);
         spinFiltration.setAdapter(filtrationAdapter);
         spinSorting.setAdapter(sortingArrayAdapter);
