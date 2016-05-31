@@ -13,14 +13,14 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 /**
  * Created by Long Huynh on 31.05.2016.
  */
-public class ManuAdapter extends CursorAdapter {
+public class LineAdapater extends CursorAdapter {
 
     private LayoutInflater inflater;
     private DatabaseInteractor db;
     Cursor cursor;
     Context context;
 
-    public ManuAdapter(Context context, Cursor c, int flags) {
+    public LineAdapater(Context context, Cursor c, int flags) {
         super(context, c, flags);
         this.cursor = c;
         this.context = context;
@@ -56,12 +56,11 @@ public class ManuAdapter extends CursorAdapter {
         View v = inflater.inflate(R.layout.spinner_item, null);
         TextView text = (TextView) v.findViewById(R.id.spinner_text);
         if(position==0) {
-            text.setText("Choose manufacturer");
+            text.setText("Choose line");
         }else{
-            text.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_name)));
+            text.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_line_name)));
         }
         return v;
 
     }
-
 }

@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -64,12 +63,13 @@ public class MainActivity extends AppCompatActivity
     private CharSequence mTitle;
 
     EditText txtSearch;
-    Spinner spinManu,spinLine, spinFiltration, spinSorting;
+    Spinner spinManu,spinLine, spinFiltration, spinSorting, spinTaste1, spinTaste2, spinTaste3;
     SortingAdapter sortingArrayAdapter;
     FiltrationAdapter filtrationAdapter;
-    AddSnusSpinnerAdapter lineAdapter;
+    LineAdapater lineAdapter;
     ManuAdapter manuAdapter;
-
+    MenuItem search;
+    TasteAdapter tasteAdaper;
     DatabaseInteractor db;
     
     int filtrationID;
@@ -120,41 +120,43 @@ public class MainActivity extends AppCompatActivity
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
        addSearchFiltrationAdapter();
+        onSearchClicked();
+        onSortClicked();
     }
 
     private void addSearchFiltrationAdapter() {
-        spinFiltration = (Spinner) findViewById(R.id.spin_Filtration);
         spinSorting = (Spinner) findViewById(R.id.spin_Sorting);
         spinManu = (Spinner) findViewById(R.id.spin_serchManu);
         spinLine = (Spinner) findViewById(R.id.spin_searchLine);
+        spinTaste1 = (Spinner) findViewById(R.id.spin_taste1);
+        spinTaste2 = (Spinner) findViewById(R.id.spin_taste2);
+        spinTaste3 = (Spinner) findViewById(R.id.spin_taste3);
 
-        List<Filtration> filtrationsList = Arrays.asList(Filtration.values());
+
         List<Sorting> sortingsList = Arrays.asList(Sorting.values());
 
         db  = new DatabaseInteractor(this);
         Cursor mcur = db.fetchManufacturers();
+        Cursor lines = db.fetchLines();
+        Cursor tcur = db.fetchTastes();
+
 
         manuAdapter = new ManuAdapter(this, mcur, 0);
-        filtrationAdapter = new FiltrationAdapter(getBaseContext(), filtrationsList);
-
+        lineAdapter = new LineAdapater(this, lines, 0);
+        tasteAdaper = new TasteAdapter(this, tcur, 0);
         sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
 
-        Cursor lines = db.fetchLines();
-        lineAdapter = new AddSnusSpinnerAdapter(getApplication(), lines, 0);
-        spinLine.setAdapter(lineAdapter);
 
+        spinTaste1.setAdapter(tasteAdaper);
+        spinTaste2.setAdapter(tasteAdaper);
+        spinTaste3.setAdapter(tasteAdaper);
+        spinLine.setAdapter(lineAdapter);
         spinManu.setAdapter(manuAdapter);
-        spinFiltration.setAdapter(filtrationAdapter);
         spinSorting.setAdapter(sortingArrayAdapter);
 
+        tasteAdaper.notifyDataSetChanged();
         filtrationAdapter.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
-        spinFiltration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                filtrationID = position;
-            }
-        });
     }
 
     @Override
@@ -240,7 +242,7 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        search = item;
         //noinspection SimplifiableIfStatement
         final View layout = findViewById(R.id.searchLayout);
         if (id == R.id.action_search) {
@@ -262,7 +264,7 @@ public class MainActivity extends AppCompatActivity
 
     public void searchWindow(){
         final View layout = findViewById(R.id.searchLayout);
-            layout.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.VISIBLE);
             final Button buttonSearch = (Button) layout.findViewById(R.id.btnSearch);
             final Button buttonSorting = (Button) layout.findViewById(R.id.btnSortingFiltration);
         layout.findViewById(R.id.relativeLayoutSortingFiltrationWindow).setVisibility(View.GONE);
@@ -276,6 +278,7 @@ public class MainActivity extends AppCompatActivity
                     layout.findViewById(R.id.searchWindow).setVisibility(View.VISIBLE);
                     buttonSearch.setTextColor(Color.parseColor("#881e5d"));
                     buttonSorting.setTextColor(Color.parseColor("#FFFFFF"));
+                    onSearchClicked();
                 }
             });
             buttonSorting.setOnClickListener(new View.OnClickListener() {
@@ -302,8 +305,9 @@ public class MainActivity extends AppCompatActivity
 
                 EditText etxt = (EditText) findViewById(R.id.eText_search);
                 List<Filtration> list = new ArrayList<>();
-                Filtration f = Filtration.WILDCARD;
-                f.setSearchValue(etxt.getText().toString());
+                Filtration f1 = Filtration.WILDCARD;
+                f1.setSearchValue(etxt.getText().toString());
+
                 Filtration f2 = Filtration.MANUFACTURER_NUMBER;
                 manuAdapter.getCursor().moveToPosition(spinManu.getSelectedItemPosition());
                 selectedManufacturerId = manuAdapter.getCursor().getInt(0);
@@ -313,15 +317,36 @@ public class MainActivity extends AppCompatActivity
                 lineAdapter.getCursor().moveToPosition(spinLine.getSelectedItemPosition());
                 selectedLineId = lineAdapter.getCursor().getInt(0);
                 f3.setSearchValue(selectedLineId);
-                list.add(f);
+
+                Filtration f4 = Filtration.LINE_NUMBER;
+                lineAdapter.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
+                selectedLineId = tasteAdaper.getCursor().getInt(0);
+                f4.setSearchValue(selectedLineId);
+
+                Filtration f5 = Filtration.LINE_NUMBER;
+                lineAdapter.getCursor().moveToPosition(spinTaste2.getSelectedItemPosition());
+                selectedLineId = tasteAdaper.getCursor().getInt(0);
+                f5.setSearchValue(selectedLineId);
+
+                Filtration f6 = Filtration.LINE_NUMBER;
+                lineAdapter.getCursor().moveToPosition(spinTaste3.getSelectedItemPosition());
+                selectedLineId = tasteAdaper.getCursor().getInt(0);
+                f6.setSearchValue(selectedLineId);
+
+                list.add(f1);
                 list.add(f2);
                 list.add(f3);
+                list.add(f4);
+                list.add(f5);
+                list.add(f6);
 
                 if (snusList != null){
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
+                    search.setIcon(R.drawable.search);
                     Cursor c = db.fetchSnus(list, null);
                     snusList.search(c);
+                    Log.i(Globals.TAG, "search is not null");
                     //snusList.search("", "", String.valueOf(etxt.getText()), list);
                 }
 
@@ -346,6 +371,7 @@ public class MainActivity extends AppCompatActivity
                     snusList.setUp(null, sorting);
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
+                    search.setIcon(R.drawable.search);
                 } else {
                 }
             }
