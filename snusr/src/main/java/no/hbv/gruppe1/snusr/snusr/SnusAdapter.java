@@ -68,7 +68,7 @@ public class SnusAdapter extends CursorAdapter {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 // Update the rating in MYLIST in DB:
                 int rat = Math.round(rating);
-                db.updatePersonalRankingAndUpdateAverage(rat);
+                db.updatePersonalRankingAndUpdateAverage(id, rat);
             }
         });
 
@@ -76,7 +76,7 @@ public class SnusAdapter extends CursorAdapter {
         imgBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.setMyListBookmark(id);
+                db.setMyListBookmarked(id);
             }
         });
 
