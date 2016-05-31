@@ -15,9 +15,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:id="@+id/searchLayout"
-        android:visibility="gone">
+        android:visibility="visible"
+        android:touchscreenBlocksFocus="true"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +42,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filtration/Sorting"
+                android:text="Sorting"
                 android:id="@+id/btnSortingFiltration"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -113,7 +115,7 @@
             android:background="#dd313131"
             android:id="@+id/searchWindow"
             android:layout_below="@+id/SearchFiltrationTop"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <EditText
                 android:layout_width="300dp"
@@ -152,10 +154,10 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayoutManu"
                 android:id="@+id/relativeLayoutLine"
                 android:layout_alignEnd="@+id/relativeLayoutManu"
-                android:layout_alignStart="@+id/relativeLayoutManu">
+                android:layout_alignStart="@+id/relativeLayoutManu"
+                android:layout_below="@+id/relativeLayoutManu">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -164,34 +166,92 @@
                     android:id="@+id/textView2"
                     android:textSize="30dp"
                     android:textColor="#ffffff"
-                    android:layout_marginBottom="27dp"/>
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spin_searchLine"
                     android:layout_below="@+id/textView2"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="false" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/relativeLayoutFiltration"
+                android:id="@+id/relativeLayoutTaste1"
                 android:paddingTop="10dp"
                 android:layout_below="@+id/relativeLayoutLine">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Filtration"
-                    android:id="@+id/textViewFiltration"
+                    android:text="Taste1"
+                    android:id="@+id/textViewTaste1"
                     android:textSize="30dp"
                     android:textColor="#FFFFFF"/>
 
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spin_Filtration"
-                    android:layout_below="@+id/textViewFiltration"
+                    android:id="@+id/spin_Taste1"
+                    android:layout_below="@+id/textViewTaste1"
+                    android:layout_alignParentStart="true"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:contextClickable="true"
+                    android:dropDownWidth="match_parent"
+                    android:importantForAccessibility="yes"
+                    android:spinnerMode="dropdown"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayoutTaste2"
+                android:paddingTop="10dp"
+                android:layout_below="@+id/relativeLayoutTaste1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Taste2"
+                    android:textSize="30dp"
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/textTaste2"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_Taste2"
+                    android:layout_below="@+id/textTaste2"
+                    android:layout_alignParentStart="true"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:contextClickable="true"
+                    android:dropDownWidth="match_parent"
+                    android:importantForAccessibility="yes"
+                    android:spinnerMode="dropdown"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayoutTaste3"
+                android:paddingTop="10dp"
+                android:layout_below="@+id/relativeLayoutTaste2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Taste2"
+                    android:textSize="30dp"
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/textTaste3"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spin_Taste3"
+                    android:layout_below="@+id/textTaste3"
                     android:layout_alignParentStart="true"
                     android:paddingLeft="10dp"
                     android:clickable="true"
@@ -204,7 +264,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayoutFiltration"
+                android:layout_below="@+id/relativeLayoutTaste3"
                 android:paddingBottom="20dp"
                 android:paddingTop="10dp">
                 <Button

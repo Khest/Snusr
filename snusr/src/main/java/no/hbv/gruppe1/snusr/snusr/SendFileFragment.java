@@ -281,7 +281,7 @@ public class SendFileFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        interactor.close();
+        //interactor.close();
         super.onDestroyView();
     }
 
@@ -362,8 +362,7 @@ public class SendFileFragment extends Fragment {
                         sorting.setOrder(Sorting.Order.ASCENDING);
                         Cursor snusCursor = interactor.fetchSnus(null, sorting);
 
-                        //while (snusCursor.moveToNext()) {
-                        snusCursor.moveToFirst();
+                        while (snusCursor.moveToNext()) {
                             StringBuilder sb = new StringBuilder();
                             for (String s : snusListOrder) {
                                 sb.append(snusCursor.getString(snusCursor.getColumnIndex(s))).append(DELIMITER);
@@ -381,7 +380,7 @@ public class SendFileFragment extends Fragment {
                             Log.i(Globals.TAG, " Sending data for ID : " + snusCursor.getString(0));
                             bluetoothHandler.write(sb.toString().getBytes());
 
-                        //}
+                        }
                         //snusCursor.close(); // FIXME: 2016-05-30 closing this here ruins file transfer
                     } catch (UnsupportedEncodingException uex) {
                         Log.e(Globals.TAG, "Fatal error when converting byte to string " + uex.getMessage());

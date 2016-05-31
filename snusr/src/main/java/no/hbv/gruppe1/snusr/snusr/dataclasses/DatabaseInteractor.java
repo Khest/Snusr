@@ -52,7 +52,7 @@ public class DatabaseInteractor implements DatabaseInteraction {
         } else {
             sb.append(sorting.getSql());
         }
-        //Log.i(Globals.TAG, sb.toString());
+        Log.i(Globals.TAG, sb.toString());
         return dbCursor(sb.toString());
     }
 
@@ -183,71 +183,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(sql);
     }
 
-
-    public Cursor fetchCostume(String manu, String line, String snusname) {
-        String sql = "";
-        if(manu == "" && line == "" && snusname != ""){
-            sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_snus_name + ", " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    DatabaseHelper.FeedEntry.col_line_name +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS +
-                    " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_name + " = " + snusname;
-        }
-        if(manu == "" && line != "" && snusname != ""){
-            sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_snus_name + ", " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    DatabaseHelper.FeedEntry.col_line_name +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS +
-                    " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_name + " = " + snusname +
-                    " AND " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_line + " = " + line;
-        }
-        if(manu != "" && line != "" && snusname != ""){
-            sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_snus_name + ", " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    DatabaseHelper.FeedEntry.col_line_name +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS +
-                    " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_name + " = " + snusname +
-                    " AND " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_line + " = " + line +
-                    " AND " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_manufactorer + " = " + manu;
-        }
-        if(manu != "" && line != "" && snusname == ""){
-            sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_snus_name + ", " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    DatabaseHelper.FeedEntry.col_line_name +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_line + " = " + line +
-                    " AND " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_manufactorer + " = " + manu;
-        }
-        if(manu != "" && line == "" && snusname != ""){
-            sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_snus_name + ", " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    DatabaseHelper.FeedEntry.col_line_name +
-                    DatabaseHelper.FeedEntry.col_manufacturer_name +
-                    " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS +
-                    " WHERE " + DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_name + " = " + snusname +
-                    " AND " +  DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS + "." +
-                    DatabaseHelper.FeedEntry.col_snus_manufactorer + " = " + manu;
-        }
-        return dbCursor(sql);
-    }
-
     /**
      * Fetches a list of lines
      * @param manufacturerId    ID of the manufacturer
@@ -265,13 +200,42 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(sql);
     }
 
+    /**
+     *
+     * @return  Returns all lines in the database
+     */
+    @Override
+    public Cursor fetchLines() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_line_id + " AS _id, " +
+                DatabaseHelper.FeedEntry.col_line_name +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE;
+        return dbCursor(sql);
+    }
+
+    /**
+     *
+     * @return  Returns all tastes
+     */
     @Override
     public Cursor fetchTastes() {
         String sql = "SELECT " +
-                DatabaseHelper.FeedEntry.col_taste_id + ", " +
+                DatabaseHelper.FeedEntry.col_taste_id + " AS _id, " +
                 DatabaseHelper.FeedEntry.col_taste_taste +
-                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE +
-                Sorting.ALPHABETICAL.getSql();
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TASTE;
+        return dbCursor(sql);
+    }
+
+    /**
+     *
+     * @return  Returns all types
+     */
+    @Override
+    public Cursor fetchTypes() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_type_id + " AS _id, " +
+                DatabaseHelper.FeedEntry.col_type_text +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_TYPE;
         return dbCursor(sql);
     }
 

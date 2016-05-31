@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 /**
@@ -35,6 +36,7 @@ public final class Snus {
                 DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
                 null,
                 getContentValues());
+        resetSnus();
         return (result >0 );
     }
 
@@ -45,18 +47,25 @@ public final class Snus {
      */
     public static boolean snusExists(Context context) {
         List<Filtration> filtrationList = new ArrayList<>();
-        Filtration f1 = Filtration.MANUFACTURER;
+        Filtration f1 = Filtration.MANUFACTURER_NUMBER;
         Filtration f2 = Filtration.LINE_NUMBER;
-        Filtration f3 = Filtration.NAME;
+        Filtration f3 = Filtration.NAME_EXACT;
+        Filtration f4 = Filtration.TASTE_NUMBER;
+        Filtration f5 = Filtration.TYPE_NUMBER;
         f1.setSearchValue(getManufacturer());
         f2.setSearchValue(getLine());
         f3.setSearchValue(getName());
+        f4.setSearchValue(getTaste1());
+        f5.setSearchValue(getType());
         filtrationList.add(f1);
         filtrationList.add(f2);
         filtrationList.add(f3);
+        filtrationList.add(f4);
+        filtrationList.add(f5);
         DatabaseInteractor db = new DatabaseInteractor(context);
         Cursor c = db.fetchSnus(filtrationList, null);
         int count = c.getCount();
+        Log.i(Globals.TAG, "Number of snus with same parameters that already exists " + count);
         db.close();
         return (count > 0);
     }
@@ -168,9 +177,7 @@ public final class Snus {
      */
     public static void setSnus(String name, int manufacturer, int line, int taste1, int taste2, int taste3, int type,
                                Double strength, Double nicotineLevel, Double totalRank, Bitmap image) throws Exception {
-        Snus.name = "";
-        Snus.strength = Snus.nicotineLevel = Snus.totalRank = 0.0;
-        Snus.manufacturer = Snus.line = Snus.taste1 = Snus.taste2 = Snus.taste3 = Snus.type = 0;
+        resetSnus();
         setName(name);
         setStrength(strength);
         setNicotineLevel(nicotineLevel);
@@ -182,6 +189,15 @@ public final class Snus {
         setTaste3(taste3);
         setType(type);
         setImage(image);
+    }
+
+    /**
+     * Method that resets all values in the Snus static class
+     */
+    public static void resetSnus() {
+        Snus.name = "";
+        Snus.strength = Snus.nicotineLevel = Snus.totalRank = 0.0;
+        Snus.manufacturer = Snus.line = Snus.taste1 = Snus.taste2 = Snus.taste3 = Snus.type = 0;
     }
 
     private static SQLiteDatabase getWriteableDatabase(Context context) {

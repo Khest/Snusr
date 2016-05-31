@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -64,11 +63,17 @@ public class MainActivity extends AppCompatActivity
     private CharSequence mTitle;
 
     EditText txtSearch;
-    Spinner spinManu,spinLine, spinFiltration, spinSorting;
+    Spinner spinManu,spinLine, spinFiltration, spinSorting, spinTaste1, spinTaste2, spinTaste3;
     SortingAdapter sortingArrayAdapter;
-    FiltrationAdapter filtrationAdapter;
+    LineAdapater lineAdapter;
     ManuAdapter manuAdapter;
+    MenuItem search;
+    TasteAdapter tasteAdaper;
+    DatabaseInteractor db;
+    
     int filtrationID;
+
+    private int selectedManufacturerId, selectedLineId, selectedTasteID1,selectedTasteID2, selectedTasteID3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,42 +119,42 @@ public class MainActivity extends AppCompatActivity
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
        addSearchFiltrationAdapter();
+        onSearchClicked();
+        onSortClicked();
     }
 
     private void addSearchFiltrationAdapter() {
-        spinFiltration = (Spinner) findViewById(R.id.spin_Filtration);
         spinSorting = (Spinner) findViewById(R.id.spin_Sorting);
         spinManu = (Spinner) findViewById(R.id.spin_serchManu);
         spinLine = (Spinner) findViewById(R.id.spin_searchLine);
+        spinTaste1 = (Spinner) findViewById(R.id.spin_Taste1);
+        spinTaste2 = (Spinner) findViewById(R.id.spin_Taste2);
+        spinTaste3 = (Spinner) findViewById(R.id.spin_Taste3);
 
-        List<Filtration> filtrationsList = Arrays.asList(Filtration.values());
+
         List<Sorting> sortingsList = Arrays.asList(Sorting.values());
 
-        DatabaseInteractor db = new DatabaseInteractor(this);
+        db  = new DatabaseInteractor(this);
         Cursor mcur = db.fetchManufacturers();
+        Cursor lines = db.fetchLines();
+        Cursor tcur = db.fetchTastes();
+
 
         manuAdapter = new ManuAdapter(this, mcur, 0);
-        filtrationAdapter = new FiltrationAdapter(getBaseContext(), filtrationsList);
+        lineAdapter = new LineAdapater(this, lines, 0);
+        tasteAdaper = new TasteAdapter(this, tcur, 0);
         sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
 
 
+        spinTaste1.setAdapter(tasteAdaper);
+        spinTaste2.setAdapter(tasteAdaper);
+        spinTaste3.setAdapter(tasteAdaper);
+        spinLine.setAdapter(lineAdapter);
         spinManu.setAdapter(manuAdapter);
-        spinFiltration.setAdapter(filtrationAdapter);
         spinSorting.setAdapter(sortingArrayAdapter);
 
-        filtrationAdapter.notifyDataSetChanged();
+        tasteAdaper.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
-        spinFiltration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                filtrationID = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
@@ -235,7 +240,7 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        search = item;
         //noinspection SimplifiableIfStatement
         final View layout = findViewById(R.id.searchLayout);
         if (id == R.id.action_search) {
@@ -257,7 +262,7 @@ public class MainActivity extends AppCompatActivity
 
     public void searchWindow(){
         final View layout = findViewById(R.id.searchLayout);
-            layout.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.VISIBLE);
             final Button buttonSearch = (Button) layout.findViewById(R.id.btnSearch);
             final Button buttonSorting = (Button) layout.findViewById(R.id.btnSortingFiltration);
         layout.findViewById(R.id.relativeLayoutSortingFiltrationWindow).setVisibility(View.GONE);
@@ -271,6 +276,7 @@ public class MainActivity extends AppCompatActivity
                     layout.findViewById(R.id.searchWindow).setVisibility(View.VISIBLE);
                     buttonSearch.setTextColor(Color.parseColor("#881e5d"));
                     buttonSorting.setTextColor(Color.parseColor("#FFFFFF"));
+                    onSearchClicked();
                 }
             });
             buttonSorting.setOnClickListener(new View.OnClickListener() {
@@ -293,14 +299,53 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
+
+
                 EditText etxt = (EditText) findViewById(R.id.eText_search);
-                List<Filtration> list = new ArrayList();
-                list.add(filtrationAdapter.getItem(filtrationID));
+                List<Filtration> list = new ArrayList<>();
+                Filtration f1 = Filtration.WILDCARD;
+                f1.setSearchValue(etxt.getText().toString());
+
+                Filtration f2 = Filtration.MANUFACTURER_NUMBER;
+                manuAdapter.getCursor().moveToPosition(spinManu.getSelectedItemPosition());
+                selectedManufacturerId = manuAdapter.getCursor().getInt(0);
+                f2.setSearchValue(selectedManufacturerId);
+
+                Filtration f3 = Filtration.LINE_NUMBER;
+                lineAdapter.getCursor().moveToPosition(spinLine.getSelectedItemPosition());
+                selectedLineId = lineAdapter.getCursor().getInt(0);
+                f3.setSearchValue(selectedLineId);
+
+                Filtration f4 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
+                selectedTasteID1 = tasteAdaper.getCursor().getInt(0);
+                f4.setSearchValue(selectedTasteID1);
+
+                Filtration f5 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste2.getSelectedItemPosition());
+                selectedTasteID2 = tasteAdaper.getCursor().getInt(0);
+                f5.setSearchValue(selectedTasteID2);
+
+                Filtration f6 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste3.getSelectedItemPosition());
+                selectedTasteID3 = tasteAdaper.getCursor().getInt(0);
+                f6.setSearchValue(selectedTasteID3);
+
+                list.add(f1);
+                list.add(f2);
+                list.add(f3);
+                list.add(f4);
+                list.add(f5);
+                list.add(f6);
 
                 if (snusList != null){
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
-                    snusList.search("", "", String.valueOf(etxt.getText()), list);
+                    search.setIcon(R.drawable.search);
+                    Cursor c = db.fetchSnus(list, null);
+                    snusList.search(c);
+                    Log.i(Globals.TAG, "search is not null");
+                    //snusList.search("", "", String.valueOf(etxt.getText()), list);
                 }
 
             }
@@ -320,9 +365,11 @@ public class MainActivity extends AppCompatActivity
 
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
                 if (snusList != null){
+                    Log.i(Globals.TAG, "snuslist is not null");
                     snusList.setUp(null, sorting);
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
+                    search.setIcon(R.drawable.search);
                 } else {
                 }
             }

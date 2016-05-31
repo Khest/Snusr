@@ -47,6 +47,10 @@ public interface DatabaseInteraction {
 
     Cursor fetchTastes();
 
+    Cursor fetchLines();
+
+    Cursor fetchTypes();
+
     int updatePersonalRankingAndUpdateAverage(int snusId, double ranking);
 
     int setMyListBookmarked(int snusId);
