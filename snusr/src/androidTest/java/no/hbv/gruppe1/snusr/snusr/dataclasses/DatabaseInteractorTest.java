@@ -36,7 +36,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
 
     public void testFetchSnusWithFiltration() throws Exception {
         List<Filtration> filtrations = new  ArrayList<>();
-        filtrations.add(Filtration.LINE);
+        filtrations.add(Filtration.LINE_NUMBER);
         filtrations.get(0).setSearchValue("General");
         Cursor c = databaseInteractor.fetchSnus(filtrations, null);
         assertNotNull(c);
@@ -78,7 +78,7 @@ public class DatabaseInteractorTest extends AndroidTestCase {
     }
     public void testLineFiltration() throws Exception {
         List<Filtration> filtrations = new ArrayList<>();
-        Filtration f = Filtration.LINE;
+        Filtration f = Filtration.LINE_NUMBER;
         String searchValue = "skruf";
         f.setSearchValue(searchValue);
         filtrations.add(f);

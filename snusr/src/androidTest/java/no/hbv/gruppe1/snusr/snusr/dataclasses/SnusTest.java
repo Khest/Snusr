@@ -5,7 +5,6 @@ import android.database.DatabaseUtils;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 import android.util.Log;
-import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class SnusTest extends AndroidTestCase {
     public void testSnusExists() throws Exception {
         List<Filtration> filtrationList = new ArrayList<>();
         Filtration f1 = Filtration.MANUFACTURER;
-        Filtration f2 = Filtration.LINE;
+        Filtration f2 = Filtration.LINE_NUMBER;
         Filtration f3 = Filtration.NAME;
         String manufacturer = "swedish match";
         String line = "G3";
