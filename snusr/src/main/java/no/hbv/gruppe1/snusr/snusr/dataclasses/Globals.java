@@ -18,9 +18,13 @@ public class Globals {
     public static final int IMAGE_QUALITY = 100;
     public static final Bitmap.CompressFormat COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
 
-    public static final int MYLIST_FAVOURITES = 1;
-    public static final int MYLIST_BOOKMARKS  = 0;
-    public static final int MYLIST_ALL        = -1;
+    public static final int MYLIST_BOOKMARKED               = 1;
+    public static final int MYLIST_REMOVED_FROM_BOOKMARKS   = 0;
+    public static final int MYLIST_ALL                      = -1;
+
+    public static final int MYLIST_RATED                    = 12;
+    public static final int MYLIST_ADDED                    = 13;
+
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
