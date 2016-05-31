@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        DatabaseInteractor db2 = new DatabaseInteractor(this);
-        db2.resetDatabase();
-        db2.close();
+        //DatabaseInteractor db2 = new DatabaseInteractor(this);
+        //db2.resetDatabase();
+        //db2.close();
         //db2.close();
         //db2 = null;
         PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
