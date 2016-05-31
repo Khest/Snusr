@@ -38,6 +38,19 @@
 
     <string name="action_search">Example action</string>
 
+    <string name="add_snus_desc_image">Snus image</string>
+    <string name="add_snus_hint_name">Name</string>
+    <string name="add_snus_hint_manufacturer">Manufacturer</string>
+    <string name="add_snus_text_add_snus">Add me</string>
+    <string name="add_snus_hint_line">Line</string>
+    <string name="add_snus_hint_strength">Strength</string>
+    <string name="add_snus_hint_nicotine_level">Nicotine level</string>
+    <string name="add_snus_max_nicotine_level">10</string>
+    <string name="add_snus_max_strength_level">5</string>
+    <string name="add_snus_successful">Snus added!</string>
+    <string name="add_snus_failed">Snus could not be added. Contact the developers.</string>
+    <string name="add_snus_snus_exists">Snus already exists</string>
+
     <string-array name="spinnerItemsStr">
         <item>1</item>
         <item>2</item>
