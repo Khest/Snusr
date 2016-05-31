@@ -56,7 +56,7 @@ public class TasteAdapter extends CursorAdapter {
         View v = inflater.inflate(R.layout.spinner_item, null);
         TextView text = (TextView) v.findViewById(R.id.spinner_text);
         if(position==0) {
-            text.setText("Choose Line");
+            text.setText("Choose taste");
         }else{
             text.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_taste_taste)));
         }

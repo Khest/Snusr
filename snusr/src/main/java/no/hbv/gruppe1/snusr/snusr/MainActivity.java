@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
     EditText txtSearch;
     Spinner spinManu,spinLine, spinFiltration, spinSorting, spinTaste1, spinTaste2, spinTaste3;
     SortingAdapter sortingArrayAdapter;
-    FiltrationAdapter filtrationAdapter;
     LineAdapater lineAdapter;
     ManuAdapter manuAdapter;
     MenuItem search;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     
     int filtrationID;
 
-    private int selectedManufacturerId, selectedLineId;
+    private int selectedManufacturerId, selectedLineId, selectedTasteID1,selectedTasteID2, selectedTasteID3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +127,9 @@ public class MainActivity extends AppCompatActivity
         spinSorting = (Spinner) findViewById(R.id.spin_Sorting);
         spinManu = (Spinner) findViewById(R.id.spin_serchManu);
         spinLine = (Spinner) findViewById(R.id.spin_searchLine);
-        spinTaste1 = (Spinner) findViewById(R.id.spin_taste1);
-        spinTaste2 = (Spinner) findViewById(R.id.spin_taste2);
-        spinTaste3 = (Spinner) findViewById(R.id.spin_taste3);
+        spinTaste1 = (Spinner) findViewById(R.id.spin_Taste1);
+        spinTaste2 = (Spinner) findViewById(R.id.spin_Taste2);
+        spinTaste3 = (Spinner) findViewById(R.id.spin_Taste3);
 
 
         List<Sorting> sortingsList = Arrays.asList(Sorting.values());
@@ -155,7 +154,6 @@ public class MainActivity extends AppCompatActivity
         spinSorting.setAdapter(sortingArrayAdapter);
 
         tasteAdaper.notifyDataSetChanged();
-        filtrationAdapter.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
     }
 
@@ -318,20 +316,20 @@ public class MainActivity extends AppCompatActivity
                 selectedLineId = lineAdapter.getCursor().getInt(0);
                 f3.setSearchValue(selectedLineId);
 
-                Filtration f4 = Filtration.LINE_NUMBER;
-                lineAdapter.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
-                selectedLineId = tasteAdaper.getCursor().getInt(0);
-                f4.setSearchValue(selectedLineId);
+                Filtration f4 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
+                selectedTasteID1 = tasteAdaper.getCursor().getInt(0);
+                f4.setSearchValue(selectedTasteID1);
 
-                Filtration f5 = Filtration.LINE_NUMBER;
-                lineAdapter.getCursor().moveToPosition(spinTaste2.getSelectedItemPosition());
-                selectedLineId = tasteAdaper.getCursor().getInt(0);
-                f5.setSearchValue(selectedLineId);
+                Filtration f5 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste2.getSelectedItemPosition());
+                selectedTasteID2 = tasteAdaper.getCursor().getInt(0);
+                f5.setSearchValue(selectedTasteID2);
 
-                Filtration f6 = Filtration.LINE_NUMBER;
-                lineAdapter.getCursor().moveToPosition(spinTaste3.getSelectedItemPosition());
-                selectedLineId = tasteAdaper.getCursor().getInt(0);
-                f6.setSearchValue(selectedLineId);
+                Filtration f6 = Filtration.TASTE_NUMBER;
+                tasteAdaper.getCursor().moveToPosition(spinTaste3.getSelectedItemPosition());
+                selectedTasteID3 = tasteAdaper.getCursor().getInt(0);
+                f6.setSearchValue(selectedTasteID3);
 
                 list.add(f1);
                 list.add(f2);
