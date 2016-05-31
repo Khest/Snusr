@@ -15,7 +15,9 @@ public enum  Sorting {
     NICOTINELEVEL("Nikotinnivå", DatabaseHelper.FeedEntry.col_snus_nicotinelevel),
     TYPE("Type", DatabaseHelper.FeedEntry.col_snus_type),
     STRENGTH("Styrke", DatabaseHelper.FeedEntry.col_snus_strength),
-    OLDESTTONEWEST("Nyeste til gamleste", DatabaseHelper.FeedEntry.col_snus_id);
+    OLDESTTONEWEST("Nyeste til gamleste", DatabaseHelper.FeedEntry.col_snus_id),
+    MANUFACTURER("Manufacturer", DatabaseHelper.FeedEntry.col_manufacturer_name),
+    LINE("Line", DatabaseHelper.FeedEntry.col_line_name);
 
 
     private String guiName, columnName;
