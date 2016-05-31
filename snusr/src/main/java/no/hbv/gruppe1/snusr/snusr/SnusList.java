@@ -18,6 +18,7 @@ import java.util.List;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
+import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Sorting;
 
 
@@ -31,7 +32,7 @@ public class SnusList extends Fragment {
     ListView listview;
     Button btnAllesnus, btnBook, btnMyfav;
     private DatabaseInteractor db;
-
+    private Cursor cur;
 
     /**
      * Inneholder våre favorittsnus, alle snus og snus med bokmerke
@@ -49,7 +50,7 @@ public class SnusList extends Fragment {
         btnBook = (Button) view.findViewById(R.id.btn_book);
         btnMyfav = (Button) view.findViewById(R.id.btn_myfav);
         db = new DatabaseInteractor(this.getActivity());
-        Cursor cur = db.fetchSnus(null, null);
+        cur = db.fetchSnus(null, null);
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
 
         btnAllesnus.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,9 @@ public class SnusList extends Fragment {
     }
     @Override
     public void onDestroy() {
+        cur.close();
         db.close();
+        Log.i(Globals.TAG, "Closing database in " + this.getClass().getName());
         super.onDestroy();
     }
 
