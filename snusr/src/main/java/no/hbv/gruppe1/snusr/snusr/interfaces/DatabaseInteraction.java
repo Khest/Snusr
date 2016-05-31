@@ -43,13 +43,14 @@ public interface DatabaseInteraction {
      */
     Cursor fetchManufacturers();
 
-    Cursor fetchLines();
+    Cursor fetchLines(int manufacturerId);
 
     Cursor fetchTastes();
 
     int updatePersonalRankingAndUpdateAverage(int snusId, double ranking);
 
     int setMyListBookmarked(int snusId);
+
 
     /**
      * Closes the database connection

@@ -185,14 +185,17 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     /**
      * Fetches a list of lines
-     * @return          Returns a cursor containing id and names of lines
+     * @param manufacturerId    ID of the manufacturer
+     * @return                  Returns a cursor containing id and names of lines
      */
     @Override
-    public Cursor fetchLines() {
+    public Cursor fetchLines(int manufacturerId) {
         String sql = "SELECT " +
                 DatabaseHelper.FeedEntry.col_line_id + ", " +
                 DatabaseHelper.FeedEntry.col_line_name +
                 " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE +
+                " WHERE " + DatabaseHelper.FeedEntry.col_line_manufactorer +
+                " = " + String.valueOf(manufacturerId) +
                 Sorting.ALPHABETICAL.getSql();
         return dbCursor(sql);
     }
@@ -241,6 +244,10 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
 
     private Cursor dbCursor(String sqlString) {
+        if (!db.isOpen()) {
+            Log.i(Globals.TAG, "Database has been closed. Reopening.");
+            db = databaseHelper.getWritableDatabase();
+        }
         return db.rawQuery(sqlString, null);
     }
 
@@ -264,9 +271,11 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     public void close() {
         if (this.db != null) {
+            Log.i(Globals.TAG, "Closing database from " + this.getClass().getName());
             databaseHelper.close();
             this.db.close();
-            this.db = null;
+        } else {
+            Log.i(Globals.TAG, "Unable to decouple from database. The database object is null");
         }
     }
 
