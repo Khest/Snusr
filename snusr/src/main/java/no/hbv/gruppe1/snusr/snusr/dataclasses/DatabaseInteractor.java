@@ -262,11 +262,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     public int getVersion() {return this.db.getVersion();}
 
-    public void resetDatabase() {
-        databaseHelper.deleteDatabases(this.db);
-        databaseHelper.createDatabase(this.db);
-    }
-
     public void close() {
         if (this.db != null) {
             databaseHelper.close();

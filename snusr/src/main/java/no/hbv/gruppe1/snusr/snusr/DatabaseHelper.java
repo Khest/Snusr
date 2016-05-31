@@ -13,7 +13,7 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
  * Created by Håkon Stensheim 10.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 14;
     public static final String INTEGER = "INTEGER";
     public static final String DOUBLE = "DOUBLE";
     public static final String TEXT = "TEXT";
@@ -143,33 +143,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-    public void deleteDatabases(SQLiteDatabase db) {
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_TABLE_MYLIST);
         db.execSQL(DROP_TABLE_SNUS);
         db.execSQL(DROP_TABLE_TASTE);
         db.execSQL(DROP_TABLE_TYPE);
         db.execSQL(DROP_TABLE_LINE);
         db.execSQL(DROP_TABLE_MANUFACTURER);
+        onCreate(db);
     }
 
-    public void createDatabase(SQLiteDatabase db) {
+    @Override
+    public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_MANUFACTURER);
         db.execSQL(CREATE_TABLE_LINE);
         db.execSQL(CREATE_TABLE_TYPE);
         db.execSQL(CREATE_TABLE_TASTE);
         db.execSQL(CREATE_TABLE_SNUS);
         db.execSQL(CREATE_TABLE_MYLIST);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        deleteDatabases(db);
-        onCreate(db);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        createDatabase(db);
         putDummyData(db);
     }
 
