@@ -17,10 +17,13 @@ import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseInteraction;
 public class DatabaseInteractor implements DatabaseInteraction {
     public static final String TASTE_TABLE_ALIAS_1 = "_TASTE1";
     public static final String TASTE_COLUMN_ALIAS_1 = "TasteId1";
+    public static final String TASTE_COLUMN_TEXT_ALIAS_1 = "taste_text_1";
     public static final String TASTE_TABLE_ALIAS_2 = "_TASTE2";
     public static final String TASTE_COLUMN_ALIAS_2 = "TasteId2";
+    public static final String TASTE_COLUMN_TEXT_ALIAS_2 = "taste_text_2";
     public static final String TASTE_TABLE_ALIAS_3 = "_TASTE3";
     public static final String TASTE_COLUMN_ALIAS_3 = "TasteId3";
+    public static final String TASTE_COLUMN_TEXT_ALIAS_3 = "taste_text_3";
 
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
@@ -178,8 +181,13 @@ public class DatabaseInteractor implements DatabaseInteraction {
 
     public int getVersion() {return this.db.getVersion();}
 
+    public void resetDatabase() {
+        databaseHelper.onUpgrade(this.db, databaseHelper.DATABASE_VERSION, databaseHelper.DATABASE_VERSION);
+    }
+
     public void close() {
         if (this.db != null) {
+            databaseHelper.close();
             this.db.close();
             this.db = null;
         }
@@ -194,7 +202,13 @@ public class DatabaseInteractor implements DatabaseInteraction {
                 .append(TASTE_TABLE_ALIAS_2).append(".").append(DatabaseHelper.FeedEntry.col_taste_id)
                     .append(" AS ").append(TASTE_COLUMN_ALIAS_2).append(", ")
                 .append(TASTE_TABLE_ALIAS_3).append(".").append(DatabaseHelper.FeedEntry.col_taste_id)
-                    .append(" AS ").append(TASTE_COLUMN_ALIAS_3).append(" ")
+                    .append(" AS ").append(TASTE_COLUMN_ALIAS_3).append(", ")
+                .append(TASTE_TABLE_ALIAS_1).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
+                    .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_1).append(", ")
+                .append(TASTE_TABLE_ALIAS_2).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
+                .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_2).append(", ")
+                .append(TASTE_TABLE_ALIAS_3).append(".").append(DatabaseHelper.FeedEntry.col_taste_taste)
+                .append(" AS ").append(TASTE_COLUMN_TEXT_ALIAS_3).append(" ")
                 .append(" FROM ")
                 .append(DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS);
         sb.append(" LEFT JOIN ").append(DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE).append(" ON ")
