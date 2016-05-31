@@ -1,7 +1,10 @@
 package no.hbv.gruppe1.snusr.snusr;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +37,7 @@ public class SnusAdapter extends CursorAdapter {
         TextView txtSnusName = (TextView) view.findViewById(R.id.txtSnusName);
         TextView txtRating = (TextView) view.findViewById(R.id.txtRating);
         ImageView img = (ImageView) view.findViewById(R.id.imgSnusThumbnail);
-
+        ImageView imgBook = (ImageView) view.findViewById(R.id.imgBook);
         // Finds the ratingbar and sets the stars to yellow.
         RatingBar rating = (RatingBar) view.findViewById(R.id.ratingSnus);
         //Drawable stars = rating.getProgressDrawable();
@@ -54,14 +57,63 @@ public class SnusAdapter extends CursorAdapter {
 
             }
         });
+
+        imgBook.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50));
+
         // Convert byte[] to Bitmap:
         //ImageHandler imageHandler = new ImageHandler();
-//        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
-//        if(stream != null)
-//            img.setImageBitmap(imageHandler.convertByteToBitmap(stream));
-//        else
-//            img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
+        byte[] stream = cursor.getBlob(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));
+        if(stream != null)
+            img.setImageBitmap(convertByteToBitmap(stream));
+        else
+            img.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.noimagefound, 150, 150));
+            //img.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.noimagefound));
 
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static Bitmap convertByteToBitmap(byte[] byteArray) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap mbitmap = bitmap.createScaledBitmap(bitmap, 250, 250, true);
+        return mbitmap;
     }
 
 

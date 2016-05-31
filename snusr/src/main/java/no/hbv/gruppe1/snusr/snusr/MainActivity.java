@@ -17,13 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
-import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 import no.hbv.gruppe1.snusr.snusr.dummydata.PutDummyDataExtra;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, Search.onSearchOpenInterface {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -31,6 +31,11 @@ public class MainActivity extends AppCompatActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private final String PREFS_NAME = "PrefsFile";
+
+    boolean searchOpen = false;
+
+    DrawerLayout drawerLayout;
+
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -40,13 +45,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         //DatabaseInteractor db2 = new DatabaseInteractor(this);
         //db2.close();
         //db2 = null;
         PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
         putDummyDataExtra.putDymmyData("1", "dummy_data/skruf_knox_starkportion_styrke3.png");
+
         //Log.i(Globals.TAG, "MA ver: "+ db.getReadableDatabase().getVersion());
         if (settings.getBoolean("first_time", true)){
             // Kode som skal kjøres første gang appen tas i bruk.
@@ -72,8 +78,7 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-
+        this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
     }
 
@@ -99,6 +104,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SendFileFragment();
                 break;
         }
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
@@ -137,11 +143,16 @@ public class MainActivity extends AppCompatActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main2, menu);
+            getMenuInflater().inflate(R.menu.global, menu);
             restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    public void setSearchOpen(boolean condition){
+        searchOpen = condition;
     }
 
     @Override
@@ -150,13 +161,32 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        RelativeLayout r =(RelativeLayout) findViewById(R.id.searchLayout);
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        if (id == R.id.action_search) {
+            if(searchOpen == true){
+                item.setIcon(R.drawable.search);
+                r.setVisibility(View.GONE);
+                searchOpen = false;
+            }else{
+                drawerLayout.closeDrawers();
+                item.setIcon(R.drawable.search_lilla);
+                r.setVisibility(View.VISIBLE);
+                searchOpen = true;
+            }
+            return  true;
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSearch(boolean isOpen) {
+        if(isOpen){
+
+        }
     }
 
     /**

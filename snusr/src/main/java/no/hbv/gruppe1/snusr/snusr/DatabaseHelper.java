@@ -174,6 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putManufacturer(db, "Skruf", "www.skruf.se", "Sweden");
             putManufacturer(db, "British American Tobacco", "www.bat.com", "England");
 
+
             putLine(db, 1, "General");
             putLine(db, 1, "General G3");
             putLine(db, 1, "Ettan");
@@ -200,8 +201,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             putTaste(db, "Apple");
             putTaste(db, "Vanilla");
 
-            putSnus(db, "Extra Strong", 1, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
-            putSnus(db, "Extra Weak",   2, 5, 2, 0, 0, 3, 0.6, 3, 3, null);
+
+            for(int i = 1; i <= 100; i++){
+                putSnus(db, "Extra Strong", i, 2, 3, 0, 0, 5, 1.8, 0, 4, null);
+            }
         } catch (Exception ex){
             Log.e(Globals.TAG, " Fatal error inserting dummy data " + ex.getMessage());
         }
