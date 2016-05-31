@@ -176,10 +176,10 @@ public class DatabaseInteractor implements DatabaseInteraction {
     @Override
     public Cursor fetchManufacturers() {
         String sql = "SELECT " +
-                    DatabaseHelper.FeedEntry.col_manufacturer_id + ", " +
+                    DatabaseHelper.FeedEntry.col_manufacturer_id + " AS _id, " +
                     DatabaseHelper.FeedEntry.col_manufacturer_name +
                 " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_MANUFACTURER +
-                Sorting.ALPHABETICAL.getSql();
+                Sorting.MANUFACTURER.getSql();
         return dbCursor(sql);
     }
 
@@ -256,12 +256,12 @@ public class DatabaseInteractor implements DatabaseInteraction {
     @Override
     public Cursor fetchLines(int manufacturerId) {
         String sql = "SELECT " +
-                DatabaseHelper.FeedEntry.col_line_id + ", " +
+                DatabaseHelper.FeedEntry.col_line_id + " AS _id, " +
                 DatabaseHelper.FeedEntry.col_line_name +
                 " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE +
                 " WHERE " + DatabaseHelper.FeedEntry.col_line_manufactorer +
                 " = " + String.valueOf(manufacturerId) +
-                Sorting.ALPHABETICAL.getSql();
+                Sorting.LINE.getSql();
         return dbCursor(sql);
     }
 
