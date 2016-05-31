@@ -8,10 +8,13 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 
@@ -39,15 +42,14 @@ public class SnusAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, Context context, final Cursor cursor) {
         // Set the contentvalues for the view:
         db = new DatabaseInteractor(context);
         TextView txtSnusName = (TextView) view.findViewById(R.id.txtSnusName);
         TextView txtRating = (TextView) view.findViewById(R.id.txtRating);
         ImageView img = (ImageView) view.findViewById(R.id.imgSnusThumbnail);
-        ImageView imgBook = (ImageView) view.findViewById(R.id.imgBook);
+        final ImageView imgBook = (ImageView) view.findViewById(R.id.imgBook);
         TextView txtSnusId = (TextView) view.findViewById(R.id.txtSnusId);
-
         // Finds the ratingbar and sets the stars to yellow.
         RatingBar rating = (RatingBar) view.findViewById(R.id.ratingSnus);
         //Drawable stars = rating.getProgressDrawable();
@@ -61,22 +63,28 @@ public class SnusAdapter extends CursorAdapter {
 
         txtRating.setText(String.valueOf(rating.getRating()));
         txtSnusId.setText(String.valueOf(id));
+        final int cursorPosition = cursor.getPosition();
 
         rating.setRating(cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 // Update the rating in MYLIST in DB:
+                cursor.moveToPosition(cursorPosition);
                 int rat = Math.round(rating);
-                db.updatePersonalRankingAndUpdateAverage(rat, 0.0);
+                db.updatePersonalRankingAndUpdateAverage(id, rat);
             }
         });
 
-        imgBook.setImageBitmap(setBookmark(cursor));
+        int bookmarkValue = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_mylist_bookmark));
+        imgBook.setImageBitmap(setBookmark(bookmarkValue));
         imgBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.setMyListBookmarked(id);
+                cursor.moveToPosition(cursorPosition);
+                int returnValue = db.setMyListBookmarked(id);
+                ImageView tempImg = (ImageView) v.findViewById(R.id.imgBook);
+                tempImg.setImageBitmap(setBookmark(returnValue));
             }
         });
 
@@ -135,9 +143,8 @@ public class SnusAdapter extends CursorAdapter {
         return mbitmap;
     }
 
-    public Bitmap setBookmark(Cursor cursor){
+    public Bitmap setBookmark(int isBookmarked){
         Bitmap output;
-        int isBookmarked = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_mylist_bookmark));
         if (isBookmarked==1){
             output = decodeSampledBitmapFromResource(context.getResources(), R.drawable.button_bookmark, 50, 50);
         } else {

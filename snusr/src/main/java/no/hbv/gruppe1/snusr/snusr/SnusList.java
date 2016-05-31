@@ -58,7 +58,9 @@ public class SnusList extends Fragment {
                 btnAllesnus.setTextColor(Color.parseColor("#881e5d"));
                 btnMyfav.setTextColor(Color.parseColor("#FFFFFF"));
                 btnBook.setTextColor(Color.parseColor("#FFFFFF"));
-                //TODO query for alle snus
+
+                cur = db.fetchSnus(null, null);
+                listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
             }
         });
 
@@ -68,7 +70,9 @@ public class SnusList extends Fragment {
                 btnMyfav.setTextColor(Color.parseColor("#881e5d"));
                 btnBook.setTextColor(Color.parseColor("#FFFFFF"));
                 btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
-                //TODO qery for myfavorite
+
+                cur = db.fetchMyList(1);
+                listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
             }
         });
 
@@ -78,8 +82,9 @@ public class SnusList extends Fragment {
                 btnBook.setTextColor(Color.parseColor("#881e5d"));
                 btnMyfav.setTextColor(Color.parseColor("#FFFFFF"));
                 btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
-                //TODO query for bookmarked
 
+                cur = db.fetchMyList(Globals.MYLIST_ALL);
+                listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
             }
         });
 
