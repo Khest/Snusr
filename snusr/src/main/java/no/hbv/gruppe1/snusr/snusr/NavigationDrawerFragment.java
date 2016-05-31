@@ -245,11 +245,13 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         MainActivity a = (MainActivity) getActivity();
-        View r = a.findViewById(R.id.searchLayout);
+        View searchWindow = a.findViewById(R.id.searchWindow);
+        View searchLayout = a.findViewById(R.id.searchLayout);
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             a.setSearchOpen(false);
             item.setIcon(R.drawable.search);
-            r.setVisibility(View.GONE);
+            searchLayout.setVisibility(View.GONE);
+            searchWindow.setVisibility(View.GONE);
         }
 //        if (item.getItemId() == R.id.action_search) {
 //            if(a.searchOpen == true){
