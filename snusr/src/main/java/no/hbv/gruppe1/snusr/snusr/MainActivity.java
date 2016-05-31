@@ -139,10 +139,15 @@ public class MainActivity extends AppCompatActivity
 
         filtrationAdapter.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
-        spinFiltration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinFiltration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filtrationID = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
