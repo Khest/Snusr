@@ -68,7 +68,7 @@ public class SnusAdapter extends CursorAdapter {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 // Update the rating in MYLIST in DB:
                 int rat = Math.round(rating);
-                db.updatePersonalRankingAndUpdateAverage(rat);
+                db.updatePersonalRankingAndUpdateAverage(rat, 0.0);
             }
         });
 
@@ -76,7 +76,7 @@ public class SnusAdapter extends CursorAdapter {
         imgBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.setMyListBookmark(id);
+                db.setMyListBookmarked(id);
             }
         });
 
@@ -87,7 +87,7 @@ public class SnusAdapter extends CursorAdapter {
             img.setImageBitmap(convertByteToBitmap(stream));
         else
             img.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.drawable.noimagefound, 150, 150));
-
+        db.close();
     }
 
     public static int calculateInSampleSize(
