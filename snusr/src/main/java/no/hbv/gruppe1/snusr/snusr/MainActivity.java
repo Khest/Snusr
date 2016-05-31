@@ -67,8 +67,14 @@ public class MainActivity extends AppCompatActivity
     Spinner spinManu,spinLine, spinFiltration, spinSorting;
     SortingAdapter sortingArrayAdapter;
     FiltrationAdapter filtrationAdapter;
+    AddSnusSpinnerAdapter lineAdapter;
     ManuAdapter manuAdapter;
+
+    DatabaseInteractor db;
+    
     int filtrationID;
+
+    private int selectedManufacturerId, selectedLineId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +131,17 @@ public class MainActivity extends AppCompatActivity
         List<Filtration> filtrationsList = Arrays.asList(Filtration.values());
         List<Sorting> sortingsList = Arrays.asList(Sorting.values());
 
-        DatabaseInteractor db = new DatabaseInteractor(this);
+        db  = new DatabaseInteractor(this);
         Cursor mcur = db.fetchManufacturers();
 
         manuAdapter = new ManuAdapter(this, mcur, 0);
         filtrationAdapter = new FiltrationAdapter(getBaseContext(), filtrationsList);
+
         sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
 
+        Cursor lines = db.fetchLines();
+        lineAdapter = new AddSnusSpinnerAdapter(getApplication(), lines, 0);
+        spinLine.setAdapter(lineAdapter);
 
         spinManu.setAdapter(manuAdapter);
         spinFiltration.setAdapter(filtrationAdapter);
@@ -139,15 +149,10 @@ public class MainActivity extends AppCompatActivity
 
         filtrationAdapter.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
-        spinFiltration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinFiltration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 filtrationID = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -293,14 +298,31 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
+
+
                 EditText etxt = (EditText) findViewById(R.id.eText_search);
-                List<Filtration> list = new ArrayList();
-                list.add(filtrationAdapter.getItem(filtrationID));
+                List<Filtration> list = new ArrayList<>();
+                Filtration f = Filtration.WILDCARD;
+                f.setSearchValue(etxt.getText().toString());
+                Filtration f2 = Filtration.MANUFACTURER_NUMBER;
+                manuAdapter.getCursor().moveToPosition(spinManu.getSelectedItemPosition());
+                selectedManufacturerId = manuAdapter.getCursor().getInt(0);
+                f2.setSearchValue(selectedManufacturerId);
+
+                Filtration f3 = Filtration.LINE_NUMBER;
+                lineAdapter.getCursor().moveToPosition(spinLine.getSelectedItemPosition());
+                selectedLineId = lineAdapter.getCursor().getInt(0);
+                f3.setSearchValue(selectedLineId);
+                list.add(f);
+                list.add(f2);
+                list.add(f3);
 
                 if (snusList != null){
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
-                    snusList.search("", "", String.valueOf(etxt.getText()), list);
+                    Cursor c = db.fetchSnus(list, null);
+                    snusList.search(c);
+                    //snusList.search("", "", String.valueOf(etxt.getText()), list);
                 }
 
             }
@@ -320,6 +342,7 @@ public class MainActivity extends AppCompatActivity
 
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
                 if (snusList != null){
+                    Log.i(Globals.TAG, "snuslist is not null");
                     snusList.setUp(null, sorting);
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
