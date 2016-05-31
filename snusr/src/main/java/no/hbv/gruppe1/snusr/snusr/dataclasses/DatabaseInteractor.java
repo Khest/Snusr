@@ -265,6 +265,14 @@ public class DatabaseInteractor implements DatabaseInteraction {
         return dbCursor(sql);
     }
 
+    public Cursor fetchLines() {
+        String sql = "SELECT " +
+                DatabaseHelper.FeedEntry.col_line_id + " AS _id, " +
+                DatabaseHelper.FeedEntry.col_line_name +
+                " FROM " + DatabaseHelper.FeedEntry.DATABASE_TABLE_LINE;
+        return dbCursor(sql);
+    }
+
     @Override
     public Cursor fetchTastes() {
         String sql = "SELECT " +

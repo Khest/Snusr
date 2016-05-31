@@ -121,15 +121,14 @@ public class SnusList extends Fragment {
         super.onDestroyView();
 
     }
-    public void search(String manu, String line, String snusname, List<Filtration> filtration){
-        db = new DatabaseInteractor(this.getActivity());
+    public void search(Cursor result){
+       // filtration.WILDCARD.setSearchValue();
         //DatabaseHelper h = new DatabaseHelper(getActivity());
         //h.putDummyData();
-        Cursor cur = db.fetchCostume(manu, line, snusname);
-        SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
+        //Cursor cur = db.fetchCostume(manu, line, snusname);
+        SnusAdapter adapter = new SnusAdapter(getActivity(), result, 0);
         listview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        db.close();
     }
 
     public void setUp(List<Filtration> list, Sorting sort){
