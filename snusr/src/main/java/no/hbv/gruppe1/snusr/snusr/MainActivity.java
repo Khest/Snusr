@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, getResources().getText(R.string.main_write_external_denied).toString(), Toast.LENGTH_SHORT).show();
-            finish();
         }
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
