@@ -14,11 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.widget.Toast;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
@@ -46,78 +43,54 @@ public class MainActivity extends AppCompatActivity
     boolean searchOpen = false;
 
     DrawerLayout drawerLayout;
-
-    public void onSearch(List<Filtration> list, Sorting sort) {
-        if(list != null || sort != null){
-            SnusList snusList = (SnusList) getFragmentManager().findFragmentById(R.id.snuslistFragment);
-            if (snusList != null){
-                snusList.setUp(list, sort);
-            }
-
-        }
-    }
-
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
 
     EditText txtSearch;
-    Spinner spinManu,spinLine, spinFiltration, spinSorting, spinTaste1, spinTaste2, spinTaste3;
+    Spinner spinManu,spinLine, spinSorting, spinTaste1;
     SortingAdapter sortingArrayAdapter;
-    LineAdapater lineAdapter;
-    ManuAdapter manuAdapter;
+    AddSnusSpinnerAdapter lineAdapter;
+    AddSnusSpinnerAdapter manuAdapter;
     MenuItem search;
-    TasteAdapter tasteAdaper;
+    AddSnusSpinnerAdapter tasteAdaper;
     DatabaseInteractor db;
-    
-    int filtrationID;
 
-    private int selectedManufacturerId, selectedLineId, selectedTasteID1,selectedTasteID2, selectedTasteID3;
+    private boolean pokedManufacturingSpinner, pokedLineSpinner, pokedTasteSpinner;
+
+    private int selectedManufacturerId, selectedLineId, selectedTasteID1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        //DatabaseInteractor db2 = new DatabaseInteractor(this);
-        //db2.resetDatabase();
-        //db2.close();
-        //db2.close();
-        //db2 = null;
+
         PutDummyDataExtra putDummyDataExtra = new PutDummyDataExtra(this);
 
         for(int i= 1; i <= 10; i++){
             String a = String.valueOf(i);
             putDummyDataExtra.putDymmyData(a, "dummy_data/skruf_knox_starkportion_styrke3.png");
         }
-        //Log.i(Globals.TAG, "MA ver: "+ db.getReadableDatabase().getVersion());
-        if (settings.getBoolean("first_time", true)){
-            // Kode som skal kjøres første gang appen tas i bruk.
-            // Opprett database
-            // Ved testing av appen kan det være greit å slette appen fra mobilen
-            // om det er gjort endringer i databasen, og lignende.
-           // db.putDummyData();
-            // Setter first_time til false, denne koden kjøres aldri igjen.
-            settings.edit().putBoolean("first_time", false).apply();
-        }
+
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            Log.i(Globals.TAG, "Permission denied");
+            Toast.makeText(this, getResources().getText(R.string.main_write_external_denied).toString(), Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        //db.close();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = "SNUSR";
+        mTitle = getResources().getText(R.string.app_name).toString();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        txtSearch = (EditText) findViewById(R.id.eText_search);
        addSearchFiltrationAdapter();
         onSearchClicked();
         onSortClicked();
@@ -128,8 +101,6 @@ public class MainActivity extends AppCompatActivity
         spinManu = (Spinner) findViewById(R.id.spin_serchManu);
         spinLine = (Spinner) findViewById(R.id.spin_searchLine);
         spinTaste1 = (Spinner) findViewById(R.id.spin_Taste1);
-        spinTaste2 = (Spinner) findViewById(R.id.spin_Taste2);
-        spinTaste3 = (Spinner) findViewById(R.id.spin_Taste3);
 
 
         List<Sorting> sortingsList = Arrays.asList(Sorting.values());
@@ -140,26 +111,59 @@ public class MainActivity extends AppCompatActivity
         Cursor tcur = db.fetchTastes();
 
 
-        manuAdapter = new ManuAdapter(this, mcur, 0);
-        lineAdapter = new LineAdapater(this, lines, 0);
-        tasteAdaper = new TasteAdapter(this, tcur, 0);
+        manuAdapter = new AddSnusSpinnerAdapter(this, mcur, 0);
+        lineAdapter = new AddSnusSpinnerAdapter(this, lines, 0);
+        tasteAdaper = new AddSnusSpinnerAdapter(this, tcur, 0);
         sortingArrayAdapter = new SortingAdapter(getBaseContext(), sortingsList);
 
 
         spinTaste1.setAdapter(tasteAdaper);
-        spinTaste2.setAdapter(tasteAdaper);
-        spinTaste3.setAdapter(tasteAdaper);
         spinLine.setAdapter(lineAdapter);
         spinManu.setAdapter(manuAdapter);
         spinSorting.setAdapter(sortingArrayAdapter);
 
+        spinManu.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                pokedManufacturingSpinner = true;
+                return false;
+            }
+        });
+        spinLine.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                pokedLineSpinner = true;
+                return false;
+            }
+        });
+        spinTaste1.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                pokedTasteSpinner = true;
+                return false;
+            }
+        });
+
         tasteAdaper.notifyDataSetChanged();
         sortingArrayAdapter.notifyDataSetChanged();
+        clearAll();
     }
 
     @Override
     protected void onDestroy() {
+        db.close();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        db.close();
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -182,6 +186,10 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SendFileFragment();
                 fragTag = "SendFile";
                 break;
+            case 3:
+                fragment = new AboutUs();
+                fragTag = "AboutUs";
+                break;
         }
 
         fragmentManager.beginTransaction()
@@ -191,14 +199,17 @@ public class MainActivity extends AppCompatActivity
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case 1:
+            case 0:
                 mTitle = getString(R.string.title_section1);
                 break;
-            case 2:
+            case 1:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
+            case 2:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section4);
                 break;
         }
     }
@@ -301,51 +312,52 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 SnusList snusList = (SnusList) getFragmentManager().findFragmentByTag("SnusList");
 
-
-                EditText etxt = (EditText) findViewById(R.id.eText_search);
                 List<Filtration> list = new ArrayList<>();
-                Filtration f1 = Filtration.WILDCARD;
-                f1.setSearchValue(etxt.getText().toString());
 
-                Filtration f2 = Filtration.MANUFACTURER_NUMBER;
-                manuAdapter.getCursor().moveToPosition(spinManu.getSelectedItemPosition());
-                selectedManufacturerId = manuAdapter.getCursor().getInt(0);
-                f2.setSearchValue(selectedManufacturerId);
+                if (txtSearch.getText().length() > 0) {
+                    Filtration f1 = Filtration.WILDCARD;
+                    f1.setSearchValue(txtSearch.getText().toString());
+                    list.add(f1);
+                }
 
-                Filtration f3 = Filtration.LINE_NUMBER;
-                lineAdapter.getCursor().moveToPosition(spinLine.getSelectedItemPosition());
-                selectedLineId = lineAdapter.getCursor().getInt(0);
-                f3.setSearchValue(selectedLineId);
+                if (pokedManufacturingSpinner) {
+                    Filtration f2 = Filtration.MANUFACTURER_NUMBER;
+                    manuAdapter.getCursor().moveToPosition(spinManu.getSelectedItemPosition());
+                    selectedManufacturerId = manuAdapter.getCursor().getInt(0);
+                    f2.setSearchValue(selectedManufacturerId);
+                    list.add(f2);
+                }
 
-                Filtration f4 = Filtration.TASTE_NUMBER;
-                tasteAdaper.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
-                selectedTasteID1 = tasteAdaper.getCursor().getInt(0);
-                f4.setSearchValue(selectedTasteID1);
+                if (pokedLineSpinner) {
+                    Filtration f3 = Filtration.LINE_NUMBER;
+                    lineAdapter.getCursor().moveToPosition(spinLine.getSelectedItemPosition());
+                    selectedLineId = lineAdapter.getCursor().getInt(0);
+                    f3.setSearchValue(selectedLineId);
+                    list.add(f3);
+                }
 
-                Filtration f5 = Filtration.TASTE_NUMBER;
-                tasteAdaper.getCursor().moveToPosition(spinTaste2.getSelectedItemPosition());
-                selectedTasteID2 = tasteAdaper.getCursor().getInt(0);
-                f5.setSearchValue(selectedTasteID2);
-
-                Filtration f6 = Filtration.TASTE_NUMBER;
-                tasteAdaper.getCursor().moveToPosition(spinTaste3.getSelectedItemPosition());
-                selectedTasteID3 = tasteAdaper.getCursor().getInt(0);
-                f6.setSearchValue(selectedTasteID3);
-
-                list.add(f1);
-                list.add(f2);
-                list.add(f3);
-
+                if (pokedTasteSpinner) {
+                    Filtration f4 = Filtration.TASTE_NUMBER;
+                    tasteAdaper.getCursor().moveToPosition(spinTaste1.getSelectedItemPosition());
+                    selectedTasteID1 = tasteAdaper.getCursor().getInt(0);
+                    f4.setSearchValue(selectedTasteID1);
+                    list.add(f4);
+                }
 
                 if (snusList != null){
                     final View layout = findViewById(R.id.searchLayout);
                     layout.setVisibility(View.GONE);
-                    search.setIcon(R.drawable.search);
-                    Cursor c = db.fetchSnus(list, null);
+                    if (search != null) {
+                        search.setIcon(R.drawable.search);
+                    }
+                    Cursor c;
+                    if (list.size() == 0) {
+                        c = db.fetchSnus(null, Sorting.ALPHABETICAL);
+                    } else {
+                        c = db.fetchSnus(list, Sorting.ALPHABETICAL);
+                    }
                     snusList.search(c);
                     clearAll();
-                    Log.i(Globals.TAG, "search is not null");
-                    //snusList.search("", "", String.valueOf(etxt.getText()), list);
                 }
 
             }
@@ -353,13 +365,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void clearAll(){
-        EditText etxt = (EditText) findViewById(R.id.eText_search);
-        etxt.setText("");
-        spinManu.setSelection(0);
-        spinLine.setSelection(0);
-        spinTaste1.setSelection(0);
-        spinTaste2.setSelection(0);
-        spinTaste3.setSelection(0);
+        pokedManufacturingSpinner = false;
+        pokedLineSpinner = false;
+        pokedTasteSpinner = false;
+        txtSearch.setText("");
+        spinManu.setSelection(-1);
+        spinLine.setSelection(-1);
+        spinTaste1.setSelection(-1);
         spinSorting.setSelection(0);
     }
 

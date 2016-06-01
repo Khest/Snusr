@@ -42,9 +42,12 @@ public class DatabaseInteractor implements DatabaseInteraction {
         sb.append(leftJoinMyList());
         if (filtrationList != null) {
             sb.append(" WHERE ");
+            Log.i(Globals.TAG, "FiltrationListSize = " + filtrationList.size());
             for (int i = 0; i < filtrationList.size(); i++) {
                 sb.append(filtrationList.get(i).filtrationString());
-                if (i != filtrationList.size() - 1) sb.append(" AND ");
+                Log.i(Globals.TAG, "CurrentFiltration = " + i);
+                if (i < filtrationList.size() - 1) sb.append(" AND ");
+//                Log.i(Globals.TAG, sb.toString());
             }
         }
         if (sorting == null) {
@@ -52,7 +55,6 @@ public class DatabaseInteractor implements DatabaseInteraction {
         } else {
             sb.append(sorting.getSql());
         }
-        Log.i(Globals.TAG, sb.toString());
         return dbCursor(sb.toString());
     }
 

@@ -29,9 +29,10 @@
     <string name="discoverable">Make discoverable</string>
     <string name="title_activity_main2">Main2Activity</string>
 
-    <string name="title_section1">Home</string>
+    <string name="title_section1">Snus list</string>
     <string name="title_section2">Add snus</string>
     <string name="title_section3">Send snusliste</string>
+    <string name="title_section4">About us</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -53,29 +54,26 @@
     <string name="add_snus_error_nicotine">You must set a nicotine level</string>
     <string name="add_snus_error_strength">You must set a strength level</string>
 
-    <string-array name="spinnerItemsStr">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-    <string-array name="spinnerItemsType">
-        <item>White</item>
-        <item>Portion</item>
-        <item>Loose</item>
-    </string-array>
+    <string name="main_sort_button">Sort</string>
+    <string name="main_search_value">Search</string>
+    <string name="main_manufacturer">Manufacturer</string>
+    <string name="main_line_descriptor">Product line</string>
+    <string name="main_taste_descriptor">Taste</string>
+    <string name="main_write_external_denied">Required permission to write to external storage was denied. Please allow this and restart the application</string>
+
+    <string name="about_us_text">
+        This app is made by Knut Johan Hesten, Long Hyunh, Hakon Stensheim and Lasse Tangeras
+        as part of the spring 2016 Android course at HSN.
+
+        It\'s main usage is to save and rate snus you encounter in the wild. If you like a snus you can rate it,
+        and share your list with other people too!
+
+
+        We hope you enjoy our app, but please be aware that Snus is highly addictive and might damage your health!
+    </string>
 
     <string-array name="spinnerItemsCamera">
         <item>Camera</item>
         <item>Gallery</item>
-    </string-array>
-
-    <string-array name="spinnerItemsTaste">
-        <item>Mint</item>
-        <item>Peppermint</item>
-        <item>Lakris</item>
-        <item>Vanilje</item>
-        <item>Frukt</item>
     </string-array>
 </resources>

@@ -1,6 +1,7 @@
 package no.hbv.gruppe1.snusr.snusr.dataclasses;
 
 import no.hbv.gruppe1.snusr.snusr.DatabaseHelper;
+import no.hbv.gruppe1.snusr.snusr.interfaces.DatabaseInteraction;
 
 /**
  * Created by Knut Johan Hesten 2016-04-14.
@@ -27,6 +28,8 @@ public enum Filtration {
             DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.TASTE_NUMBER),
     TASTE_TEXT("Taste text", DatabaseInteractor.TASTE_TABLE_ALIAS_1,
             DatabaseHelper.FeedEntry.col_taste_taste, FiltrationRule.LIKE),
+    TASTE_NUMBER_OR("Taste or", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
+            DatabaseHelper.FeedEntry.col_snus_taste1, FiltrationRule.TASTE_NUMBER_OR),
     NICOTINE("Nicotine", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
             DatabaseHelper.FeedEntry.col_snus_nicotinelevel, FiltrationRule.RANGE),
     TYPE_NUMBER("Type", DatabaseHelper.FeedEntry.DATABASE_TABLE_SNUS,
@@ -104,6 +107,13 @@ public enum Filtration {
                 return " " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste1 + " = " + String.valueOf(searchValue1) +
                         " AND " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste2 + " = " + String.valueOf(searchValue1) +
                         " AND " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste3 + " = " + String.valueOf(searchValue1) + " ";
+            }
+        },
+        TASTE_NUMBER_OR() {
+            protected String getRule(String tableName, String columnName, Object searchValue1, Object searchValue2) {
+                return " " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste1 + " = " + String.valueOf(searchValue1) +
+                        " OR " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste2 + " = " + String.valueOf(searchValue1) +
+                        " OR " + tableName + "." + DatabaseHelper.FeedEntry.col_snus_taste3 + " = " + String.valueOf(searchValue1) + " ";
             }
         },
         WILDCARD() {

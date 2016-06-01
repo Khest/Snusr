@@ -22,13 +22,13 @@ public class AddSnusSpinnerAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView txtManufacturer = (TextView) view.findViewById(R.id.manufacturer_list_txt);
+        TextView txtGeneric = (TextView) view.findViewById(R.id.manufacturer_list_txt);
         String inputText = cursor.getString(1);
-        txtManufacturer.setText(inputText);
+        txtGeneric.setText(inputText);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return inflater.from(context).inflate(R.layout.manufacturer_list_item, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.manufacturer_list_item, parent, false);
     }
 }

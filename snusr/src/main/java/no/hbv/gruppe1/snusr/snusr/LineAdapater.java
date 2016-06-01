@@ -33,9 +33,6 @@ public class LineAdapater extends CursorAdapter {
         return inflater.from(context).inflate(R.layout.spinner_item, parent, false);
     }
 
-    public int getID(){
-        return cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_id));
-    }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {

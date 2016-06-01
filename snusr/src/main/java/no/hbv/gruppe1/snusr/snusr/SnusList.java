@@ -29,7 +29,7 @@ public class SnusList extends Fragment {
 
 
     ListView listview;
-    Button btnAllesnus, btnBook, btnMyfav;
+    Button btnAllesnus, btnBook;
     private DatabaseInteractor db;
     private Cursor cur;
 
@@ -55,7 +55,6 @@ public class SnusList extends Fragment {
             @Override
             public void onClick(View v) {
                 btnAllesnus.setTextColor(Color.parseColor("#881e5d"));
-                btnMyfav.setTextColor(Color.parseColor("#FFFFFF"));
                 btnBook.setTextColor(Color.parseColor("#FFFFFF"));
 
                 cur = db.fetchSnus(null, null);
@@ -67,7 +66,6 @@ public class SnusList extends Fragment {
             @Override
             public void onClick(View v) {
                 btnBook.setTextColor(Color.parseColor("#881e5d"));
-                btnMyfav.setTextColor(Color.parseColor("#FFFFFF"));
                 btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
 
 

@@ -33,10 +33,6 @@ public class ManuAdapter extends CursorAdapter {
         return inflater.from(context).inflate(R.layout.spinner_item, parent, false);
     }
 
-    public int getID(){
-        return cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_id));
-    }
-
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
@@ -53,13 +49,9 @@ public class ManuAdapter extends CursorAdapter {
     }
 
     public View getCustomView(int position, View convertView, ViewGroup parent) {
-        View v = inflater.inflate(R.layout.spinner_item, null);
+        View v = inflater.inflate(R.layout.spinner_item, parent);
         TextView text = (TextView) v.findViewById(R.id.spinner_text);
-        if(position==0) {
-            text.setText("Choose manufacturer");
-        }else{
-            text.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_name)));
-        }
+        text.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_manufacturer_name)));
         return v;
 
     }
