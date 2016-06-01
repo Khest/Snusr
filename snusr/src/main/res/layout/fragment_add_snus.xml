@@ -91,6 +91,20 @@
                 android:textColorLink="#881e5d"
                 android:drawableTint="#881e5d"
                 android:backgroundTint="#881e5d" />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/add_snus_manu_desc"
+                android:id="@+id/desc_manu"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/add_snus_manu_desc"
+                android:id="@+id/desc_line"
+                android:layout_alignTop="@+id/spinner_addsnus_line"
+        />
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="wrap_content"
@@ -125,6 +139,12 @@
             android:backgroundTint="#881e5d"
             android:focusable="false"
             android:foregroundTint="#881e5d" />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/add_snus_taste_desc"
+                android:id="@+id/desc_taste"/>
     </RelativeLayout>
     <LinearLayout
             android:orientation="vertical"
