@@ -13,12 +13,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.io.IOException;
+
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Snus;
-
-import java.io.IOException;
 
 
 public class AddSnus extends Fragment {
@@ -139,6 +146,12 @@ public class AddSnus extends Fragment {
         return v;
     }
 
+
+    public void clearAll(){
+        eTxtName.setText("");
+        snusImage.setImageDrawable(getResources().getDrawable(R.drawable.noimagefound));
+    }
+
     @Override
     public void onDestroyView() {
         interactor.close();
@@ -236,6 +249,7 @@ public class AddSnus extends Fragment {
                 Toast.makeText(getActivity(),
                         getResources().getText(R.string.add_snus_successful).toString(),
                         Toast.LENGTH_SHORT).show();
+                clearAll();
             } else {
                 Toast.makeText(getActivity(),
                         getResources().getText(R.string.add_snus_failed).toString(),

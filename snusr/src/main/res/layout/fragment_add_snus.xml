@@ -95,14 +95,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/add_snus_manu_desc"
-                android:id="@+id/desc_manu"/>
+            android:id="@+id/desc_manu"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/add_snus_manu_desc"
-                android:id="@+id/desc_line"
+            android:id="@+id/desc_line"
                 android:layout_alignTop="@+id/spinner_addsnus_line"
         />
     </RelativeLayout>
@@ -143,8 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/add_snus_taste_desc"
-                android:id="@+id/desc_taste"/>
+            android:id="@+id/desc_taste"/>
     </RelativeLayout>
     <LinearLayout
             android:orientation="vertical"

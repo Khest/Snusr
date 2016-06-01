@@ -196,22 +196,22 @@ public class MainActivity extends AppCompatActivity
         android.app.FragmentManager fragmentManager = getFragmentManager(); // For AppCompat use getSupportFragmentManager
         switch(position) {
             default:
-            case 1:
+            case 0:
                 fragment = new SnusList();
                 fragTag = "SnusList";
                 lastP = 1;
                 break;
-            case 2:
+            case 1:
                 fragment = new AddSnus();
                 fragTag = "AddSnus";
                 lastP = 2;
                 break;
-            case 3:
+            case 2:
                 fragment = new SendFileFragment();
                 fragTag = "SendFile";
                 lastP = 3;
                 break;
-            case 4:
+            case 3:
                 fragment = new AboutUs();
                 fragTag = "AboutUs";
                 lastP = 4;
@@ -254,16 +254,6 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onBackPressed() {
-        if(lastP == 0){
-            super.onBackPressed();
-        }else{
-            onNavigationDrawerItemSelected(lastP);
-            drawerLayout.closeDrawers();
-        }
-
-    }
 
 
     @Override
