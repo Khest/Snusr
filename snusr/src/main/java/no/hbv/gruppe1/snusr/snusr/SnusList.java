@@ -68,6 +68,8 @@ public class SnusList extends Fragment {
                 btnBook.setTextColor(Color.parseColor("#881e5d"));
                 btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
 
+//                cur = db.fetchMyList(Globals.MYLIST_ALL);
+//                listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
 
                 cur = db.fetchMyList(1);
                 listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));

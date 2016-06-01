@@ -7,65 +7,72 @@
     android:background="@drawable/list_item_shape"
     android:minHeight="1dp"
     android:descendantFocusability="blocksDescendants">
-    <TextView
-        android:id="@+id/txtSnusName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"/>
 
-    <ImageView
-        android:contentDescription="img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imgSnusThumbnail"
-        android:layout_gravity="end"
-        android:layout_below="@+id/txtSnusName"
-        android:layout_toEndOf="@+id/ratingSnus"
-        android:paddingBottom="15dp"
-        android:paddingRight="10dp"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:id="@+id/txtSnusName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtRating"
-        android:layout_alignTop="@+id/ratingSnus"
-        android:layout_below="@+id/txtSnusName"
-        android:paddingLeft="10dp"/>
+        <ImageView
+            android:contentDescription="img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgSnusThumbnail"
+            android:layout_gravity="end"
+            android:layout_below="@+id/txtSnusName"
+            android:layout_toEndOf="@+id/ratingSnus"
+            android:paddingBottom="15dp"
+            android:paddingRight="10dp"/>
 
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratingSnus"
-        android:rating="3"
-        android:stepSize="1"
-        android:numStars="5"
-        android:isIndicator="false"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:progressTint="#ffcf00"
-        android:secondaryProgressTint="#881e5d"
-        android:paddingLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtRating"
+            android:layout_alignTop="@+id/ratingSnus"
+            android:layout_below="@+id/txtSnusName"
+            android:paddingLeft="10dp"/>
 
-    <ImageView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:id="@+id/imgBook"
-        android:paddingTop="10dp"
-        android:paddingLeft="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:paddingRight="10dp"/>
+        <RatingBar
+            android:layout_below="@+id/txtRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingSnus"
+            android:rating="3"
+            android:stepSize="1"
+            android:numStars="5"
+            android:isIndicator="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:progressTint="#ffcf00"
+            android:secondaryProgressTint="#881e5d"
+            android:paddingLeft="10dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/txtSnusId"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="315dp"
-        android:visibility="gone" />
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/imgBook"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtSnusId"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="315dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
