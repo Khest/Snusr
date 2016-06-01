@@ -47,7 +47,6 @@ public class SnusList extends Fragment {
         listview = (ListView) view.findViewById(R.id.snuslist);
         btnAllesnus = (Button) view.findViewById(R.id.btn_allsnus);
         btnBook = (Button) view.findViewById(R.id.btn_book);
-        btnMyfav = (Button) view.findViewById(R.id.btn_myfav);
         db = new DatabaseInteractor(this.getActivity());
         cur = db.fetchSnus(null, null);
         SnusAdapter adapter = new SnusAdapter(getActivity(), cur, 0);
@@ -64,18 +63,6 @@ public class SnusList extends Fragment {
             }
         });
 
-        btnMyfav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnMyfav.setTextColor(Color.parseColor("#881e5d"));
-                btnBook.setTextColor(Color.parseColor("#FFFFFF"));
-                btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
-
-                cur = db.fetchMyList(1);
-                listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
-            }
-        });
-
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +70,8 @@ public class SnusList extends Fragment {
                 btnMyfav.setTextColor(Color.parseColor("#FFFFFF"));
                 btnAllesnus.setTextColor(Color.parseColor("#FFFFFF"));
 
-                cur = db.fetchMyList(Globals.MYLIST_ALL);
+
+                cur = db.fetchMyList(1);
                 listview.setAdapter(new SnusAdapter(getActivity(), cur, 0));
             }
         });
@@ -103,6 +91,7 @@ public class SnusList extends Fragment {
             }
         });
         listview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         return view;
     }
     public void newFragmentSnusInformationFragment(String snusId){

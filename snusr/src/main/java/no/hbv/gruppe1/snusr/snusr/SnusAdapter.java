@@ -25,6 +25,8 @@ public class SnusAdapter extends CursorAdapter {
     private int id;
     private DatabaseInteractor db;
     Context context;
+    int flags;
+
 
     public SnusAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -36,6 +38,12 @@ public class SnusAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return inflater.from(context).inflate(R.layout.snus_list_item, parent, false);
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
     }
 
     @Override
@@ -58,7 +66,7 @@ public class SnusAdapter extends CursorAdapter {
                 + " " + cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_name));
         txtSnusName.setText(snusname);
 
-        txtRating.setText(String.valueOf(rating.getRating()));
+        txtRating.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
         txtSnusId.setText(String.valueOf(id));
         final int cursorPosition = cursor.getPosition();
 

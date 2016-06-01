@@ -2,7 +2,6 @@ package no.hbv.gruppe1.snusr.snusr;
 
 import android.app.Fragment;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,7 @@ import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
 public class SnusInformationFragment extends Fragment {
 
     private ImageView imgSnus;
-    private TextView txtName, txtManufacturer, txtTaste, txtStrength;
+    private TextView txtName, txtManufacturer, txtTaste, txtStrength, txtRank, txtNico, txtType;
     private RatingBar ratingInfo;
     private int snusID;
 
@@ -62,7 +61,10 @@ public class SnusInformationFragment extends Fragment {
         txtManufacturer = (TextView) view.findViewById(R.id.txtManufacturer);
         txtTaste = (TextView) view.findViewById(R.id.txtTaste);
         txtStrength = (TextView) view.findViewById(R.id.txtStrength);
+        txtRank = (TextView) view.findViewById(R.id.textViewrank);
+        txtNico = (TextView) view.findViewById(R.id.textViewNicotinlevel);
         ratingInfo = (RatingBar) view.findViewById(R.id.ratingSnusInformation);
+        txtType = (TextView) view.findViewById(R.id.textViewType);
 
         db = new DatabaseInteractor(getActivity());
         Cursor cur = db.fetchSpecificSnus(snusID);
@@ -79,7 +81,12 @@ public class SnusInformationFragment extends Fragment {
         //Log.i("treee", cur.getString(cur.getColumnIndexOrThrow(DatabaseInteractor.TASTE_TABLE_ALIAS_1 + "." + DatabaseHelper.FeedEntry.col_taste_taste)));
 
 
+
+        txtRank.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
+        ratingInfo.setRating(cur.getFloat(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_totalrank)));
+        txtNico.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_nicotinelevel)));
         String test = cur.getString(cur.getColumnIndex(DatabaseHelper.FeedEntry.col_snus_name));
+        txtType.setText(cur.getString(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_type)));
         txtTaste.setText(makeTasteString(taste1, taste2, taste3));
 
         byte[] array = cur.getBlob(cur.getColumnIndexOrThrow(DatabaseHelper.FeedEntry.col_snus_img));

@@ -88,10 +88,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingSnusInformation"
-        android:layout_below="@+id/txtStrength"
-        android:layout_alignParentEnd="true"
         android:numStars="5"
         android:stepSize="1"
-        android:isIndicator="true"/>
+        android:isIndicator="true"
+        android:progressTint="#ffcf00"
+        android:secondaryProgressTint="#881e5d"
+        android:layout_below="@+id/textViewrank"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Totalrank:"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textViewrank"
+        android:layout_below="@+id/textView3"
+        android:layout_alignStart="@+id/textViewNicotinlevel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Nicotin level:"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/lblStrength"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textViewNicotinlevel"
+        android:layout_below="@+id/txtStrength"
+        android:layout_alignStart="@+id/txtStrength" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Totalrank:"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textViewType"
+        android:layout_below="@+id/textViewNicotinlevel"
+        android:layout_alignStart="@+id/textViewNicotinlevel" />
 
 </RelativeLayout>
