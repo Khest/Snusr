@@ -175,6 +175,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         android.app.Fragment fragment;

@@ -59,6 +59,9 @@
     <string name="main_manufacturer">Manufacturer</string>
     <string name="main_line_descriptor">Product line</string>
     <string name="main_taste_descriptor">Taste</string>
+    <string name="add_snus_manu_desc">Manufacturer:</string>
+    <string name="add_snus_line_desc">Product</string>
+    <string name="add_snus_taste_desc">Major tastes</string>
     <string name="main_write_external_denied">Required permission to write to external storage was denied. Please allow this and restart the application</string>
 
     <string name="about_us_text">
