@@ -120,11 +120,10 @@ public class AddSnus extends Fragment {
         spinTakePic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0 && cameraOpen == true){
+                if(position == 0){
                     cameraOpen = false;
                     takePicture();
-                }
-                if(position == 1){
+                } else {
                     cameraOpen = false;
                     openGallery();
                 }
