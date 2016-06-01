@@ -13,17 +13,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.widget.Toast;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.DatabaseInteractor;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Filtration;
 import no.hbv.gruppe1.snusr.snusr.dataclasses.Globals;
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     MenuItem search;
     AddSnusSpinnerAdapter tasteAdaper;
     DatabaseInteractor db;
+    int lastP;
 
     private boolean pokedManufacturingSpinner, pokedLineSpinner, pokedTasteSpinner;
 
@@ -93,6 +100,8 @@ public class MainActivity extends AppCompatActivity
        addSearchFiltrationAdapter();
         onSearchClicked();
         onSortClicked();
+
+
     }
 
     private void addSearchFiltrationAdapter() {
@@ -121,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         spinManu.setAdapter(manuAdapter);
         spinSorting.setAdapter(sortingArrayAdapter);
 
-        spinManu.setOnTouchListener(new View.OnTouchListener(){
+        spinManu.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent me) {
                 pokedManufacturingSpinner = true;
@@ -173,21 +182,26 @@ public class MainActivity extends AppCompatActivity
         android.app.FragmentManager fragmentManager = getFragmentManager(); // For AppCompat use getSupportFragmentManager
         switch(position) {
             default:
-            case 0:
+            case 1:
                 fragment = new SnusList();
                 fragTag = "SnusList";
-                break;
-            case 1:
-                fragment = new AddSnus();
-                fragTag = "AddSnus";
+                lastP = 1;
                 break;
             case 2:
-                fragment = new SendFileFragment();
-                fragTag = "SendFile";
+                fragment = new AddSnus();
+                fragTag = "AddSnus";
+                lastP = 2;
                 break;
             case 3:
+                fragment = new SendFileFragment();
+                fragTag = "SendFile";
+                lastP = 3;
+                break;
+            case 4:
                 fragment = new AboutUs();
                 fragTag = "AboutUs";
+                lastP = 4;
+
                 break;
         }
 
@@ -217,12 +231,24 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(Html.fromHtml("<font color='#cc9900'>SNUSR </font>"));
+        //actionBar.setTitle(mTitle);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(lastP == 0){
+            super.onBackPressed();
+        }else{
+            onNavigationDrawerItemSelected(lastP);
+            drawerLayout.closeDrawers();
+        }
+
     }
 
 

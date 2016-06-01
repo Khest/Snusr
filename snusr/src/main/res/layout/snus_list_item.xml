@@ -8,9 +8,8 @@
     android:minHeight="1dp"
     android:descendantFocusability="blocksDescendants">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+
+
         <TextView
             android:id="@+id/txtSnusName"
             android:layout_width="wrap_content"
@@ -34,13 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtRating"
-            android:layout_alignTop="@+id/ratingSnus"
-            android:layout_below="@+id/txtSnusName"
-            android:paddingLeft="10dp"/>
+            android:paddingLeft="10dp"
+            android:text="3333"
+            android:layout_above="@+id/ratingSnus"
+            android:layout_alignParentStart="true" />
 
         <RatingBar
-            android:layout_below="@+id/txtRating"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:id="@+id/ratingSnus"
             android:rating="3"
@@ -72,7 +71,5 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="315dp"
             android:visibility="gone" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

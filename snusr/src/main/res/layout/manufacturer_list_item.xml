@@ -9,6 +9,6 @@
         android:textColor="#881e5d"
         android:backgroundTint="#881e5d"
         android:foregroundTint="#881e5d"
-        android:id="@+id/manufacturer_list_txt"/>
+        android:id="@+id/manufacturer_list_txt" />
 
 </LinearLayout>
